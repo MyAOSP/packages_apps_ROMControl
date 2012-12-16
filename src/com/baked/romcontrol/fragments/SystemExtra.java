@@ -46,7 +46,6 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mRecentKillAll;
     CheckBoxPreference mKillAppLongpressBack;
-    CheckBoxPreference mForceTabletUI;
     CheckBoxPreference mUseAltResolver;
     CheckBoxPreference mVibrateOnExpand;
     CheckBoxPreference mClockDateOpens;
@@ -81,7 +80,7 @@ public class SystemExtra extends BAKEDPreferenceFragment {
 
         boolean hasNavBarByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar);
-        if (hasNavBarByDefault || mTablet) {
+        if (hasNavBarByDefault) {
             ((PreferenceGroup) findPreference("misc")).removePreference(mKillAppLongpressBack);
         }
 
@@ -106,18 +105,9 @@ public class SystemExtra extends BAKEDPreferenceFragment {
         mClockDateOpens.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
                 Settings.System.CLOCK_DATE_OPENS, true));
 
-        mForceTabletUI = (CheckBoxPreference) findPreference(PREF_FORCE_TABLET_UI);
-        mForceTabletUI.setChecked(Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.FORCE_TABLET_UI, 0) == 1);
-
         mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
         mUseAltResolver.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
                 Settings.System.ACTIVITY_RESOLVER_USE_ALT, false));
-
-        if (mTablet) {
-            // if it's a tablet not reason to show the force of a tablet ui
-            prefs.removePreference(mForceTabletUI);
-        }
     }
 
     private void writeKillAppLongpressBackOptions() {
@@ -161,16 +151,6 @@ public class SystemExtra extends BAKEDPreferenceFragment {
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.RECENT_KILL_ALL_BUTTON, checked ? 1 : 0);
             Helpers.restartSystemUI();
-            return true;
-
-        } else if (preference == mForceTabletUI) {
-            boolean checked = ((CheckBoxPreference)preference).isChecked();
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.FORCE_TABLET_UI, checked ? 1 : 0);
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_TOGGLES_BRIGHTNESS_LOC, 3);
-            Settings.System.putFloat(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_TOGGLES_BACKGROUND, 0 / 100);
             return true;
 
         } else if (preference == mLcdDensity) {

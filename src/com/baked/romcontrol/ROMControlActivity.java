@@ -53,10 +53,6 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
 
     Locale defaultLocale;
 
-    boolean mTablet;
-    boolean isTablet;
-    boolean isPhablet;
-    boolean isPhone;
     protected boolean isShortcut;
 
     @Override
@@ -64,15 +60,6 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        mTablet = Settings.System.getBoolean(getContentResolver(),
-                Settings.System.TABLET_UI, false);
-        isPhone = Settings.System.getInt(this.getContentResolver(),
-                Settings.System.FORCE_TABLET_UI, 0) == 0;
-        isPhablet = Settings.System.getInt(this.getContentResolver(),
-                Settings.System.FORCE_TABLET_UI, 0) == 2;
-        isTablet = Settings.System.getInt(this.getContentResolver(),
-                Settings.System.FORCE_TABLET_UI, 0) == 1;
         defaultLocale = Locale.getDefault();
         Log.i(TAG, "defualt locale: " + defaultLocale.getDisplayName());
         setLocale();
@@ -209,7 +196,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
-        for (int i=0; i<target.size(); i++) {
+        /* for (int i=0; i<target.size(); i++) {
             Header header = target.get(i);
             final int deviceKeys = getResources().getInteger(
                     com.android.internal.R.integer.config_deviceHardwareKeys);
@@ -232,7 +219,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                     target.get(i);
                 }
             }
-        }
+        } */
         updateHeaderList(target);
         mHeaders = target;
     }

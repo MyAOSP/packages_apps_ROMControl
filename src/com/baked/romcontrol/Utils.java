@@ -149,7 +149,7 @@ public class Utils {
         if (mDeviceType == -1) {
             WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
             android.view.Display display = wm.getDefaultDisplay();
-            int shortSize = Math.min(display.getRawHeight(), display.getRawWidth());
+            int shortSize = Math.min(display.getHeight(), display.getWidth());
             int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / DisplayMetrics.DENSITY_DEVICE;
             if (shortSizeDp < 600) {
                 // 0-599dp: "phone" UI with a separate status & navigation bar
