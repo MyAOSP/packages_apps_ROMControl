@@ -54,8 +54,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.R;
+import com.baked.romcontrol.BAKEDPreferenceFragment;
+import com.baked.romcontrol.fragments.NavRingTargets;
 import com.baked.romcontrol.util.Helpers;
 import com.baked.romcontrol.util.ShortcutPickerHelper;
 import com.baked.romcontrol.widgets.NavBarItemPreference;
@@ -78,8 +79,10 @@ public class Navbar extends BAKEDPreferenceFragment implements
     private static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
     private static final String NAVIGATION_BAR_HEIGHT_LANDSCAPE = "navigation_bar_height_landscape";
     private static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
-    // private static final String NAVIGATION_BAR_BACKGROUND_COLOR = "navigation_bar_background_color";
+    private static final String NAVIGATION_BAR_BACKGROUND_COLOR = "navigation_bar_background_color";
     private static final String NAVIGATION_BAR_WIDGETS = "navigation_bar_widgets";
+    private static final String PREF_NAVRING_AMOUNT = "pref_navring_amount";
+    private static final String ENABLE_NAVRING_LONG = "enable_navring_long";
 
     public static final int REQUEST_PICK_CUSTOM_ICON = 200;
     public static final int REQUEST_PICK_LANDSCAPE_ICON = 201;
@@ -88,24 +91,27 @@ public class Navbar extends BAKEDPreferenceFragment implements
 
     public static final String PREFS_NAV_BAR = "navbar";
 
+    Preference mNavRingTargets;
+
     // move these later
     ColorPickerPreference mNavigationBarColor;
     ColorPickerPreference mNavigationBarGlowColor;
-    // ColorPickerPreference mNavigationBarBgColor;
+    ColorPickerPreference mNavigationBarBgColor;
     ListPreference mGlowTimes;
     ListPreference menuDisplayLocation;
     ListPreference mNavBarMenuDisplay;
     ListPreference mNavBarButtonQty;
+    ListPreference mNavRingButtonQty;
     CheckBoxPreference mEnableNavigationBar;
     ListPreference mNavigationBarHeight;
     ListPreference mNavigationBarHeightLandscape;
     ListPreference mNavigationBarWidth;
-    // ListPreference mNavigationBarBgStyle;
+    ListPreference mNavigationBarBgStyle;
     SeekBarPreference mButtonAlpha;
+    CheckBoxPreference mEnableNavringLong;
     Preference mConfigureWidgets;
 
     private int mPendingIconIndex = -1;
-    private int mPendingWidgetDrawer = -1;
     private int defaultBgColor = 0xFF000000;
     private NavBarCustomAction mPendingNavBarCustomAction = null;
 
@@ -131,6 +137,8 @@ public class Navbar extends BAKEDPreferenceFragment implements
 
         mPicker = new ShortcutPickerHelper(this, this);
 
+        mNavRingTargets = findPreference("navring_settings");
+
         menuDisplayLocation = (ListPreference) findPreference(PREF_MENU_UNLOCK);
         menuDisplayLocation.setOnPreferenceChangeListener(this);
         menuDisplayLocation.setValue(Settings.System.getInt(getActivity()
@@ -143,10 +151,19 @@ public class Navbar extends BAKEDPreferenceFragment implements
                 .getContentResolver(), Settings.System.MENU_VISIBILITY,
                 0) + "");
 
+        mNavRingButtonQty = (ListPreference) findPreference(PREF_NAVRING_AMOUNT);
+        mNavRingButtonQty.setOnPreferenceChangeListener(this);
+        mNavRingButtonQty.setValue(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.SYSTEMUI_NAVRING_AMOUNT, 1) + "");
+
         mNavBarButtonQty = (ListPreference) findPreference(PREF_NAVBAR_QTY);
         mNavBarButtonQty.setOnPreferenceChangeListener(this);
         mNavBarButtonQty.setValue(Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.NAVIGATION_BAR_BUTTONS_QTY, 3) + "");
+
+        mEnableNavringLong = (CheckBoxPreference) findPreference("enable_navring_long");
+        mEnableNavringLong.setChecked(Settings.System.getBoolean(getContentResolver(),
+                Settings.System.SYSTEMUI_NAVRING_LONG_ENABLE, false));
 
         mPicker = new ShortcutPickerHelper(this, this);
 
@@ -156,11 +173,11 @@ public class Navbar extends BAKEDPreferenceFragment implements
         mEnableNavigationBar.setChecked(Settings.System.getInt(getContentResolver(),
                 Settings.System.NAVIGATION_BAR_SHOW, hasNavBarByDefault ? 1 : 0) == 1);
 
-        /* mNavigationBarBgStyle = (ListPreference) findPreference(PREF_NAVBAR_BG_STYLE);
+        mNavigationBarBgStyle = (ListPreference) findPreference(PREF_NAVBAR_BG_STYLE);
         mNavigationBarBgStyle.setOnPreferenceChangeListener(this);
 
         mNavigationBarBgColor = (ColorPickerPreference) findPreference(NAVIGATION_BAR_BACKGROUND_COLOR);
-        mNavigationBarBgColor.setOnPreferenceChangeListener(this); */
+        mNavigationBarBgColor.setOnPreferenceChangeListener(this);
 
         mNavigationBarColor = (ColorPickerPreference) findPreference(PREF_NAV_COLOR);
         mNavigationBarColor.setOnPreferenceChangeListener(this);
@@ -197,7 +214,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
         refreshSettings();
         setHasOptionsMenu(true);
         updateGlowTimesSummary();
-        // updateVisibility();
+        updateVisibility();
     }
 
     @Override
@@ -238,10 +255,10 @@ public class Navbar extends BAKEDPreferenceFragment implements
                 Settings.System.putString(getActivity().getContentResolver(),
                         Settings.System.NAVIGATION_CUSTOM_APP_ICONS[2], "");
 
-                /* Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.putInt(getActivity().getContentResolver(),
                         Settings.System.NAVIGATION_BAR_BACKGROUND_STYLE, 2);
                 Settings.System.putInt(getActivity().getContentResolver(),
-                        Settings.System.NAVIGATION_BAR_BACKGROUND_COLOR, defaultBgColor); */
+                        Settings.System.NAVIGATION_BAR_BACKGROUND_COLOR, defaultBgColor);
                 refreshSettings();
                 return true;
             default:
@@ -259,7 +276,20 @@ public class Navbar extends BAKEDPreferenceFragment implements
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             Helpers.restartSystemUI();
             return true;
+        } else if (preference == mEnableNavringLong) {
 
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.SYSTEMUI_NAVRING_LONG_ENABLE,
+                    ((CheckBoxPreference) preference).isChecked() ? true : false);
+            resetNavRingLong();
+            return true;
+        } else if (preference == mNavRingTargets) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            NavRingTargets fragment = new NavRingTargets();
+            ft.addToBackStack("config_nav_ring");
+            ft.replace(this.getId(), fragment);
+            ft.commit();
+            return true;
         } else if (preference == mConfigureWidgets) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             WidgetConfigurationFragment fragment = new WidgetConfigurationFragment();
@@ -284,6 +314,14 @@ public class Navbar extends BAKEDPreferenceFragment implements
                     Settings.System.MENU_VISIBILITY, Integer.parseInt((String) newValue));
             return true;
 
+       } else if (preference == mNavRingButtonQty) {
+            int val = Integer.parseInt((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SYSTEMUI_NAVRING_AMOUNT, val);
+            resetNavRing();
+            resetNavRingLong();
+            refreshSettings();
+            return true;
         } else if (preference == mNavBarButtonQty) {
             int val = Integer.parseInt((String) newValue);
             Settings.System.putInt(getActivity().getContentResolver(),
@@ -361,15 +399,14 @@ public class Navbar extends BAKEDPreferenceFragment implements
                     Settings.System.NAVIGATION_BAR_TINT, intHex);
             return true;
 
-        /* } else if (preference == mNavigationBarBgStyle) {
+        } else if (preference == mNavigationBarBgStyle) {
             int value = Integer.valueOf((String) newValue);
             int index = mNavigationBarBgStyle.findIndexOfValue((String) newValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_BACKGROUND_STYLE, value);
             preference.setSummary(mNavigationBarBgStyle.getEntries()[index]);
             updateVisibility();
-            if (value == 2)
-                Helpers.restartSystemUI();
+            Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mNavigationBarBgColor) {
@@ -379,7 +416,8 @@ public class Navbar extends BAKEDPreferenceFragment implements
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_BACKGROUND_COLOR, intHex);
-            return true; */
+            Helpers.restartSystemUI();
+            return true;
 
         } else if (preference == mNavigationBarGlowColor) {
             String hex = ColorPickerPreference.convertToARGB(
@@ -406,14 +444,21 @@ public class Navbar extends BAKEDPreferenceFragment implements
 
         } else if (preference == mButtonAlpha) {
             float val = Float.parseFloat((String) newValue);
-            Log.e("R", "value: " + val / 100);
+            Log.e("R", "value: " + val * 0.01f);
             Settings.System.putFloat(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_BUTTON_ALPHA,
-                    val / 100);
+                    val * 0.01f);
             return true;
-
         }
         return false;
+    }
+
+    public void resetNavRing() {
+            // TODO : FIXME
+    }
+
+    public void resetNavRingLong() {
+            // TODO : FIXME
     }
 
     @Override
@@ -449,7 +494,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
         return null;
     }
 
-    /* private void updateVisibility() {
+    private void updateVisibility() {
         int visible = Settings.System.getInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_BACKGROUND_STYLE, 2);
         if (visible == 2) {
@@ -457,7 +502,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
         } else {
             mNavigationBarBgColor.setEnabled(true);
         }
-    } */
+    }
 
     private void updateGlowTimesSummary() {
         int resId;

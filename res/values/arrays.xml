@@ -86,10 +86,10 @@
     </string-array>
 
     <string-array name="pref_navigation_menu_display_entries">
-        <item>Default JB behavior</item>
-        <item>Always show invisible icons</item>
-        <item>Always show</item>
-        <item>Default JB with invisible icons when hidden</item>
+        <item>@string/default_jb_behavior</item>
+        <item>@string/always_show_invincible_icons</item>
+        <item>@string/always_show</item>
+        <item>@string/default_jb_with_invincible_icons_when_hidden</item>
     </string-array>
 
     <string-array name="pref_navigation_menu_display_values" translatable="false">
@@ -296,10 +296,53 @@
         <item>@string/navbar_defaultbg</item>
     </string-array>
 
+    <!-- Navring -->
     <string-array name="navbar_background_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="navring_dialog_entries" translatable="false">
+        <item>@string/none</item>
+        <item>@string/take_screenshot</item>
+        <item>@string/open_ime_switcher</item>
+        <item>@string/ring_vib</item>
+        <item>@string/ring_silent</item>
+        <item>@string/ring_vib_silent</item>
+        <item>@string/kill_app</item>
+        <item>@string/screen_off</item>
+        <item>@string/google_now</item>
+        <item>@string/select_application</item>
+    </string-array>
+
+    <string-array name="navring_dialog_values" translatable="false">
+        <item>**null**</item>
+        <item>**screenshot**</item>
+        <item>**ime**</item>
+        <item>**ring_vib**</item>
+        <item>**ring_silent**</item>
+        <item>**ring_vib_silent**</item>
+        <item>**kill**</item>
+        <item>**power**</item>
+        <item>**assist**</item>
+        <item>**app**</item>
+    </string-array>
+
+    <string-array name="pref_navring_amount_entries" translatable="false">
+        <item>@string/one_target</item>
+        <item>@string/two_targets</item>
+        <item>@string/three_targets</item>
+        <item>@string/four_targets</item>
+        <item>@string/five_targets</item>
+    </string-array>
+
+    <string-array name="pref_navring_amount_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
     <!-- Lockscreen delay

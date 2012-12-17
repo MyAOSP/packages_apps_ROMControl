@@ -72,24 +72,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".fragments.PowerWidget">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".fragments.TabletPowerWidget">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".fragments.StatusBarToggles">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".fragments.StatusBarBattery">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -180,14 +162,6 @@
             android:name=".util.ShowBuildProp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".performance.Performance"
-            android:label="@string/header_performance_title" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.baked.romcontrol.SHORTCUT" />
             </intent-filter>
         </activity>
         <activity

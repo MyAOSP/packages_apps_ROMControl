@@ -14,17 +14,6 @@
         android:title="@string/header_performance" />
 
     <header
-        android:id="@+id/tools"
-        android:icon="@drawable/ic_rom_control_performance"
-        android:title="@string/header_performance_title"
-        android:summary="@string/header_summary_performance">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetClass="com.baked.romcontrol.performance.Performance"
-            android:targetPackage="com.baked.romcontrol" />
-    </header>
-
-    <header
         android:id="@+id/propmodder_initd"
         android:title="@string/propmodder_title"
         android:fragment="com.baked.romcontrol.fragments.PropModder"
@@ -71,12 +60,12 @@
         android:icon="@drawable/ic_rom_control_general"
         android:summary="@string/header_summary_system_extra" />
 
-    <!-- Lockscreen
+    <!-- Lockscreen -->
     <header
         android:id="@+id/header_lockscreen"
         android:title="@string/header_lockscreen" />
 
-    <header
+    <!-- <header
         android:id="@+id/lockscreen_targets"
         android:fragment="com.baked.romcontrol.fragments.LockscreenTargets"
         android:summary="@string/lockscreen_target_summary"
@@ -95,14 +84,14 @@
         android:fragment="com.baked.romcontrol.fragments.Calendar"
         android:summary="@string/lockscreen_calendar_summary"
         android:icon="@drawable/ic_rom_control_calendar"
-        android:title="@string/lockscreen_calendar_title" />
+        android:title="@string/lockscreen_calendar_title" />-->
 
     <header
         android:id="@+id/lockscreen_extras"
         android:fragment="com.baked.romcontrol.fragments.LockscreenInterface"
         android:summary="@string/header_summary_lockscreen_extra"
         android:icon="@drawable/ic_rom_control_general"
-        android:title="@string/header_lockscreen_extra_title" /> -->
+        android:title="@string/header_lockscreen_extra_title" />
 
     <!-- Statusbar -->
     <header
@@ -130,11 +119,11 @@
         android:icon="@drawable/ic_rom_control_clock"
         android:title="@string/clock" />
 
-    <!-- <header
+    <header
         android:id="@+id/statusbar_extra"
         android:fragment="com.baked.romcontrol.fragments.StatusBarExtra"
         android:summary="@string/header_summary_statusbar_extra"
         android:icon="@drawable/ic_rom_control_general"
-        android:title="@string/header_statusbar_extra" /> -->
+        android:title="@string/header_statusbar_extra" />
 
 </preference-headers>
