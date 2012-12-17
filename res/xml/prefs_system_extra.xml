@@ -11,10 +11,10 @@
             android:title="@string/recent_kill_all"
             android:summary="@string/recent_kill_all_summary" />
 
-        <!-- <CheckBoxPreference
+        <CheckBoxPreference
             android:key="kill_app_longpress_back"
             android:title="@string/kill_app_longpress_back"
-            android:summary="@string/kill_app_longpress_back_summary"/> -->
+            android:summary="@string/kill_app_longpress_back_summary"/>
 
         <CheckBoxPreference
             android:key="disable_bootanimation"
@@ -26,10 +26,10 @@
             android:summary="@string/alt_resolver_summary"
             android:defaultValue="false" />
 
-        <!-- <CheckBoxPreference
+        <CheckBoxPreference
             android:key="vibrate_notif_expand"
             android:title="@string/vibrate_notif_expand_title"
-            android:summary="@string/vibrate_notif_expand_summary" /> -->
+            android:summary="@string/vibrate_notif_expand_summary" />
 
         <CheckBoxPreference
             android:key="clock_date_opens"

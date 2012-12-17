@@ -66,8 +66,7 @@ import com.baked.romcontrol.Utils;
 import net.margaritov.preference.colorpicker.ColorPickerView;
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
-public class LockscreenInterface extends BAKEDPreferenceFragment implements
-        Preference.OnPreferenceChangeListener {
+public class LockscreenInterface extends BAKEDPreferenceFragment {
 
     private static final String TAG = "LockscreenInterface";
     private static final boolean DEBUG = true;
@@ -80,19 +79,19 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private static final String KEY_LOCKSCREEN_ROTATION = "lockscreen_rotation";
     private static final String LOCKSCREEN_ROTATION_MODE = "Lock screen";
 
-    private File wallpaperImage;
-    private File wallpaperTemporary;
+    // private File wallpaperImage;
+    // private File wallpaperTemporary;
 
-    private ListPreference mCustomBackground;
-    private ListPreference mBatteryStatus;
-    private CheckBoxPreference mLockScreenRotation;
+    // private ListPreference mCustomBackground;
+    // private ListPreference mBatteryStatus;
+    // private CheckBoxPreference mLockScreenRotation;
     private Activity mActivity;
-    private Preference mWallpaperAlpha;
+    // private Preference mWallpaperAlpha;
     ContentResolver mResolver;
 
-    private boolean mIsScreenLarge;
+    // private boolean mIsScreenLarge;
 
-    private int seekbarProgress;
+    // private int seekbarProgress;
 
     ArrayList<String> keys = new ArrayList<String>();
 
@@ -108,7 +107,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
 
         addPreferencesFromResource(R.xml.prefs_lockscreen);
 
-        mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
+        /* mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
         mLockScreenRotation.setChecked(Settings.System.getInt(mResolver,
                 Settings.System.LOCKSCREEN_ROTATION, 0) == 1);
 
@@ -202,22 +201,22 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                 Toast.makeText(mActivity, getResources().getString(R.string.
                         lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
             }
-        }
+        } */
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if (preference == mLockScreenRotation) {
+        /* if (preference == mLockScreenRotation) {
             Settings.System.putInt(getContentResolver(), Settings.System.LOCKSCREEN_ROTATION,
                     mLockScreenRotation.isChecked() ? 1 : 0);
             return true;
 
-        } else if (keys.contains(preference.getKey())) {
+        } else*/ if (keys.contains(preference.getKey())) {
             Log.e("RC_Lockscreens", "key: " + preference.getKey());
             return Settings.System.putInt(getActivity().getContentResolver(), preference.getKey(),
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
 
-        } else if (preference == mWallpaperAlpha) {
+        /* } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();
             String cancel = res.getString(R.string.cancel);
             String ok = res.getString(R.string.ok);
@@ -262,12 +261,13 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             })
             .create()
             .show();
-            return true;
+            return true; */
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
+}
 
-    public boolean onPreferenceChange(Preference preference, Object objValue) {
+    /* public boolean onPreferenceChange(Preference preference, Object objValue) {
         if (preference == mCustomBackground) {
             int indexOf = mCustomBackground.findIndexOfValue(objValue.toString());
             switch (indexOf) {
@@ -371,4 +371,4 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
         }
         return false;
     }
-}
+} */

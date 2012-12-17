@@ -38,7 +38,6 @@ public class SystemExtra extends BAKEDPreferenceFragment {
 
     private static final String PREF_RECENT_KILL_ALL = "recent_kill_all";
     private static final String PREF_KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
-    private static final String PREF_FORCE_TABLET_UI = "force_tablet_ui";
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
     private static final String PREF_VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
     private static final String PREF_CLOCK_DATE_OPENS = "clock_date_opens";
