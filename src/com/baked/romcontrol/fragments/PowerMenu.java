@@ -14,6 +14,7 @@ import com.baked.romcontrol.BAKEDPreferenceFragment;
 public class PowerMenu extends BAKEDPreferenceFragment {
 
     private static final String PREF_SCREENSHOT = "show_screenshot";
+    private static final String PREF_POWER_OFF = "show_power_off";
     private static final String PREF_REBOOT_CHOOSER = "show_reboot_chooser";
     private static final String PREF_SHOW_EXPANDED_DESKTOP_TOGGLE = "show_expanded_desktop_toggle";
     private static final String PREF_NAVBAR_HIDE = "show_navbar_hide";
@@ -22,6 +23,7 @@ public class PowerMenu extends BAKEDPreferenceFragment {
     private static final String PREF_SHOW_SOUND_CHOOSER = "show_sound_chooser";
 
     CheckBoxPreference mShowScreenShot;
+    CheckBoxPreference mShowPowerOff;
     CheckBoxPreference mShowRebootChooser;
     CheckBoxPreference mShowExpandedDesktopToggle;
     CheckBoxPreference mShowAirplaneToggle;
@@ -39,6 +41,10 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         mShowScreenShot = (CheckBoxPreference) findPreference(PREF_SCREENSHOT);
         mShowScreenShot.setChecked(Settings.System.getInt(getActivity()
                 .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_SCREENSHOT, 0) == 1);
+
+        mShowPowerOff = (CheckBoxPreference) findPreference(PREF_POWER_OFF);
+        mShowPowerOff.setChecked(Settings.System.getInt(getActivity()
+                .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_POWER_OFF, 1) == 1);
 
         mShowRebootChooser = (CheckBoxPreference) findPreference(PREF_REBOOT_CHOOSER);
         mShowRebootChooser.setChecked(Settings.System.getInt(getActivity()
@@ -63,13 +69,6 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         mShowSoundChooser = (CheckBoxPreference) findPreference(PREF_SHOW_SOUND_CHOOSER);
         mShowSoundChooser.setChecked(Settings.System.getInt(getActivity()
                 .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_SOUND_CHOOSER, 1) == 1);
-
-        // I took this code out to allow Tablets the ability to Hide Navbar.
-        // Note going to completely delete it incase an issue arises and needs to
-        // be re-implemented - Z
-        //if (mTablet) {
-        //    getPreferenceScreen().removePreference(mShowNavBarHide);
-        //}
     }
 
     @Override
@@ -79,6 +78,12 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         if (preference == mShowScreenShot) {
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.POWER_DIALOG_SHOW_SCREENSHOT,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+
+        } else if (preference == mShowPowerOff) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.POWER_DIALOG_SHOW_POWER_OFF,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             return true;
 
