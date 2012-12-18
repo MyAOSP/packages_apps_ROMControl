@@ -84,8 +84,8 @@ public class SystemExtra extends BAKEDPreferenceFragment {
         }
 
         mRecentKillAll = (CheckBoxPreference) findPreference(PREF_RECENT_KILL_ALL);
-        mRecentKillAll.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.RECENT_KILL_ALL_BUTTON, 0) == 1);
+        mRecentKillAll.setChecked(Settings.System.getBoolean(getActivity().getContentResolver(),
+                Settings.System.RECENT_KILL_ALL_BUTTON, false));
 
         mDisableBootAnimation = (CheckBoxPreference) findPreference("disable_bootanimation");
         mDisableBootAnimation.setChecked(!new File("/system/media/bootanimation.zip").exists());
@@ -147,9 +147,8 @@ public class SystemExtra extends BAKEDPreferenceFragment {
 
         } else if (preference == mRecentKillAll) {
             boolean checked = ((CheckBoxPreference)preference).isChecked();
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.RECENT_KILL_ALL_BUTTON, checked ? 1 : 0);
-            Helpers.restartSystemUI();
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.RECENT_KILL_ALL_BUTTON, checked ? true : false);
             return true;
 
         } else if (preference == mLcdDensity) {
