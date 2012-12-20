@@ -38,6 +38,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.DisplayInfo;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -148,9 +149,10 @@ public class Utils {
     private static int getScreenType(Context con) {
         if (mDeviceType == -1) {
             WindowManager wm = (WindowManager)con.getSystemService(Context.WINDOW_SERVICE);
-            android.view.Display display = wm.getDefaultDisplay();
-            int shortSize = Math.min(display.getHeight(), display.getWidth());
-            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / DisplayMetrics.DENSITY_DEVICE;
+            DisplayInfo outDisplayInfo = new DisplayInfo();
+            wm.getDefaultDisplay().getDisplayInfo(outDisplayInfo);
+            int shortSize = Math.min(outDisplayInfo.logicalHeight, outDisplayInfo.logicalWidth);
+            int shortSizeDp = shortSize * DisplayMetrics.DENSITY_DEFAULT / outDisplayInfo.logicalDensityDpi;
             if (shortSizeDp < 600) {
                 // 0-599dp: "phone" UI with a separate status & navigation bar
                 mDeviceType =  DEVICE_PHONE;
@@ -176,5 +178,4 @@ public class Utils {
     public static boolean isTablet(Context con) {
         return getScreenType(con) == DEVICE_TABLET;
     }
-
 }
