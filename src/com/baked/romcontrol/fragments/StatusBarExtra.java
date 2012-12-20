@@ -75,7 +75,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
 
     CheckBoxPreference mStatusBarNotifCount;
     CheckBoxPreference mShowImeSwitcher;
-    // CheckBoxPreference mStatusBarBrightnessSlider;
+    CheckBoxPreference mStatusBarBrightnessSlider;
     Preference mCustomLabel;
     ListPreference mNotificationBackground;
     ListPreference mStatusbarBgStyle;
@@ -105,9 +105,9 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         mStatusBarNotifCount.setChecked(Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.STATUSBAR_NOTIF_COUNT, 0) == 1);
 
-        /* mStatusBarBrightnessSlider = (CheckBoxPreference) findPreference(PREF_STATUSBAR_BRIGHTNESS_SLIDER);
+        mStatusBarBrightnessSlider = (CheckBoxPreference) findPreference(PREF_STATUSBAR_BRIGHTNESS_SLIDER);
         mStatusBarBrightnessSlider.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_BRIGHTNESS_SLIDER, true)); */
+                Settings.System.STATUSBAR_BRIGHTNESS_CONTROL, true));
 
         mShowImeSwitcher = (CheckBoxPreference) findPreference(PREF_IME_SWITCHER);
         mShowImeSwitcher.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
@@ -189,11 +189,11 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     checkBoxChecked(preference));
             return true;
 
-        /* } else if (preference == mStatusBarBrightnessSlider) {
+        } else if (preference == mStatusBarBrightnessSlider) {
             Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUS_BAR_BRIGHTNESS_SLIDER,
+                    Settings.System.STATUSBAR_BRIGHTNESS_CONTROL,
                     checkBoxChecked(preference));
-            return true; */
+            return true;
 
         } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();

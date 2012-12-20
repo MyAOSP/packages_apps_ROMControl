@@ -117,6 +117,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".fragments.PowerWidget">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragments.QuickSettings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragments.QuickSettingsTiles">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".fragments.LockscreenInterface">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

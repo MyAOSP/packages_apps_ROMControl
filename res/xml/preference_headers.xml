@@ -70,33 +70,32 @@
         android:fragment="com.baked.romcontrol.fragments.LockscreenTargets"
         android:summary="@string/lockscreen_target_summary"
         android:icon="@drawable/ic_rom_control_lockscreen_target"
-        android:title="@string/lockscreen_target_title" />
-
-    <header
-        android:id="@+id/lockscreen_weather"
-        android:fragment="com.baked.romcontrol.fragments.Weather"
-        android:summary="@string/lockscreen_weather_summary"
-        android:icon="@drawable/ic_rom_control_weather"
-        android:title="@string/lockscreen_weather_title" />
-
-    <header
-        android:id="@+id/lockscreen_calendar"
-        android:fragment="com.baked.romcontrol.fragments.Calendar"
-        android:summary="@string/lockscreen_calendar_summary"
-        android:icon="@drawable/ic_rom_control_calendar"
-        android:title="@string/lockscreen_calendar_title" />-->
+        android:title="@string/lockscreen_target_title" /> -->
 
     <header
         android:id="@+id/lockscreen_extras"
         android:fragment="com.baked.romcontrol.fragments.LockscreenInterface"
         android:summary="@string/header_summary_lockscreen_extra"
-        android:icon="@drawable/ic_rom_control_general"
+        android:icon="@drawable/ic_rom_control_lock_settings"
         android:title="@string/header_lockscreen_extra_title" />
 
     <!-- Statusbar -->
     <header
         android:id="@+id/header_statusbar"
         android:title="@string/header_statusbar" />
+
+    <header
+        android:id="@+id/statusbar_powerwidget"
+        android:fragment="com.baked.romcontrol.fragments.PowerWidget"
+        android:icon="@drawable/ic_rom_control_powerwidget"
+        android:summary="@string/header_summary_powerwidget"
+        android:title="@string/header_powerwidget" />
+
+    <header
+        android:id="@+id/quick_settings_panel"
+        android:fragment="com.baked.romcontrol.fragments.QuickSettings"
+        android:icon="@drawable/ic_rom_control_quick_settings"
+        android:title="@string/quick_settings_panel_title" />
 
     <header
         android:id="@+id/statusbar_signal"
