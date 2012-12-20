@@ -39,6 +39,13 @@
         android:key="static_tiles"
         android:title="@string/title_static_tiles" >
 
+        <ListPreference
+            android:key="tiles_per_row"
+            android:entries="@array/tiles_per_row_entries"
+            android:entryValues="@array/tiles_per_row_values"
+            android:title="@string/tiles_per_row_title"
+            android:summary="@string/tiles_per_row_summary" />
+
         <PreferenceScreen
            android:key="tile_picker"
             android:title="@string/tile_picker_title"

@@ -28,6 +28,7 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -51,8 +52,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
     private static final String DYNAMIC_WIFI = "dynamic_wifi";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String COLLAPSE_PANEL = "collapse_panel";
+    private static final String TILES_PER_ROW = "tiles_per_row";
 
     MultiSelectListPreference mRingMode;
+    ListPreference mTilesPerRow;
     CheckBoxPreference mDynamicAlarm;
     CheckBoxPreference mDynamicBugReport;
     CheckBoxPreference mDynamicWifi;
@@ -63,12 +66,12 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.prefs_qs_settings);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        addPreferencesFromResource(R.xml.prefs_qs_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
         PackageManager pm = getPackageManager();
@@ -80,6 +83,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
         } else {
             mQuickPulldown.setChecked(Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0) == 1);
         }
+
+        mTilesPerRow = (ListPreference) prefSet.findPreference(TILES_PER_ROW);
+        mTilesPerRow.setOnPreferenceChangeListener(this);
 
         mCollapsePanel = (CheckBoxPreference) prefSet.findPreference(COLLAPSE_PANEL);
         mCollapsePanel.setChecked(Settings.System.getInt(resolver, Settings.System.QS_COLLAPSE_PANEL, 0) == 1);
@@ -175,6 +181,13 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
             Settings.System.putString(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.EXPANDED_RING_MODE, TextUtils.join(SEPARATOR, arrValue));
             updateSummary(TextUtils.join(SEPARATOR, arrValue), mRingMode, R.string.pref_ring_mode_summary);
+
+        } else if (preference == mTilesPerRow) {
+            int val = Integer.parseInt((String) newValue);
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.QUICK_TILES_PER_ROW, val);
+            Helpers.restartSystemUI();
+
         }
         return true;
     }

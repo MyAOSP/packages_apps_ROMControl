@@ -134,23 +134,6 @@
     <string name="statusbar_background_color">Statusbar background color</string>
     <string name="statusbar_brightness_slider_title">Statusbar brightness slider</string>
     <string name="statusbar_brightness_slider_summary">Whether the Statusbar brightness slider is on when you slide across the statusbar</string>
-    <!-- Statusbar | Toggles -->
-    <string name="toggles_visible_enabled">Show toggles</string>
-    <string name="toggle_style_title">Toggle style</string>
-    <string name="toggle_style_summary">Whether to show icons or text on your toggles.</string>
-    <string name="toggles_layout_title">Toggle Layout</string>
-    <string name="enabled_toggles_title">Enabled toggles</string>
-    <string name="enabled_toggles_summary">Choose toggles to display</string>
-    <string name="toggles_display_dialog">Choose which toggles to use</string>
-    <string name="toggles_display_close">Close</string>
-    <string name="toggles_order_title">Toggle order</string>
-    <string name="toggles_order_summary">Choose the order which your toggles are displayed</string>
-    <string name="brightness_location_title">Brightness location</string>
-    <string name="reset_toggles_title">Reset toggles</string>
-    <string name="reset_toggles_summary">Reset all toggles and their order</string>
-    <string name="toggle_button_alpha_title">Toggle indicator alpha</string>
-    <string name="toggle_btn_enabled_color_title">Toggle on color</string>
-    <string name="toggle_btn_disabled_color_title">Toggle off color</string>
 
     <!-- Statusbar | wallpaper by xoomdev -->
     <string name="notification_wallpaper_title">Choose notification background</string>
@@ -787,6 +770,8 @@
     <!-- Reset tiles -->
     <string name="tiles_reset_title">Reset</string>
     <string name="tiles_reset_message">Restore the default displayed tiles and layout?</string>
+    <string name="tiles_per_row_title">Toggles per row</string>
+    <string name="tiles_per_row_summary">Choose how many toggles to show per row (SystemUI will restart)</string>
 
     <!-- This exists as part of Power widget already, re-use them
          If Power widget is removed, re-enable these
