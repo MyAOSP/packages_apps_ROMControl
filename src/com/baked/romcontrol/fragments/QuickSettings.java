@@ -40,6 +40,7 @@ import android.text.TextUtils;
 import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.Utils;
+import com.baked.romcontrol.util.Helpers;
 
 public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferenceChangeListener {
     private static final String TAG = "QuickSettings";
