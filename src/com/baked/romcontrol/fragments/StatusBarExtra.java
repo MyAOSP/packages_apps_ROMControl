@@ -296,6 +296,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     Settings.System.STATUSBAR_BACKGROUND_STYLE, value);
             preference.setSummary(mStatusbarBgStyle.getEntries()[index]);
             updateVisibility();
+            Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mStatusbarBgColor) {
