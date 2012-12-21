@@ -185,7 +185,7 @@
     <string name="title_toggle_screentimeout">Toggle Screen timeout</string>
     <string name="title_toggle_mobiledata">Toggle Mobile data</string>
     <string name="title_toggle_lockscreen">Toggle Lock screen</string>
-    <string name="title_toggle_networkmode">Toggle 2G/3G</string>
+    <string name="title_toggle_networkmode">Toggle network mode</string>
     <string name="title_toggle_autorotate">Toggle Orientation</string>
     <string name="title_toggle_airplane">Toggle Airplane mode</string>
     <string name="title_toggle_flashlight">Toggle LED flashlight</string>
@@ -738,9 +738,6 @@
     <string name="title_tile_flashlight">LED flashlight</string>
     <string name="title_tile_lockscreen">Lock screen</string>
     <string name="title_tile_lte">LTE</string>
-    <string name="title_tile_media_play_pause">Media: Play/Pause</string>
-    <string name="title_tile_media_next">Media: Skip to Next</string>
-    <string name="title_tile_media_previous">Media: Skip to Previous</string>
     <string name="title_tile_mobiledata">Mobile data</string>
     <string name="title_tile_autorotate">Orientation</string>
     <string name="title_tile_profile">Profile</string>
@@ -752,7 +749,7 @@
     <string name="title_tile_wifi">Wi-Fi</string>
     <string name="title_tile_wimax">WiMAX</string>
     <string name="title_tile_user">User switcher</string>
-    <string name="title_tile_networkmode">2G/3G</string>
+    <string name="title_tile_networkmode">Network mode</string>
     <string name="title_dynamic_tiles">Dynamic tiles</string>
     <string name="dynamic_tiles_note_title">Note</string>
     <string name="dynamic_tiles_note_summary">Dynamic tiles are not always visible and will only show up if triggered by a system event</string>
@@ -762,9 +759,12 @@
     <string name="title_dynamic_wifi">Wi-Fi display</string>
     <string name="title_general">General</string>
     <string name="title_quick_pulldown">Quick pulldown</string>
-    <string name="summary_quick_pulldown">Show Quick Settings when pulling down notification bar near the right side of the screen</string>
+    <string name="summary_quick_pulldown">edge of the status bar pulls down Quick Settings</string>
+    <string name="quick_pulldown_off">Off</string>
+    <string name="quick_pulldown_left">Left</string>
+    <string name="quick_pulldown_right">Right</string>
     <string name="title_collapse_panel">Auto close panel</string>
-    <string name="summary_collapse_panel">Close the notification panel upon toggle</string>
+    <string name="summary_collapse_panel">Close the QuickSettings panel upon toggle</string>
     <string name="dialog_delete_title">Delete</string>
     <string name="profiles_add">Add</string>
     <!-- Reset tiles -->
