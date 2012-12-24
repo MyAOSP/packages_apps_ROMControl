@@ -33,6 +33,7 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -84,7 +85,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
 
         mQuickPulldown = (ListPreference) prefSet.findPreference(QUICK_PULLDOWN);
         if (!Utils.isPhone(getActivity())) {
-            prefSet.removePreference(mQuickPulldown);
+            ((PreferenceGroup) findPreference("pref_general_settings"))
+                    .removePreference(mQuickPulldown);
         } else {
             mQuickPulldown.setOnPreferenceChangeListener(this);
             int statusQuickPulldown = Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0);
@@ -131,7 +133,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_MOBILEDATA);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_WIFIAP);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-            prefSet.removePreference(mNetworkMode);
+            ((PreferenceGroup) findPreference("static_tiles")).removePreference(mNetworkMode);
         } else {
             // We have telephony support however, some phones run on networks not supported
             // by the networkmode tile so remove both it and the associated options list
@@ -153,7 +155,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
                     break;
                 default:
                     QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-                    prefSet.removePreference(mNetworkMode);
+                    ((PreferenceGroup) findPreference("static_tiles"))
+                            .removePreference(mNetworkMode);
                     break;
             }
         }
