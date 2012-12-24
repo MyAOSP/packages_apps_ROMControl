@@ -26,6 +26,7 @@ import java.util.Set;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
