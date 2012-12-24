@@ -32,7 +32,6 @@ import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
@@ -51,6 +50,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
     private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
     private static final String EXP_RING_MODE = "pref_ring_mode";
     private static final String EXP_NETWORK_MODE = "pref_network_mode";
+    private static final String EXP_SCREENTIMEOUT_MODE = "pref_screentimeout_mode";
     private static final String DYNAMIC_ALARM = "dynamic_alarm";
     private static final String DYNAMIC_BUGREPORT = "dynamic_bugreport";
     private static final String DYNAMIC_IME = "dynamic_ime";
@@ -67,6 +67,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
     ListPreference mTilesPerRow;
     ListPreference mQuickPulldown;
     ListPreference mNetworkMode;
+    ListPreference mScreenTimeoutMode;
     MultiSelectListPreference mRingMode;
 
     @Override
@@ -116,6 +117,11 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
         mNetworkMode = (ListPreference) prefSet.findPreference(EXP_NETWORK_MODE);
         mNetworkMode.setSummary(mNetworkMode.getEntry());
         mNetworkMode.setOnPreferenceChangeListener(this);
+
+        // Screen timeout mode
+        mScreenTimeoutMode = (ListPreference) prefSet.findPreference(EXP_SCREENTIMEOUT_MODE);
+        mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntry());
+        mScreenTimeoutMode.setOnPreferenceChangeListener(this);
 
         // Add the dynamic tiles checkboxes
         mDynamicAlarm = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_ALARM);
@@ -244,6 +250,13 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
             int index = mNetworkMode.findIndexOfValue((String) newValue);
             Settings.System.putInt(resolver, Settings.System.EXPANDED_NETWORK_MODE, value);
             mNetworkMode.setSummary(mNetworkMode.getEntries()[index]);
+            return true;
+
+        } else if (preference == mScreenTimeoutMode) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
+            Settings.System.putInt(resolver, Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
+            mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntries()[index]);
             return true;
         }
         return false;
