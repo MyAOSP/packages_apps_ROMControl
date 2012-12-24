@@ -214,6 +214,67 @@
     <string name="lock_settings_picker_title">Choose screen lock</string>
     <string name="notification_drawer_title">Tablet notification drawer</string>
 
+    <!-- Quick settings panel  -->
+    <string name="quick_settings_panel_title">Quick Settings panel</string>
+    <string name="quick_settings_title">Quick Settings</string>
+    <string name="title_static_tiles">Static tiles</string>
+    <string name="tile_picker_title">Tiles and layout</string>
+    <string name="tile_picker_summary">View, select or change the layout of the displayed tiles</string>
+    <string name="tile_choose_title">Choose a tile</string>
+    <string name="title_tile_airplane">Airplane mode</string>
+    <string name="title_tile_battery">Battery stats</string>
+    <string name="title_tile_bluetooth">Bluetooth</string>
+    <string name="title_tile_brightness">Brightness</string>
+    <string name="title_tile_sleep">Go to sleep</string>
+    <string name="title_tile_gps">GPS</string>
+    <string name="title_tile_torch">Torch</string>
+    <string name="title_tile_lockscreen">Lock screen</string>
+    <string name="title_tile_lte">LTE</string>
+    <string name="title_tile_mobiledata">Mobile data</string>
+    <string name="title_tile_autorotate">Orientation</string>
+    <string name="title_tile_profile">Profile</string>
+    <string name="title_tile_settings">Settings</string>
+    <string name="title_tile_screentimeout">Screen timeout</string>
+    <string name="title_tile_sound">Sound</string>
+    <string name="title_tile_sync">Sync</string>
+    <string name="title_tile_wifiap">Wi-Fi AP</string>
+    <string name="title_tile_wifi">Wi-Fi</string>
+    <string name="title_tile_wimax">WiMAX</string>
+    <string name="title_tile_user">User switcher</string>
+    <string name="title_tile_networkmode">Network mode</string>
+    <string name="title_dynamic_tiles">Dynamic tiles</string>
+    <string name="dynamic_tiles_note_title">Note</string>
+    <string name="dynamic_tiles_note_summary">Dynamic tiles are not always visible and will only show up if triggered by a system event</string>
+    <string name="title_dynamic_alarm">Alarm clock</string>
+    <string name="title_dynamic_bugreport">Bug report</string>
+    <string name="title_dynamic_ime">IME changer</string>
+    <string name="title_dynamic_wifi">Wi-Fi display</string>
+    <string name="title_general">General</string>
+    <string name="title_quick_pulldown">Quick pulldown</string>
+    <string name="summary_quick_pulldown">edge of the status bar pulls down Quick Settings</string>
+    <string name="quick_pulldown_off">Off</string>
+    <string name="quick_pulldown_left">Left</string>
+    <string name="quick_pulldown_right">Right</string>
+    <string name="title_collapse_panel">Auto close panel</string>
+    <string name="summary_collapse_panel">Close the QuickSettings panel upon toggle</string>
+    <string name="dialog_delete_title">Delete</string>
+    <string name="profiles_add">Add</string>
+    <!-- Reset tiles -->
+    <string name="tiles_reset_title">Reset</string>
+    <string name="tiles_reset_message">Restore the default displayed tiles and layout?</string>
+    <string name="tiles_per_row_title">Toggles per row</string>
+    <string name="tiles_per_row_summary">Choose how many toggles to show per row (SystemUI will restart)</string>
+
+    <!-- This exists as part of Power widget already, re-use them
+         If Power widget is removed, re-enable these
+    <string name="pref_ring_mode_title">Sound modes</string>
+    <string name="pref_ring_mode_summary">View or change the Sound button modes</string>
+    <string name="cm_sound_mode_silent">Silent</string>
+    <string name="cm_sound_mode_vibrate">Vibrate</string>
+    <string name="cm_sound_mode_sound">Sound</string>
+    <string name="cm_sound_mode_soundVibrate">Sound + Vibrate</string>
+    -->
+
     <!-- Statusbar | Battery -->
     <string name="battery_icon">Battery icon style</string>
     <string name="battery_color">Colors</string>
@@ -721,67 +782,6 @@
     <string name="custom_density_dialog_summary">"Changing your LCD density can cause unexpected app behavior. If you encounter market app incompatibility please return here and restart the process from step 1."</string>
     <string name="custom_density_dialog_button_got">Got it!</string>
     <string name="custom_density_dialog_button_reboot">Reboot now</string>
-
-    <!-- Quick settings panel  -->
-    <string name="quick_settings_panel_title">Quick Settings panel</string>
-    <string name="quick_settings_title">Quick Settings</string>
-    <string name="title_static_tiles">Static tiles</string>
-    <string name="tile_picker_title">Tiles and layout</string>
-    <string name="tile_picker_summary">View, select or change the layout of the displayed tiles</string>
-    <string name="tile_choose_title">Choose a tile</string>
-    <string name="title_tile_airplane">Airplane mode</string>
-    <string name="title_tile_battery">Battery stats</string>
-    <string name="title_tile_bluetooth">Bluetooth</string>
-    <string name="title_tile_brightness">Brightness</string>
-    <string name="title_tile_sleep">Go to sleep</string>
-    <string name="title_tile_gps">GPS</string>
-    <string name="title_tile_flashlight">LED flashlight</string>
-    <string name="title_tile_lockscreen">Lock screen</string>
-    <string name="title_tile_lte">LTE</string>
-    <string name="title_tile_mobiledata">Mobile data</string>
-    <string name="title_tile_autorotate">Orientation</string>
-    <string name="title_tile_profile">Profile</string>
-    <string name="title_tile_settings">Settings</string>
-    <string name="title_tile_screentimeout">Screen timeout</string>
-    <string name="title_tile_sound">Sound</string>
-    <string name="title_tile_sync">Sync</string>
-    <string name="title_tile_wifiap">Wi-Fi AP</string>
-    <string name="title_tile_wifi">Wi-Fi</string>
-    <string name="title_tile_wimax">WiMAX</string>
-    <string name="title_tile_user">User switcher</string>
-    <string name="title_tile_networkmode">Network mode</string>
-    <string name="title_dynamic_tiles">Dynamic tiles</string>
-    <string name="dynamic_tiles_note_title">Note</string>
-    <string name="dynamic_tiles_note_summary">Dynamic tiles are not always visible and will only show up if triggered by a system event</string>
-    <string name="title_dynamic_alarm">Alarm clock</string>
-    <string name="title_dynamic_bugreport">Bug report</string>
-    <string name="title_dynamic_ime">IME changer</string>
-    <string name="title_dynamic_wifi">Wi-Fi display</string>
-    <string name="title_general">General</string>
-    <string name="title_quick_pulldown">Quick pulldown</string>
-    <string name="summary_quick_pulldown">edge of the status bar pulls down Quick Settings</string>
-    <string name="quick_pulldown_off">Off</string>
-    <string name="quick_pulldown_left">Left</string>
-    <string name="quick_pulldown_right">Right</string>
-    <string name="title_collapse_panel">Auto close panel</string>
-    <string name="summary_collapse_panel">Close the QuickSettings panel upon toggle</string>
-    <string name="dialog_delete_title">Delete</string>
-    <string name="profiles_add">Add</string>
-    <!-- Reset tiles -->
-    <string name="tiles_reset_title">Reset</string>
-    <string name="tiles_reset_message">Restore the default displayed tiles and layout?</string>
-    <string name="tiles_per_row_title">Toggles per row</string>
-    <string name="tiles_per_row_summary">Choose how many toggles to show per row (SystemUI will restart)</string>
-
-    <!-- This exists as part of Power widget already, re-use them
-         If Power widget is removed, re-enable these
-    <string name="pref_ring_mode_title">Sound modes</string>
-    <string name="pref_ring_mode_summary">View or change the Sound button modes</string>
-    <string name="cm_sound_mode_silent">Silent</string>
-    <string name="cm_sound_mode_vibrate">Vibrate</string>
-    <string name="cm_sound_mode_sound">Sound</string>
-    <string name="cm_sound_mode_soundVibrate">Sound + Vibrate</string>
-    -->
 
     <!-- Hardware keys -->
     <string name="hardware_keys_title">Hardware keys</string>
