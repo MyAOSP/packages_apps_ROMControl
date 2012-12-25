@@ -57,9 +57,9 @@ public class CreateShortcut extends LauncherActivity {
         String c = className.substring(className.lastIndexOf(".") + 1);
 
         if (c.equals("Navbar"))
-            return R.drawable.ic_baked_navigation_bar;
+            return R.mipmap.ic_navbar;
         else if (c.equals("QuickSettings"))
-            return R.drawable.ic_baked_quick_settings;
+            return R.mipmap.ic_quick_settings;
         else
             return R.mipmap.ic_launcher;
     }
