@@ -20,12 +20,14 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.animation.AlphaAnimation;
@@ -47,7 +49,8 @@ public class DraggableGridView extends ViewGroup implements
         View.OnTouchListener, View.OnClickListener, View.OnLongClickListener {
 
     public static float childRatio = .95f;
-    protected int colCount, childSize, padding, dpi, scroll = 0;
+    protected int colCount = 3;
+    protected int childSize, padding, dpi, scroll = 0;
     protected float lastDelta = 0;
     protected Handler handler = new Handler();
     protected int dragged = -1, lastX = -1, lastY = -1, lastTarget = -1;
@@ -124,7 +127,8 @@ public class DraggableGridView extends ViewGroup implements
         float w = (r - l) / (dpi / 160f);
 
         // determine number of columns, at least 2
-        colCount = 3;
+        colCount = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.QUICK_TILES_PER_ROW, 3);
 
         // determine childSize and padding, in px
         childSize = (r - l) / colCount;
@@ -180,7 +184,7 @@ public class DraggableGridView extends ViewGroup implements
         // Set the measured dimensions. We always fill the tray width, but wrap
         // to the height of
         // all the tiles.
-        int numRows = (int) Math.ceil((float) cursor / 3);
+        int numRows = (int) Math.ceil((float) cursor / colCount);
         int newHeight = (int) ((numRows * cellHeight) + ((numRows - 1) * 0))
                 + getPaddingTop() + getPaddingBottom();
         // setMeasuredDimension(width, newHeight);
