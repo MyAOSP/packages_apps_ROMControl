@@ -56,10 +56,10 @@ public class CreateShortcut extends LauncherActivity {
     private int getProperShortcutIcon(String className) {
         String c = className.substring(className.lastIndexOf(".") + 1);
 
-        if (c.equals("Performance"))
-            return R.drawable.ic_rom_control_performance;
-        else if (c.equals("Navbar"))
-            return R.drawable.ic_rom_control_navigation_bar;
+        if (c.equals("Navbar"))
+            return R.drawable.ic_baked_navigation_bar;
+        else if (c.equals("QuickSettings"))
+            return R.drawable.ic_baked_quick_settings;
         else
             return R.mipmap.ic_launcher;
     }
