@@ -53,6 +53,7 @@
         <item>@string/icon_with_percent_center</item>
         <item>@string/text_only</item>
         <item>@string/circle_mod</item>
+        <item>@string/circle_xoom_mod</item>
         <item>@string/cm_circle_wo_percent</item>
         <item>@string/cm_circle_with_percent</item>
         <item>@string/battery_hide</item>
@@ -67,7 +68,20 @@
         <item>5</item>
         <item>6</item>
         <item>7</item>
+        <item>8</item>
     </string-array>
+
+    <array name="battery_icon_images">
+        <item>@drawable/battery_icon</item>
+        <item>@drawable/battery_icon_percent</item>
+        <item>@drawable/battery_icon_percent_centered</item>
+        <item>@drawable/battery_text_only</item>
+        <item>@drawable/battery_circle_mod</item>
+        <item>@drawable/battery_xoom_mod</item>
+        <item>@drawable/battery_cm_circle_wo_percent</item>
+        <item>@drawable/battery_cm_circle_percent</item>
+        <item>@drawable/battery_hide</item>
+    </array>
 
     <!-- NavBar -->
     <string-array name="pref_navigation_menu_entries">

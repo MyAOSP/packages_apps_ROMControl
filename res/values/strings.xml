@@ -153,6 +153,33 @@
     <string name="enable_clock_weekday">Day of the week</string>
     <string name="enable_clock_weekday_summary">Abbreviated day of the week before the time</string>
 
+    <!-- Statusbar | Battery -->
+    <string name="battery_icon">Battery icon style</string>
+    <string name="battery_color">Colors</string>
+    <string name="battery_charge_text_only_color">Battery charging text color</string>
+    <string name="battery_text_only_color">Battery text color</string>
+    <string name="battery_cm_circle_ring_color">CM circle mod ring color</string>
+    <string name="battery_cm_circle_ring_color_charge">CM circle mod charging ring color</string>
+    <string name="battery_not_title">Battery icon in notifications</string>
+    <string name="battery_not_summary">Battery icon will show up where the clear all button shows up</string>
+    <string name="battery_bar">Battery bar location</string>
+    <string name="battery_bar_color">Battery bar color</string>
+    <string name="battery_bar_cat">Battery bar options</string>
+    <string name="battery_bar_style_title">Battery bar style</string>
+    <string name="battery_bar_thickness_title">Battery bar thickness</string>
+    <string name="battery_bar_animate_title">Charging animation</string>
+    <string name="battery_bar_animate_summary">The charging animation may result in a poor user experience. Enable at your own discretion.</string>
+    <string name="icon_only">Icon only</string>
+    <string name="icon_with_percent">Icon with percent</string>
+    <string name="icon_with_percent_center">Icon with percent centered</string>
+    <string name="text_only">Text only</string>
+    <string name="circle_mod">Circle mod</string>
+    <string name="circle_xoom_mod">Xoom circle mod</string>
+    <string name="cm_circle_wo_percent">CM circle w/o percent</string>
+    <string name="cm_circle_with_percent">CM circle with percent</string>
+    <string name="battery_hide">Hide</string>
+
+
     <!-- Statusbar | notification clock/date color -->
     <string name="expanded_clock_color_title">Statusbar expanded clock/date color</string>
 
@@ -275,32 +302,6 @@
     <string name="cm_sound_mode_sound">Sound</string>
     <string name="cm_sound_mode_soundVibrate">Sound + Vibrate</string>
     -->
-
-    <!-- Statusbar | Battery -->
-    <string name="battery_icon">Battery icon style</string>
-    <string name="battery_color">Colors</string>
-    <string name="battery_charge_text_only_color">Battery charging text color</string>
-    <string name="battery_text_only_color">Battery text color</string>
-    <string name="battery_cm_circle_ring_color">CM circle mod ring color</string>
-    <string name="battery_cm_circle_ring_color_charge">CM circle mod charging ring color</string>
-    <string name="battery_not_title">Battery icon in notifications</string>
-    <string name="battery_not_summary">Battery icon will show up where the clear all button shows up</string>
-    <string name="battery_bar">Battery bar location</string>
-    <string name="battery_bar_color">Battery bar color</string>
-    <string name="battery_bar_cat">Battery bar options</string>
-    <string name="battery_bar_style_title">Battery bar style</string>
-    <string name="battery_bar_thickness_title">Battery bar thickness</string>
-    <string name="battery_bar_animate_title">Charging animation</string>
-    <string name="battery_bar_animate_summary">The charging animation may result in a poor user experience. Enable at your own discretion.</string>
-    <string name="icon_only">Icon only</string>
-    <string name="icon_with_percent">Icon with percent</string>
-    <string name="icon_with_percent_center">Icon with percent centered</string>
-    <string name="text_only">Text only</string>
-    <string name="circle_mod">Circle mod</string>
-    <string name="cm_circle_wo_percent">CM circle w/o percent</string>
-    <string name="cm_circle_with_percent">CM circle with percent</string>
-    <string name="battery_hide">Hide</string>
-
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
     <string name="press_color_to_apply">Press on Color to apply</string>

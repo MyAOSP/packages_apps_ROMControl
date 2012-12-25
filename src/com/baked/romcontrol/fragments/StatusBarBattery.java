@@ -11,6 +11,7 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 
 import com.baked.romcontrol.R;
+import com.baked.romcontrol.preferences.ImageListPreference;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 
@@ -18,14 +19,13 @@ public class StatusBarBattery extends PreferenceFragment implements
         OnPreferenceChangeListener {
 
     private static final String PREF_BATT_ICON = "battery_icon_list";
-    private static final String PREF_BATT_NOT = "battery_not";
     private static final String PREF_BATT_BAR = "battery_bar_list";
     private static final String PREF_BATT_BAR_STYLE = "battery_bar_style";
     private static final String PREF_BATT_BAR_COLOR = "battery_bar_color";
     private static final String PREF_BATT_BAR_WIDTH = "battery_bar_thickness";
     private static final String PREF_BATT_ANIMATE = "battery_bar_animate";
 
-    ListPreference mBatteryIcon;
+    ImageListPreference mBatteryIcon;
     ListPreference mBatteryBar;
     ListPreference mBatteryBarStyle;
     ListPreference mBatteryBarThickness;
@@ -43,7 +43,7 @@ public class StatusBarBattery extends PreferenceFragment implements
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_statusbar_battery);
 
-        mBatteryIcon = (ListPreference) findPreference(PREF_BATT_ICON);
+        mBatteryIcon = (ImageListPreference) findPreference(PREF_BATT_ICON);
         mBatteryIcon.setOnPreferenceChangeListener(this);
         mBatteryIcon.setValue((Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.STATUSBAR_BATTERY_ICON, 0)) + "");
