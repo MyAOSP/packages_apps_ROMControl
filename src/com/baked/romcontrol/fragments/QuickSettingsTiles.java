@@ -18,12 +18,14 @@ package com.baked.romcontrol.fragments;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +52,8 @@ public class QuickSettingsTiles extends Fragment {
     Resources mSystemUiResources;
     TileAdapter mTileAdapter;
 
+    private int mTileTextSize = 12;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mDragView = new DraggableGridView(getActivity(), null);
@@ -64,6 +68,7 @@ public class QuickSettingsTiles extends Fragment {
             }
         }
         mTileAdapter = new TileAdapter(getActivity(), 0);
+        updateTilesPerRow();
         return mDragView;
     }
 
@@ -88,8 +93,9 @@ public class QuickSettingsTiles extends Fragment {
      */
     void addTile(int titleId, String iconSysId, int iconRegId, boolean newTile) {
         View v = (View) mInflater.inflate(R.layout.qs_tile, null, false);
-        final TextView name = (TextView) v.findViewById(R.id.qs_text);
+        TextView name = (TextView) v.findViewById(R.id.qs_text);
         name.setText(titleId);
+        name.setTextSize(1, mTileTextSize);
         if (mSystemUiResources != null && iconSysId != null) {
             int resId = mSystemUiResources.getIdentifier(iconSysId, null, null);
             if (resId > 0) {
@@ -230,5 +236,27 @@ public class QuickSettingsTiles extends Fragment {
     public interface OnRearrangeListener {
         public abstract void onRearrange(int oldIndex, int newIndex);
         public abstract void onDelete(int index);
+    }
+
+    void updateTileTextSize(int column) {
+        // adjust the tile text size based on column count
+        switch (column) {
+            case 5:
+                mTileTextSize = 8;
+                break;
+            case 4:
+                mTileTextSize = 10;
+                break;
+            case 3:
+            default:
+                mTileTextSize = 12;
+                break;
+        }
+    }
+
+    private void updateTilesPerRow() {
+        int columnCount = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.QUICK_TILES_PER_ROW, 3);
+        updateTileTextSize(columnCount);
     }
 }

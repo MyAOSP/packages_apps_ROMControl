@@ -60,6 +60,7 @@ public class DraggableGridView extends ViewGroup implements
     protected OnRearrangeListener onRearrangeListener;
     protected OnClickListener secondaryOnClickListener;
     private OnItemClickListener onItemClickListener;
+    private int mTileTextSize = 12;
 
     public DraggableGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -123,10 +124,11 @@ public class DraggableGridView extends ViewGroup implements
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        updateTilesPerRow();
         // compute width of view, in dp
         float w = (r - l) / (dpi / 160f);
 
-        // determine number of columns, at least 2
+        // determine number of columns, at least 3
         colCount = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.QUICK_TILES_PER_ROW, 3);
 
@@ -281,6 +283,7 @@ public class DraggableGridView extends ViewGroup implements
         TextView addDeleteTile = ((TextView) getChildAt(getChildCount() - 1).findViewById(R.id.qs_text));
         addDeleteTile.setCompoundDrawablesRelativeWithIntrinsicBounds(0, resid, 0, 0);
         addDeleteTile.setText(stringid);
+        addDeleteTile.setTextSize(1, mTileTextSize);
     }
 
     public boolean onLongClick(View view) {
@@ -495,6 +498,29 @@ public class DraggableGridView extends ViewGroup implements
                 lastDelta = 0;
             }
         }
+    }
+
+    void updateTileTextSize(int column) {
+        // adjust the tile text size based on column count
+        switch (column) {
+            case 5:
+                mTileTextSize = 8;
+                break;
+            case 4:
+                mTileTextSize = 10;
+                break;
+            case 3:
+            default:
+                mTileTextSize = 12;
+                break;
+        }
+    }
+
+    private void updateTilesPerRow() {
+        ContentResolver resolver = mContext.getContentResolver();
+        int columnCount = Settings.System.getInt(resolver, Settings.System.QUICK_TILES_PER_ROW,
+                3);
+        updateTileTextSize(columnCount);
     }
 
     protected int getMaxScroll() {
