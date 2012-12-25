@@ -5,7 +5,7 @@
         android:id="@+id/about_page"
         android:fragment="com.baked.romcontrol.fragments.About"
         android:title="@string/teambaked_about_page"
-        android:icon="@drawable/ic_rom_control"
+        android:icon="@drawable/ic_baked"
         android:summary="@string/teambaked_about_summary" />
 
     <!-- Performance -->
@@ -18,7 +18,7 @@
         android:title="@string/propmodder_title"
         android:fragment="com.baked.romcontrol.fragments.PropModder"
         android:summary="@string/propmodder_title_summary"
-        android:icon="@drawable/ic_rom_control_propmodder" />
+        android:icon="@drawable/ic_baked_propmodder" />
 
     <!-- System -->
     <header
@@ -29,35 +29,35 @@
         android:id="@+id/sound"
         android:fragment="com.baked.romcontrol.fragments.Sound"
         android:title="@string/header_sound_title"
-        android:icon="@drawable/ic_rom_control_sound"
+        android:icon="@drawable/ic_baked_sound"
         android:summary="@string/header_summary_sound" />
 
     <header
         android:id="@+id/power_menu"
         android:fragment="com.baked.romcontrol.fragments.PowerMenu"
         android:title="@string/power_menu_options"
-        android:icon="@drawable/ic_rom_control_power_menu"
+        android:icon="@drawable/ic_baked_power_menu"
         android:summary="@string/header_summary_power_menu" />
 
     <header
         android:id="@+id/nav_bar"
         android:fragment="com.baked.romcontrol.fragments.Navbar"
         android:title="@string/nav_bar"
-        android:icon="@drawable/ic_rom_control_navigation_bar"
+        android:icon="@drawable/ic_baked_navigation_bar"
         android:summary="@string/header_summary_navigation_bar" />
 
     <!-- <header
         android:id="@+id/hardware_keys"
         android:fragment="com.baked.romcontrol.fragments.HardwareKeys"
         android:title="@string/hardware_keys_title"
-        android:icon="@drawable/ic_rom_control_hardware_keys"
+        android:icon="@drawable/ic_baked_hardware_keys"
         android:summary="@string/header_summary_hardware_keys" /> -->
 
     <header
         android:id="@+id/system_extra"
         android:fragment="com.baked.romcontrol.fragments.SystemExtra"
         android:title="@string/header_system_extra"
-        android:icon="@drawable/ic_rom_control_general"
+        android:icon="@drawable/ic_baked_system_settings"
         android:summary="@string/header_summary_system_extra" />
 
     <!-- Lockscreen -->
@@ -69,14 +69,14 @@
         android:id="@+id/lockscreen_targets"
         android:fragment="com.baked.romcontrol.fragments.LockscreenTargets"
         android:summary="@string/lockscreen_target_summary"
-        android:icon="@drawable/ic_rom_control_lockscreen_target"
+        android:icon="@drawable/ic_baked_lockscreen_target"
         android:title="@string/lockscreen_target_title" /> -->
 
     <header
         android:id="@+id/lockscreen_extras"
         android:fragment="com.baked.romcontrol.fragments.LockscreenInterface"
         android:summary="@string/header_summary_lockscreen_extra"
-        android:icon="@drawable/ic_rom_control_lock_settings"
+        android:icon="@drawable/ic_baked_lock_settings"
         android:title="@string/header_lockscreen_extra_title" />
 
     <!-- Statusbar -->
@@ -87,42 +87,42 @@
     <header
         android:id="@+id/statusbar_powerwidget"
         android:fragment="com.baked.romcontrol.fragments.PowerWidget"
-        android:icon="@drawable/ic_rom_control_powerwidget"
+        android:icon="@drawable/ic_baked_powerwidget"
         android:summary="@string/header_summary_powerwidget"
         android:title="@string/header_powerwidget" />
 
     <header
         android:id="@+id/quick_settings_panel"
         android:fragment="com.baked.romcontrol.fragments.QuickSettings"
-        android:icon="@drawable/ic_rom_control_quick_settings"
+        android:icon="@drawable/ic_baked_quick_settings"
         android:title="@string/quick_settings_panel_title" />
 
     <header
         android:id="@+id/statusbar_signal"
         android:title="@string/signal"
         android:fragment="com.baked.romcontrol.fragments.StatusBarSignal"
-        android:icon="@drawable/ic_rom_control_signal"
+        android:icon="@drawable/ic_baked_signal"
         android:summary="@string/header_summary_signal" />
 
     <header
         android:id="@+id/statusbar_battery"
         android:title="@string/battery"
         android:fragment="com.baked.romcontrol.fragments.StatusBarBattery"
-        android:icon="@drawable/ic_rom_control_battery"
+        android:icon="@drawable/ic_baked_battery"
         android:summary="@string/header_summary_battery" />
 
     <header
         android:id="@+id/statusbar_clock"
         android:fragment="com.baked.romcontrol.fragments.StatusBarClock"
         android:summary="@string/header_summary_clock"
-        android:icon="@drawable/ic_rom_control_clock"
+        android:icon="@drawable/ic_baked_clock"
         android:title="@string/clock" />
 
     <header
         android:id="@+id/statusbar_extra"
         android:fragment="com.baked.romcontrol.fragments.StatusBarExtra"
         android:summary="@string/header_summary_statusbar_extra"
-        android:icon="@drawable/ic_rom_control_general"
+        android:icon="@drawable/ic_baked_statusbar_settings"
         android:title="@string/header_statusbar_extra" />
 
 </preference-headers>
