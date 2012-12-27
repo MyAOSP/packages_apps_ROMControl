@@ -53,7 +53,7 @@
             android:layout="?android:attr/preferenceLayoutChild"
             android:persistent="true"
             android:title="@string/navigation_bar_tint_title"
-            android:defaultValue="#FFFFFF"
+            android:defaultValue="#00ffffff"
             alphaSlider="true" />
 
         <net.margaritov.preference.colorpicker.ColorPickerPreference
