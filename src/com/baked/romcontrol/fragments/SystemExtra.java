@@ -106,7 +106,7 @@ public class SystemExtra extends BAKEDPreferenceFragment {
 
         mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
         mUseAltResolver.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
-                Settings.System.ACTIVITY_RESOLVER_USE_ALT, false));
+                Settings.System.ACTIVITY_RESOLVER_USE_ALT, true));
     }
 
     private void writeKillAppLongpressBackOptions() {
