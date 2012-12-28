@@ -196,7 +196,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
-        /* for (int i=0; i<target.size(); i++) {
+        for (int i=0; i<target.size(); i++) {
             Header header = target.get(i);
             final int deviceKeys = getResources().getInteger(
                     com.android.internal.R.integer.config_deviceHardwareKeys);
@@ -205,21 +205,11 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
             if (header.id == R.id.hardware_keys) {
                 if (deviceKeys == 0 || hasHardwareKeys == false) {
                     target.remove(i);
-                }
-            } else if (header.id == R.id.statusbar_powerwidget) {
-                if (isTablet || mTablet) {
-                    target.remove(i);
-                } else {
-                    target.get(i);
-                }
-            } else if (header.id == R.id.tablet_statusbar_powerwidget) {
-                if (isPhablet || isPhone) {
-                    target.remove(i);
                 } else {
                     target.get(i);
                 }
             }
-        } */
+        }
         updateHeaderList(target);
         mHeaders = target;
     }

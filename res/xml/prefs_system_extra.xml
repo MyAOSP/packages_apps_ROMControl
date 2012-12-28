@@ -26,10 +26,10 @@
             android:summary="@string/alt_resolver_summary"
             android:defaultValue="false" />
 
-        <CheckBoxPreference
+        <!-- <CheckBoxPreference
             android:key="vibrate_notif_expand"
             android:title="@string/vibrate_notif_expand_title"
-            android:summary="@string/vibrate_notif_expand_summary" />
+            android:summary="@string/vibrate_notif_expand_summary" /> -->
 
         <CheckBoxPreference
             android:key="clock_date_opens"

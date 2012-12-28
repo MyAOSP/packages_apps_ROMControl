@@ -157,13 +157,13 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-        </activity>
+        </activity> -->
         <activity
             android:name=".fragments.HardwareKeys">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-        </activity> -->
+        </activity>
         <activity
             android:name=".util.ShowBuildProp">
             <intent-filter>

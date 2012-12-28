@@ -33,19 +33,6 @@
         <item>2</item>
     </string-array>
 
-    <!-- Brightness slider
-    <string-array name="brightness_location_entries">
-        <item>On top</item>
-        <item>On the bottom</item>
-        <item>Don\'t Show</item>
-    </string-array>
-
-    <string-array name="brightness_location_values" translatable="false">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array> -->
-
     <!-- Battery styles -->
     <string-array name="battery_icon_entries">
         <item>@string/icon_only</item>
@@ -1016,7 +1003,7 @@
         <item>Iphone Lover!</item>
     </string-array>
 
-    <!-- hardware keys
+    <!-- hardware keys -->
     <string-array name="hardware_keys_action_entries" translatable="false">
         <item>@string/hardware_keys_action_nothing</item>
         <item>@string/hardware_keys_action_menu</item>
@@ -1033,6 +1020,6 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
-    </string-array> -->
+    </string-array>
 
 </resources>

@@ -46,7 +46,7 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     CheckBoxPreference mRecentKillAll;
     CheckBoxPreference mKillAppLongpressBack;
     CheckBoxPreference mUseAltResolver;
-    CheckBoxPreference mVibrateOnExpand;
+    // CheckBoxPreference mVibrateOnExpand;
     CheckBoxPreference mClockDateOpens;
     Preference mLcdDensity;
 
@@ -96,9 +96,9 @@ public class SystemExtra extends BAKEDPreferenceFragment {
             mDisableBootAnimation.setSummary(insults[randomInt]);
         }
 
-        mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
+        /* mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
         mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
-                Settings.System.VIBRATE_NOTIF_EXPAND, true));
+                Settings.System.VIBRATE_NOTIF_EXPAND, true)); */
 
         mClockDateOpens = (CheckBoxPreference) findPreference(PREF_CLOCK_DATE_OPENS);
         mClockDateOpens.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
@@ -162,12 +162,12 @@ public class SystemExtra extends BAKEDPreferenceFragment {
                     checkBoxChecked(preference));
             return true;
 
-        } else if (preference == mVibrateOnExpand) {
+        /* } else if (preference == mVibrateOnExpand) {
             Settings.System.putBoolean(mContext.getContentResolver(),
                     Settings.System.VIBRATE_NOTIF_EXPAND,
                     ((CheckBoxPreference) preference).isChecked());
             Helpers.restartSystemUI();
-            return true;
+            return true; */
 
         } else if (preference == mClockDateOpens) {
             Settings.System.putBoolean(mContext.getContentResolver(),
