@@ -45,7 +45,9 @@ import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.Utils;
 import com.baked.romcontrol.util.Helpers;
 
-public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferenceChangeListener {
+public class QuickSettings extends BAKEDPreferenceFragment implements
+        OnPreferenceChangeListener {
+
     private static final String TAG = "QuickSettings";
 
     private static final String SEPARATOR = "OV=I=XseparatorX=I=VO";
@@ -237,7 +239,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements OnPreferen
         } else if (preference == mTilesPerRow) {
             int val = Integer.parseInt((String) newValue);
             Settings.System.putInt(resolver, Settings.System.QUICK_TILES_PER_ROW, val);
-            Helpers.restartSystemUI();
+            // Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mQuickPulldown) {

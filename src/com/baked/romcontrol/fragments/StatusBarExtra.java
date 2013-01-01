@@ -180,7 +180,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
          if (preference == mStatusBarNotifCount) {
             Settings.System.putInt(mContext.getContentResolver(),
                     Settings.System.STATUSBAR_NOTIF_COUNT,
-                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+                    checkBoxChecked(preference) ? 1 : 0);
             return true;
 
         } else if (preference == mShowImeSwitcher) {
@@ -296,7 +296,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     Settings.System.STATUSBAR_BACKGROUND_STYLE, value);
             preference.setSummary(mStatusbarBgStyle.getEntries()[index]);
             updateVisibility();
-            Helpers.restartSystemUI();
+            // Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mStatusbarBgColor) {

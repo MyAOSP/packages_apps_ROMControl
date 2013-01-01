@@ -269,14 +269,12 @@ public class Navbar extends BAKEDPreferenceFragment implements
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             Preference preference) {
         if (preference == mEnableNavigationBar) {
-
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_SHOW,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mEnableNavringLong) {
-
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.SYSTEMUI_NAVRING_LONG_ENABLE,
                     ((CheckBoxPreference) preference).isChecked() ? true : false);
@@ -405,7 +403,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
                     Settings.System.NAVIGATION_BAR_BACKGROUND_STYLE, value);
             preference.setSummary(mNavigationBarBgStyle.getEntries()[index]);
             updateVisibility();
-            Helpers.restartSystemUI();
+            // Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mNavigationBarBgColor) {
@@ -415,7 +413,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_BACKGROUND_COLOR, intHex);
-            Helpers.restartSystemUI();
+            // Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mNavigationBarGlowColor) {
