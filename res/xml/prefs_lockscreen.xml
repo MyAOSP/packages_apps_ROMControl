@@ -45,6 +45,16 @@
         android:title="@string/lockscreen_quick_unlock_control_title"
         android:summary="@string/lockscreen_quick_unlock_control_summary" />
 
+    <CheckBoxPreference
+        android:key="volbtn_music_controls"
+        android:title="@string/volbtn_music_controls_title"
+        android:summary="@string/volbtn_music_controls_summary" />
+
+    <CheckBoxPreference
+        android:key="pref_volume_wake"
+        android:title="@string/pref_volume_wake_title"
+        android:summary="@string/pref_volume_wake_summary" />
+
     <!-- <CheckBoxPreference
         android:key="lockscreen_rotation"
         android:title="@string/display_lockscreen_rotation_title" />

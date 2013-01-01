@@ -78,6 +78,8 @@ public class LockscreenInterface extends BAKEDPreferenceFragment {
     private static final String KEY_ALWAYS_BATTERY_PREF = "lockscreen_battery_status";
     private static final String KEY_LOCKSCREEN_ROTATION = "lockscreen_rotation";
     private static final String LOCKSCREEN_ROTATION_MODE = "Lock screen";
+    private static final String KEY_VOLUME_WAKE = "pref_volume_wake";
+    private static final String KEY_VOLBTN_MUSIC_CTRL = "volbtn_music_controls";
 
     // private File wallpaperImage;
     // private File wallpaperTemporary;
@@ -85,6 +87,8 @@ public class LockscreenInterface extends BAKEDPreferenceFragment {
     // private ListPreference mCustomBackground;
     // private ListPreference mBatteryStatus;
     // private CheckBoxPreference mLockScreenRotation;
+    private CheckBoxPreference mVolumeWake;
+    private CheckBoxPreference mVolBtnMusicCtrl;
     private Activity mActivity;
     // private Preference mWallpaperAlpha;
     ContentResolver mResolver;
@@ -106,6 +110,14 @@ public class LockscreenInterface extends BAKEDPreferenceFragment {
         keys.add(Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL);
 
         addPreferencesFromResource(R.xml.prefs_lockscreen);
+
+        mVolumeWake = (CheckBoxPreference) findPreference(KEY_VOLUME_WAKE);
+        mVolumeWake.setChecked(Settings.System.getInt(mResolver,
+                Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
+
+        mVolBtnMusicCtrl = (CheckBoxPreference) findPreference(KEY_VOLBTN_MUSIC_CTRL);
+        mVolBtnMusicCtrl.setChecked(Settings.System.getInt(mResolver,
+                Settings.System.VOLBTN_MUSIC_CONTROLS, 0) == 1);
 
         /* mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
         mLockScreenRotation.setChecked(Settings.System.getInt(mResolver,
@@ -213,8 +225,19 @@ public class LockscreenInterface extends BAKEDPreferenceFragment {
 
         } else*/ if (keys.contains(preference.getKey())) {
             Log.e("RC_Lockscreens", "key: " + preference.getKey());
-            return Settings.System.putInt(getActivity().getContentResolver(), preference.getKey(),
+            return Settings.System.putInt(mResolver, preference.getKey(),
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+
+        } else if (preference == mVolBtnMusicCtrl) {
+            Settings.System.putInt(mResolver, Settings.System.VOLBTN_MUSIC_CONTROLS,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+
+        } else if (preference == mVolumeWake) {
+            Settings.System.putInt(mResolver, Settings.System.VOLUME_WAKE_SCREEN,
+                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+        }
 
         /* } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();
