@@ -212,7 +212,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                 } else {
                     target.get(i);
                 }
-            } else if (id == R.id.launcher_settings) {
+            } else if (header.id == R.id.launcher_settings) {
                 Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
                 launcherIntent.addCategory(Intent.CATEGORY_HOME);
                 launcherIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -226,6 +226,15 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                 if (launcherPreferences != null) {
                     header.intent = new Intent().setClassName(launcherPreferences.activityInfo.packageName,
                             launcherPreferences.activityInfo.name);
+                } else {
+                    target.remove(i);
+                }
+            } else if (header.id == R.id.lockscreen_lock_clock) {
+                Intent launchPref = new Intent(Intent.ACTION_MAIN);
+                launchPref.setClassName("com.cyanogenmod.lockclock", "com.cyanogenmod.lockclock.preference.Preferences");
+                ResolveInfo launcherPreferences = getPackageManager().resolveActivity(launchPref, 0);
+                if (launcherPreferences != null) {
+                    header.intent = launchPref;
                 } else {
                     target.remove(i);
                 }

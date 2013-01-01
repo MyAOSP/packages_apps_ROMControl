@@ -237,7 +237,6 @@ public class LockscreenInterface extends BAKEDPreferenceFragment {
             Settings.System.putInt(mResolver, Settings.System.VOLUME_WAKE_SCREEN,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             return true;
-        }
 
         /* } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();

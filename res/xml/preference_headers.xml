@@ -8,15 +8,16 @@
         android:icon="@drawable/ic_baked"
         android:summary="@string/teambaked_about_summary" />
 
-    <!-- Performance
-    <header
-        android:id="@+id/header_performance"
-        android:title="@string/header_performance" /> -->
-
     <!-- System -->
     <header
         android:id="@+id/header_system"
         android:title="@string/header_system" />
+
+    <header
+        android:id="@+id/launcher_settings"
+        android:title="@string/header_launcher_settings"
+        android:icon="@drawable/ic_baked_settings_cmlauncher"
+        android:summary="@string/header_summary_launcher_settings" />
 
     <header
         android:id="@+id/system_extra"
@@ -31,12 +32,6 @@
         android:title="@string/nav_bar"
         android:icon="@drawable/ic_baked_navigation_bar"
         android:summary="@string/header_summary_navigation_bar" />
-
-    <header
-        android:id="@+id/launcher_settings"
-        android:title="@string/header_launcher_settings"
-        android:icon="@drawable/ic_settings_cmlauncher"
-        android:summary="@string/header_summary_launcher_settings" />
 
     <header
         android:id="@+id/hardware_keys"
@@ -84,6 +79,12 @@
         android:summary="@string/header_summary_lockscreen_extra"
         android:icon="@drawable/ic_baked_lock_settings"
         android:title="@string/header_lockscreen_extra_title" />
+
+    <header
+        android:id="@+id/lockscreen_lock_clock"
+        android:summary="@string/header_lock_clock_summary"
+        android:icon="@drawable/ic_baked_lock_clock_widget"
+        android:title="@string/header_lock_clock_title" />
 
     <!-- Statusbar -->
     <header

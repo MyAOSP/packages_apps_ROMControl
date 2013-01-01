@@ -29,6 +29,7 @@
     <string name="header_sound_title">Sound</string>
     <string name="header_performance">Performance</string>
     <string name="header_lockscreen_extra_title">Lockscreen Settings</string>
+    <string name="header_lock_clock_title">Lock Clock Widget</string>
     <string name="title_hardwarekeys">Hardware Keys</string>
     <string name="title_navring">Navigation Ring</string>
     <string name="clock">Clock</string>
@@ -55,6 +56,7 @@
     <string name="header_summary_sound">@null</string>
     <string name="header_summary_performance">@null</string>
     <string name="header_summary_lockscreen_extra">@null</string>
+    <string name="header_lock_clock_summary">@null</string>
     <string name="header_summary_signal">@null</string>
     <string name="header_summary_hardware_keys">@null</string>
 
@@ -485,6 +487,7 @@
     <string name="pref_volume_wake_summary">Pressing the volume rocker up/down will wake the device</string>
     <string name="volbtn_music_controls_title">Volume rocker music controls</string>
     <string name="volbtn_music_controls_summary">When screen off, long-pressing the volume rockers will seek music tracks</string>
+
 
     <!-- Lockscreen Weather -->
     <string name="lockscreen_weather_title">Weather</string>
