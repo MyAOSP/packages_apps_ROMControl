@@ -33,6 +33,12 @@
         android:summary="@string/header_summary_navigation_bar" />
 
     <header
+        android:id="@+id/launcher_settings"
+        android:title="@string/header_launcher_settings"
+        android:icon="@drawable/ic_settings_cmlauncher"
+        android:summary="@string/header_summary_launcher_settings" />
+
+    <header
         android:id="@+id/hardware_keys"
         android:fragment="com.baked.romcontrol.fragments.HardwareKeys"
         android:title="@string/hardware_keys_title"

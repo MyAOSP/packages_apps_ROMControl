@@ -20,6 +20,7 @@
     <string name="header_system">System</string>
     <string name="header_statusbar">Statusbar</string>
     <string name="header_navbar">Navbar</string>
+    <string name="header_launcher_settings">Trebuchet</string>
     <string name="header_powerwidget">Powerwidgets</string>
     <string name="header_tablet_powerwidget">Tablet PowerWidgets</string>
     <string name="header_lockscreen">Lockscreen</string>
@@ -45,6 +46,7 @@
     <string name="header_summary_toggles">@null</string>
     <string name="header_summary_system_extra">@null</string>
     <string name="header_summary_statusbar_extra">@null</string>
+    <string name="header_summary_launcher_settings">@null</string>
     <string name="header_summary_battery">@null</string>
     <string name="header_summary_navigation_bar">@null</string>
     <string name="header_summary_powerwidget">@null</string>
