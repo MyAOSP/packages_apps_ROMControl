@@ -123,7 +123,6 @@
         <item>@string/navbar_action_search</item>
         <item>@string/navbar_action_screenshot</item>
         <item>@string/navbar_action_menu</item>
-        <item>@string/navbar_action_widgets</item>
         <item>@string/navbar_action_ime</item>
         <item>@string/navbar_action_kill</item>
         <item>@string/navbar_action_power</item>
@@ -139,7 +138,6 @@
         <item>**search**</item>
         <item>**screenshot**</item>
         <item>**menu**</item>
-        <item>**widgets**</item>
         <item>**ime**</item>
         <item>**kill**</item>
         <item>**power**</item>
@@ -611,107 +609,6 @@
         <item>2</item>
         <item>1</item>
         <item>0</item>
-    </string-array>
-
-    <string-array name="headphone_audio_mode_entries">
-        <item>@string/headphones_mode_no_action</item>
-        <item>@string/headphones_mode_vibrate</item>
-        <item>@string/headphones_mode_silent</item>
-    </string-array>
-
-    <string-array name="headphone_audio_mode_values" translatable="false">
-        <item>-1</item>
-        <item>1</item>
-        <item>0</item>
-    </string-array>
-
-    <!-- Flip up/down arrays -->
-    <string-array name="flip_entries">
-        <item>.5 seconds</item>
-        <item>1 second</item>
-        <item>1.5 seconds</item>
-        <item>2 seconds</item>
-        <item>2.5 seconds</item>
-        <item>3 seconds</item>
-        <item>3.5 seconds</item>
-        <item>4 seconds</item>
-        <item>4.5 seconds</item>
-        <item>5 seconds</item>
-        <item>5.5 seconds</item>
-        <item>6 seconds</item>
-        <item>7 seconds</item>
-        <item>8 seconds</item>
-        <item>9 seconds</item>
-        <item>10 seconds</item>
-    </string-array>
-
-    <!-- values must be in milliseconds!~@@#E!@ -->
-    <string-array name="flip_values" translatable="false">
-        <item>500</item>
-        <item>1000</item>
-        <item>1500</item>
-        <item>2000</item>
-        <item>2500</item>
-        <item>3000</item>
-        <item>3500</item>
-        <item>4000</item>
-        <item>4500</item>
-        <item>5000</item>
-        <item>5500</item>
-        <item>6000</item>
-        <item>7000</item>
-        <item>8000</item>
-        <item>9000</item>
-        <item>10000</item>
-    </string-array>
-
-    <string-array name="flip_screenoff_entries">
-        <item>5 seconds</item>
-        <item>10 second</item>
-        <item>15 seconds</item>
-        <item>30 seconds</item>
-        <item>45 seconds</item>
-        <item>1 minute</item>
-        <item>1.5 minutes</item>
-        <item>2 minutes</item>
-        <item>2.5 minutes</item>
-        <item>3 minutes</item>
-        <item>3.5 minutes</item>
-        <item>4 minutes</item>
-        <item>5 minutes</item>
-    </string-array>
-
-    <!-- values must be in milliseconds!~@@#E!@ -->
-    <string-array name="flip_screenoff_values" translatable="false">
-        <item>5000</item>
-        <item>10000</item>
-        <item>15000</item>
-        <item>30000</item>
-        <item>45000</item>
-        <item>60000</item>
-        <item>90000</item>
-        <item>120000</item>
-        <item>150000</item>
-        <item>180000</item>
-        <item>210000</item>
-        <item>240000</item>
-        <item>300000</item>
-    </string-array>
-
-    <string-array name="minfree">
-        <item>25mb</item>
-        <item>50mb</item>
-        <item>75mb</item>
-        <item>80mb</item>
-        <item>100mb</item>
-    </string-array>
-
-    <string-array name="minfree_values" translatable="false">
-        <item>1536,2048,4096,5120,5632,6144</item>
-        <item>2560,3840,6400,7680,10240,12800</item>
-        <item>2560,3840,6400,10240,12800,19200</item>
-        <item>2048,3072,6144,15360,17920,20480</item>
-        <item>2560,3840,6400,12800,12800,25600</item>
     </string-array>
 
     <!-- Propmodder and initD support -->

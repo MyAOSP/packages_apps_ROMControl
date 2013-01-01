@@ -3,7 +3,7 @@
 
     <string name="app_name">BAKED Settings</string>
 
-    <!-- AboutPage thanks mastur_mynd -->
+<!-- AboutPage thanks mastur_mynd -->
     <string name="teambaked_about_page">About #teamBAKED</string>
     <string name="teambaked_about_summary">@null</string>
     <string name="baked_devs">Developers of teambaked</string>
@@ -16,13 +16,12 @@
     <string name="baked_irc_title">Join us on IRC</string>
     <string name="baked_irc_summary">#teamBAKED @ irc.freenode.net</string>
 
-    <!-- Header Strings -->
+<!-- Header Strings -->
     <string name="header_system">System</string>
     <string name="header_statusbar">Statusbar</string>
     <string name="header_navbar">Navbar</string>
-    <string name="header_launcher_settings">Trebuchet</string>
+    <string name="header_launcher_settings">Launcher settings</string>
     <string name="header_powerwidget">Powerwidgets</string>
-    <string name="header_tablet_powerwidget">Tablet PowerWidgets</string>
     <string name="header_lockscreen">Lockscreen</string>
     <string name="header_system_extra">System Settings</string>
     <string name="header_statusbar_extra">Statusbar Settings</string>
@@ -42,7 +41,7 @@
     <string name="ok">OK</string>
     <string name="menu_main_activity_change_locale">Blank!</string>
 
-    <!-- Header Summaries -->
+<!-- Header Summaries -->
     <string name="header_summary_clock">@null</string>
     <string name="header_summary_toggles">@null</string>
     <string name="header_summary_system_extra">@null</string>
@@ -60,7 +59,17 @@
     <string name="header_summary_signal">@null</string>
     <string name="header_summary_hardware_keys">@null</string>
 
-    <!-- System | Extras -->
+<!-- Color Picker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on Color to apply</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_hint">#FF000000</string>
+    <string name="set">Set</string>
+    <string name="ics_color">Holo</string>
+
+<!-- System | Extras -->
     <string name="ime_switcher_title">Show IME Switcher</string>
     <string name="ime_switcher_summary">In statusbar, while typing (requires reboot)</string>
     <string name="custom_carrier_label_title">Custom carrier label</string>
@@ -83,38 +92,13 @@
     <!-- system text color test -->
     <string name="primary_text_colors">Change system wide text colors</string>
 
-    <!-- Phone flip face down settings -->
-    <string name="title_flip_mode">Face down audio mode</string>
-    <string name="summary_flip_mode">Choose what to do with sound when you flip your phone face down</string>
-    <string name="flip_cat_title">Face Down Action</string>
-    <string name="title_timeout_sec">Screen Timeout</string>
-    <string name="summary_timeout_sec">Time the screen is off before the flip sensor is disabled</string>
-    <string name="title_down_sec">Face down seconds</string>
-    <string name="summary_down_sec">Time required for your phone to be considered face down</string>
-    <string name="flip_action_positive">OK</string>
-    <string name="flip_dialog_title">How it works</string>
-    <string name="flip_dialog_msg">Your phone will flip over to go to vibrate or silent on how you choose.
-        It will take 1.5 (default) seconds to change once flipped over.
-        It will then disable the flip once the screen is turned on after 15 (default) seconds.
-        NOTE: **You will need to turn the screen back on once flipped over to get sound back once the
-        screen timeout time has been reached.**</string>
-
     <!-- Menu Strings -->
     <string name="menu_nav_bar_reset">Reset nav bar</string>
 
-    <!-- General Strings -->
+<!-- General Strings -->
     <string name="advanced_settings">Advanced settings</string>
     <string name="misc_short">Misc</string>
     <string name="custom_app_icon_successfully">"'s icon set successfully!"</string>
-
-    <!-- Sound -->
-    <string name="title_headphone_audio_mode">Headphones plugged in action</string>
-    <string name="summary_headphone_audio_mode">What to do with sound when headphones are plugged in and out</string>
-    <string name="title_bt_audio_mode">Bluetooth A2DP connected action</string>
-    <string name="summary_bt_audio_mode">What to do with sound when A2DP is connected</string>
-    <string name="headphones_mode_no_action">No action</string>
-    <string name="headphones_mode_vibrate">Vibrate mode</string>
-    <string name="headphones_mode_silent">Silent mode</string>
 
     <!-- Shortcut picker -->
     <string name="use_custom_app_title">Use custom application</string>
@@ -122,7 +106,7 @@
     <string name="select_custom_app_title">Select custom application</string>
     <string name="group_applications">Applications</string>
 
-    <!-- Power Menu -->
+<!-- Power Menu -->
     <string name="title_show_screenshot">Show screenshot</string>
     <string name="title_show_power_off">Show power off</string>
     <string name="title_show_reboot_chooser">Show reboot chooser</string>
@@ -132,7 +116,7 @@
     <string name="title_show_profile_chooser">Show profile chooser</string>
     <string name="title_show_sound_chooser">Show vibrate/sound chooser</string>
 
-    <!-- Statusbar -->
+<!-- Statusbar -->
     <string name="statusbar_bg">Statusbar background</string>
     <string name="statusbar_background_style">Statusbar background style</string>
     <string name="statusbar_background_color">Statusbar background color</string>
@@ -195,7 +179,7 @@
     <string name="wifi_signal_style">WiFi Signal Text Style</string>
     <string name="wifi_signal_color_title">WiFi Signal color</string>
 
-    <!-- Power Widget  -->
+<!-- Power Widget  -->
     <string name="power_widget_title">Power widget</string>
     <string name="title_expanded_widget">Power widget</string>
     <string name="power_widget_behavior">Widget behavior</string>
@@ -245,7 +229,7 @@
     <string name="lock_settings_picker_title">Choose screen lock</string>
     <string name="notification_drawer_title">Tablet notification drawer</string>
 
-    <!-- Quick settings panel  -->
+<!-- Quick settings panel  -->
     <string name="quick_settings_panel_title">Quick Settings panel</string>
     <string name="quick_settings_title">Quick Settings</string>
     <string name="title_static_tiles">Static tiles</string>
@@ -306,17 +290,8 @@
     <string name="cm_sound_mode_sound">Sound</string>
     <string name="cm_sound_mode_soundVibrate">Sound + Vibrate</string>
     -->
-    <!-- Color Picker -->
-    <string name="dialog_color_picker">Color Picker</string>
-    <string name="press_color_to_apply">Press on Color to apply</string>
-    <string name="arrow_right">→</string>
-    <string name="arrow_down">↓</string>
-    <string name="hex">Hex:</string>
-    <string name="hex_hint">#FF000000</string>
-    <string name="set">Set</string>
-    <string name="ics_color">Holo</string>
 
-    <!-- Navigation Bar -->
+<!-- Navigation Bar -->
     <string name="navigation_bar">Navigation bar</string>
     <string name="navbar_button_cat">Navigation bar buttons</string>
     <string name="title_pref_menu_display">Menu location</string>
@@ -470,7 +445,7 @@
     <string name="size_3_dp">3 dp</string>
     <string name="size_4_dp">4 dp</string>
 
-    <!-- LOCKSCREEN -->
+<!-- LOCKSCREEN -->
     <!-- Lockscreen Shortcuts -->
     <string name="lockscreen_target_info">Drag the slider to targets to assign shortcuts</string>
     <string name="lockscreen_target_title">Custom shortcuts</string>
@@ -487,69 +462,6 @@
     <string name="pref_volume_wake_summary">Pressing the volume rocker up/down will wake the device</string>
     <string name="volbtn_music_controls_title">Volume rocker music controls</string>
     <string name="volbtn_music_controls_summary">When screen off, long-pressing the volume rockers will seek music tracks</string>
-
-
-    <!-- Lockscreen Weather -->
-    <string name="lockscreen_weather_title">Weather</string>
-    <string name="lockscreen_weather_summary">@null</string>
-    <string name="lockscreen_weather_enabled">Enabled</string>
-    <string name="weather_enable">Display weather</string>
-    <string name="weather_source">Yahoo! Weather</string>
-    <string name="weather_use_custom_location">Use custom location</string>
-    <string name="weather_geolocated">Geolocated using network</string>
-    <string name="weather_custom_location_dialog_title">Enter location</string>
-    <string name="weather_custom_location_hint">City, State/Country</string>
-    <string name="weather_custom_location_title">Location</string>
-    <string name="weather_show_location_title">Show location</string>
-    <string name="weather_show_timestamp_title">Show timestamp</string>
-    <string name="weather_refresh_interval">Update interval</string>
-    <string name="weather_use_metric">Use metric</string>
-    <string name="weather_retrieve_location_dialog_title">Cannot retrieve location!</string>
-    <string name="weather_retrieve_location_dialog_message">Network geolocation is disabled.\n\nSet a custom location or enable network location</string>
-    <string name="weather_retrieve_location_dialog_enable_button">Enable</string>
-    <string name="weather_invert_lowhigh">Invert low/high temperatures</string>
-    <string name="weather_progress_title">Verifying location</string>
-    <string name="weather_icons_style">Weather icon style</string>
-    <string name="weather_icons_fancy">Fancy icons</string>
-    <string name="weather_icons_stock">White icons</string>
-    <string name="weather_icons_white_highres">Highres white icons</string>
-
-
-    <!-- Lockscreen Weather - Update frequency -->
-    <string name="weather_refresh_manual">Manual</string>
-    <string name="weather_refresh_30min">30 minutes</string>
-    <string name="weather_refresh_60min">60 minutes</string>
-    <string name="weather_refresh_2hrs">2 hours</string>
-    <string name="weather_refresh_4hrs">4 hours</string>
-    <string name="weather_refresh_6hrs">6 hours</string>
-    <string name="weather_refresh_8hrs">8 hours</string>
-    <string name="unknown">Unknown</string>
-
-    <!-- Lockscreen Calendar -->
-    <string name="lockscreen_calendar_title">Calendar</string>
-    <string name="lockscreen_calendar_summary">@null</string>
-    <string name="lockscreen_calendar_enabled">Enabled</string>
-    <string name="calendar_title">Display next event</string>
-    <string name="calendars_title">Event calendars</string>
-    <string name="calendars_summary">Find events from these calendars</string>
-    <string name="calendar_reminders_only_title">Reminders only</string>
-    <string name="calendar_reminders_only_summary">Show only events with reminders</string>
-    <string name="calendar_lookahead_title">Event lookahead</string>
-    <string name="calendar_show_location_title">Event location</string>
-    <string name="calendar_show_description_title">Event description</string>
-
-    <!-- Lockscreen calendar - lookahead -->
-    <string name="calendar_lookahead_3hrs">3 hours</string>
-    <string name="calendar_lookahead_6hrs">6 hours</string>
-    <string name="calendar_lookahead_12hrs">12 hours</string>
-    <string name="calendar_lookahead_1day">1 day</string>
-    <string name="calendar_lookahead_3days">3 days</string>
-    <string name="calendar_lookahead_1wk">1 week</string>
-
-    <!-- Lockscreen calendar - event metadata -->
-    <string name="calendar_metadata_none">Do not show</string>
-    <string name="calendar_metadata_first_line">Show first line</string>
-    <string name="calendar_metadata_all">Show all</string>
 
     <!-- Lockscreen background -->
     <string name="lockscreen_custom_background_title">Background</string>
@@ -649,7 +561,7 @@
 
     <string name="dpi">DPI</string>
 
-    <!-- Promodder and initD arrays explainations -->
+<!-- Promodder and initD arrays explainations -->
     <string name="remove_logcat">Perminately remove log (persists through reboot)</string>
     <string name="remove_logcat_till_reboot">Remove log till reboot (will NOT persist through reboot)</string>
     <string name="enable_logcat">Enable logging (requires reboot)</string>
@@ -765,7 +677,7 @@
     <string name="pref_vvmail_title">VVMail (Sense ROMs ONLY)</string>
     <string name="pref_vvmail_summary">force Sense ROMS compatibility with VVMail</string>
 
-    <!-- LCD Density -->
+<!-- LCD Density -->
     <string name="lcd_density_title">LCD Density</string>
     <string name="lcd_density_summary">unknown</string>
     <string name="current_lcd_density">"Current LCD Density: "</string>
@@ -794,7 +706,7 @@
     <string name="custom_density_dialog_button_got">Got it!</string>
     <string name="custom_density_dialog_button_reboot">Reboot now</string>
 
-    <!-- Hardware keys -->
+<!-- Hardware keys -->
     <string name="hardware_keys_title">Hardware keys</string>
     <string name="hardware_keys_bindings_title">Key actions</string>
     <string name="hardware_keys_enable_custom_title">Enable custom actions</string>

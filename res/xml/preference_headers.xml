@@ -48,13 +48,6 @@
         android:icon="@drawable/ic_baked_propmodder" />
 
     <header
-        android:id="@+id/sound"
-        android:fragment="com.baked.romcontrol.fragments.Sound"
-        android:title="@string/header_sound_title"
-        android:icon="@drawable/ic_baked_sound"
-        android:summary="@string/header_summary_sound" />
-
-    <header
         android:id="@+id/power_menu"
         android:fragment="com.baked.romcontrol.fragments.PowerMenu"
         android:title="@string/power_menu_options"

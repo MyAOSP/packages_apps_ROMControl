@@ -732,8 +732,6 @@ public class Navbar extends BAKEDPreferenceFragment implements
                 return getResources().getDrawable(R.drawable.ic_sysbar_power);
             } else if (uri.equals("**notifications**")) {
                 return getResources().getDrawable(R.drawable.ic_sysbar_notifications);
-            } else if (uri.equals("**widgets**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_widget);
             }
         } else {
             try {
@@ -782,8 +780,6 @@ public class Navbar extends BAKEDPreferenceFragment implements
                 return getResources().getString(R.string.navbar_action_notifications);
             else if (uri.equals("**null**"))
                 return getResources().getString(R.string.navbar_action_none);
-            else if (uri.equals("**widgets**"))
-                return getResources().getString(R.string.navbar_widgets);
         } else {
             return mPicker.getFriendlyNameForUri(uri);
         }
