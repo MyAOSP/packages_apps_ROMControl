@@ -59,12 +59,12 @@
         android:id="@+id/header_lockscreen"
         android:title="@string/header_lockscreen" />
 
-    <!-- <header
+    <header
         android:id="@+id/lockscreen_targets"
         android:fragment="com.baked.romcontrol.fragments.LockscreenTargets"
         android:summary="@string/lockscreen_target_summary"
         android:icon="@drawable/ic_baked_lockscreen_target"
-        android:title="@string/lockscreen_target_title" /> -->
+        android:title="@string/lockscreen_target_title" />
 
     <header
         android:id="@+id/lockscreen_extras"

@@ -370,34 +370,7 @@
         <item>5</item>
     </string-array>
 
-    <!-- Lockscreen delay
-    <string-array name="lockscreen_delay_entries">
-        <item>@string/slide_lock_delay_none</item>
-        <item>@string/slide_lock_delay_1s</item>
-        <item>@string/slide_lock_delay_5s</item>
-        <item>@string/slide_lock_delay_10s</item>
-        <item>@string/slide_lock_delay_15s</item>
-        <item>@string/slide_lock_delay_30s</item>
-        <item>@string/slide_lock_delay_1m</item>
-        <item>@string/slide_lock_delay_5m</item>
-        <item>@string/slide_lock_delay_10m</item>
-        <item>@string/slide_lock_delay_30m</item>
-    </string-array>
-
-    <string-array name="lockscreen_delay_values" translatable="false">
-        <item>0</item>
-        <item>1000</item>
-        <item>5000</item>
-        <item>10000</item>
-        <item>15000</item>
-        <item>30000</item>
-        <item>60000</item>
-        <item>300000</item>
-        <item>600000</item>
-        <item>1800000</item>
-    </string-array> -->
-
-    <!-- Lockscreen icon picker
+    <!-- Lockscreen icon picker -->
     <string-array name="lockscreen_icon_picker_labels" translatable="false">
         <item>@string/icon_picker_alarm</item>
         <item>@string/icon_picker_browser</item>
@@ -534,7 +507,9 @@
         <item>@*android:drawable/ic_lockscreen_unlock_talk_bw_normal</item>
         <item>@*android:drawable/ic_lockscreen_unlock_talk_color_normal</item>
         <item>@*android:drawable/ic_lockscreen_unlock_video_color_normal</item>
-    </string-array> --><!-- Arrays required by powerwidgets. -->
+    </string-array>
+
+    <!-- Arrays required by powerwidgets. -->
     <string-array name="entries_brightness_widget" formatted="false" translatable="false">
         <item>@string/cm_brightness_mode_auto</item>
         <item>@string/cm_brightness_mode_dim</item>
