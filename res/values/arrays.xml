@@ -370,6 +370,17 @@
         <item>5</item>
     </string-array>
 
+    <!-- Lockscreen battery always show -->
+    <string-array name="lockscreen_battery_status_entries" translatable="false">
+        <item>@string/lockscreen_battery_status_charging</item>
+        <item>@string/lockscreen_battery_status_alwayson</item>
+    </string-array>
+
+    <string-array name="lockscreen_battery_status_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
     <!-- Lockscreen icon picker -->
     <string-array name="lockscreen_icon_picker_labels" translatable="false">
         <item>@string/icon_picker_alarm</item>
