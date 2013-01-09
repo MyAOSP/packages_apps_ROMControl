@@ -110,7 +110,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
 
         mLockMaximizeWidgets = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_MAXIMIZE_WIDGETS);
-        if (Utils.isTablet(getActivity())) {
+        if (!Utils.isPhone(getActivity())) {
             getPreferenceScreen().removePreference(mLockMaximizeWidgets);
             mLockMaximizeWidgets = null;
         } else {
