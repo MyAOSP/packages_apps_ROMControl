@@ -89,8 +89,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
         mQuickPulldown = (ListPreference) prefSet.findPreference(QUICK_PULLDOWN);
         if (!Utils.isPhone(getActivity())) {
-            ((PreferenceGroup) findPreference("pref_general_settings"))
-                    .removePreference(mQuickPulldown);
+            if (mQuickPulldown != null)
+                ((PreferenceGroup) findPreference("pref_general_settings"))
+                        .removePreference(mQuickPulldown);
         } else {
             mQuickPulldown.setOnPreferenceChangeListener(this);
             int statusQuickPulldown = Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0);
@@ -118,8 +119,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
         // Add the network mode preference
         mNetworkMode = (ListPreference) prefSet.findPreference(EXP_NETWORK_MODE);
-        mNetworkMode.setSummary(mNetworkMode.getEntry());
-        mNetworkMode.setOnPreferenceChangeListener(this);
+        if (mNetworkMode != null) {
+            mNetworkMode.setSummary(mNetworkMode.getEntry());
+            mNetworkMode.setOnPreferenceChangeListener(this);
+        }
 
         // Screen timeout mode
         mScreenTimeoutMode = (ListPreference) prefSet.findPreference(EXP_SCREENTIMEOUT_MODE);
@@ -142,7 +145,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_MOBILEDATA);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_WIFIAP);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-            ((PreferenceGroup) findPreference("static_tiles")).removePreference(mNetworkMode);
+            if (mNetworkMode != null)
+                ((PreferenceGroup) findPreference("static_tiles")).removePreference(mNetworkMode);
         } else {
             // We have telephony support however, some phones run on networks not supported
             // by the networkmode tile so remove both it and the associated options list
