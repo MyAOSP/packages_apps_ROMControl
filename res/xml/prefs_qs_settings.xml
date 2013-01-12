@@ -91,23 +91,23 @@
 
         <CheckBoxPreference
             android:key="dynamic_alarm"
-            android:title="@string/title_dynamic_alarm"
-            android:persistent="false" />
+            android:title="@string/title_dynamic_alarm" />
 
         <CheckBoxPreference
             android:key="dynamic_bugreport"
-            android:title="@string/title_dynamic_bugreport"
-            android:persistent="false" />
+            android:title="@string/title_dynamic_bugreport" />
 
         <CheckBoxPreference
             android:key="dynamic_ime"
-            android:title="@string/title_dynamic_ime"
-            android:persistent="false" />
+            android:title="@string/title_dynamic_ime" />
+
+        <CheckBoxPreference
+            android:key="dynamic_usbtether"
+            android:title="@string/title_dynamic_usbtether" />
 
         <CheckBoxPreference
             android:key="dynamic_wifi"
-            android:title="@string/title_dynamic_wifi"
-            android:persistent="false" />
+            android:title="@string/title_dynamic_wifi" />
 
     </PreferenceCategory>
 

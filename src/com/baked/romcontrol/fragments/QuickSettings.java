@@ -25,8 +25,10 @@ import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.nfc.NfcAdapter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -57,6 +59,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     private static final String DYNAMIC_ALARM = "dynamic_alarm";
     private static final String DYNAMIC_BUGREPORT = "dynamic_bugreport";
     private static final String DYNAMIC_IME = "dynamic_ime";
+    private static final String DYNAMIC_USBTETHER = "dynamic_usbtether";
     private static final String DYNAMIC_WIFI = "dynamic_wifi";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String COLLAPSE_PANEL = "collapse_panel";
@@ -64,6 +67,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
     CheckBoxPreference mDynamicAlarm;
     CheckBoxPreference mDynamicBugReport;
+    CheckBoxPreference mDynamicUsbTether;
     CheckBoxPreference mDynamicWifi;
     CheckBoxPreference mDynamicIme;
     CheckBoxPreference mCollapsePanel;
@@ -135,6 +139,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         mDynamicBugReport.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_BUGREPORT, 1) == 1);
         mDynamicIme = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_IME);
         mDynamicIme.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_IME, 1) == 1);
+        mDynamicUsbTether = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_USBTETHER);
+        mDynamicUsbTether.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER, 1) == 1);
         mDynamicWifi = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_WIFI);
         mDynamicWifi.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_WIFI, 1) == 1);
 
@@ -206,6 +212,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_IME,
                     mDynamicIme.isChecked() ? 1 : 0);
             return true;
+        } else if (preference == mDynamicUsbTether) {
+            Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER,
+                    mDynamicWifi.isChecked() ? 1 : 0);
+            return true;
         } else if (preference == mDynamicWifi) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_WIFI,
                     mDynamicWifi.isChecked() ? 1 : 0);
@@ -254,14 +264,14 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             Settings.System.putInt(resolver, Settings.System.EXPANDED_NETWORK_MODE, value);
             mNetworkMode.setSummary(mNetworkMode.getEntries()[index]);
             return true;
-        
+
        } else if (preference == mQuickPulldown) {
             int quickPulldownValue = Integer.valueOf((String) newValue);
             Settings.System.putInt(resolver, Settings.System.QS_QUICK_PULLDOWN,
                     quickPulldownValue);
             updatePulldownSummary(quickPulldownValue);
             return true;
-       
+
       } else if (preference == mScreenTimeoutMode) {
             int value = Integer.valueOf((String) newValue);
             int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
@@ -315,5 +325,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         } else {
             return val.toString().split(SEPARATOR);
         }
+    }
+
+    private boolean deviceSupportsUsbTether() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm.getTetherableUsbRegexs().length != 0);
     }
 }
