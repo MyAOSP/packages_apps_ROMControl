@@ -85,7 +85,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
         PreferenceScreen prefSet = getPreferenceScreen();
         PackageManager pm = getPackageManager();
-        ContentResolver resolver = getActivity().getApplicationContext().getContentResolver();
+        ContentResolver resolver = getActivity().getContentResolver();
 
         mQuickPulldown = (ListPreference) prefSet.findPreference(QUICK_PULLDOWN);
         if (!Utils.isPhone(getActivity())) {
@@ -94,9 +94,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
                         .removePreference(mQuickPulldown);
         } else {
             mQuickPulldown.setOnPreferenceChangeListener(this);
-            int statusQuickPulldown = Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0);
-            mQuickPulldown.setValue(String.valueOf(statusQuickPulldown));
-            updatePulldownSummary();
+            int quickPulldownValue = Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0);
+            mQuickPulldown.setValue(String.valueOf(quickPulldownValue));
+            updatePulldownSummary(quickPulldownValue);
         }
 
         mTilesPerRow = (ListPreference) prefSet.findPreference(TILES_PER_ROW);
@@ -107,8 +107,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
         // Add the sound mode
         mRingMode = (MultiSelectListPreference) prefSet.findPreference(EXP_RING_MODE);
-        String storedRingMode = Settings.System.getString(getActivity()
-                .getApplicationContext().getContentResolver(),
+        String storedRingMode = Settings.System.getString(resolver,
                 Settings.System.EXPANDED_RING_MODE);
         if (storedRingMode != null) {
             String[] ringModeArray = TextUtils.split(storedRingMode, SEPARATOR);
@@ -155,8 +154,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             // by the networkmode tile so remove both it and the associated options list
             int network_state = -99;
             try {
-                network_state = Settings.Global.getInt(getActivity()
-                        .getApplicationContext().getContentResolver(),
+                network_state = Settings.Global.getInt(resolver,
                         Settings.Global.PREFERRED_NETWORK_MODE);
             } catch (Settings.SettingNotFoundException e) {
                 Log.e(TAG, "Unable to retrieve PREFERRED_NETWORK_MODE", e);
@@ -188,14 +186,14 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_PROFILE);
         }
 
-        // Dont show the Nfc tile if not supported
+        // Dont show the NFC tile if not supported
         if (NfcAdapter.getDefaultAdapter(getActivity()) == null) {
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NFC);
         }
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        ContentResolver resolver = getActivity().getApplicationContext().getContentResolver();
+        ContentResolver resolver = getActivity().getContentResolver();
         if (preference == mDynamicAlarm) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_ALARM,
                     mDynamicAlarm.isChecked() ? 1 : 0);
@@ -235,7 +233,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        ContentResolver resolver = getActivity().getApplicationContext().getContentResolver();
+        ContentResolver resolver = getActivity().getContentResolver();
         if (preference == mRingMode) {
             ArrayList<String> arrValue = new ArrayList<String>((Set<String>) newValue);
             Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mRingMode));
@@ -250,20 +248,21 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             // Helpers.restartSystemUI();
             return true;
 
-        } else if (preference == mQuickPulldown) {
-            int statusQuickPulldown = Integer.valueOf((String) newValue);
-            Settings.System.putInt(resolver, Settings.System.QS_QUICK_PULLDOWN, statusQuickPulldown);
-            updatePulldownSummary();
-            return true;
-
         } else if (preference == mNetworkMode) {
             int value = Integer.valueOf((String) newValue);
             int index = mNetworkMode.findIndexOfValue((String) newValue);
             Settings.System.putInt(resolver, Settings.System.EXPANDED_NETWORK_MODE, value);
             mNetworkMode.setSummary(mNetworkMode.getEntries()[index]);
             return true;
-
-        } else if (preference == mScreenTimeoutMode) {
+        
+       } else if (preference == mQuickPulldown) {
+            int quickPulldownValue = Integer.valueOf((String) newValue);
+            Settings.System.putInt(resolver, Settings.System.QS_QUICK_PULLDOWN,
+                    quickPulldownValue);
+            updatePulldownSummary(quickPulldownValue);
+            return true;
+       
+      } else if (preference == mScreenTimeoutMode) {
             int value = Integer.valueOf((String) newValue);
             int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
             Settings.System.putInt(resolver, Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
@@ -296,27 +295,17 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         }
     }
 
-    private void updatePulldownSummary() {
-        ContentResolver resolver = getActivity().getApplicationContext().getContentResolver();
-        int summaryId;
-        int directionId;
-        summaryId = R.string.summary_quick_pulldown;
-        String value = Settings.System.getString(resolver, Settings.System.QS_QUICK_PULLDOWN);
-        String[] pulldownArray = getResources().getStringArray(R.array.quick_pulldown_values);
-        if (pulldownArray[0].equals(value)) {
-            directionId = R.string.quick_pulldown_off;
-            mQuickPulldown.setValueIndex(0);
-            mQuickPulldown.setSummary(getResources().getString(directionId));
-        } else if (pulldownArray[1].equals(value)) {
-            directionId = R.string.quick_pulldown_right;
-            mQuickPulldown.setValueIndex(1);
-            mQuickPulldown.setSummary(getResources().getString(directionId)
-                    + " " + getResources().getString(summaryId));
+    private void updatePulldownSummary(int value) {
+        Resources res = getResources();
+
+        if (value == 0) {
+            /* quick pulldown deactivated */
+            mQuickPulldown.setSummary(res.getString(R.string.quick_pulldown_off));
         } else {
-            directionId = R.string.quick_pulldown_left;
-            mQuickPulldown.setValueIndex(2);
-            mQuickPulldown.setSummary(getResources().getString(directionId)
-                    + " " + getResources().getString(summaryId));
+            String direction = res.getString(value == 2
+                    ? R.string.quick_pulldown_summary_left
+                    : R.string.quick_pulldown_summary_right);
+            mQuickPulldown.setSummary(res.getString(R.string.summary_quick_pulldown, direction));
         }
     }
 

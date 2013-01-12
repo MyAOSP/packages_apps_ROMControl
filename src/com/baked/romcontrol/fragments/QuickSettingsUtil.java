@@ -117,7 +117,7 @@ public class QuickSettingsUtil {
                 "com.android.systemui:drawable/ic_qs_profiles"));
         TILES.put(TILE_SCREENTIMEOUT, new QuickSettingsUtil.TileInfo(
                 TILE_SCREENTIMEOUT, R.string.title_tile_screentimeout,
-                "com.android.systemui:drawable/stat_screen_timeout_on"));
+                "com.android.systemui:drawable/ic_qs_screen_timeout_off"));
         TILES.put(TILE_SETTINGS, new QuickSettingsUtil.TileInfo(
                 TILE_SETTINGS, R.string.title_tile_settings,
                 "com.android.systemui:drawable/ic_qs_settings"));
@@ -129,10 +129,10 @@ public class QuickSettingsUtil {
                 "com.android.systemui:drawable/ic_qs_ring_on"));
         TILES.put(TILE_SYNC, new QuickSettingsUtil.TileInfo(
                 TILE_SYNC, R.string.title_tile_sync,
-                "com.android.systemui:drawable/stat_sync_on"));
+                "com.android.systemui:drawable/ic_qs_sync_off"));
         TILES.put(TILE_TORCH, new QuickSettingsUtil.TileInfo(
                 TILE_TORCH, R.string.title_tile_torch,
-                "com.android.systemui:drawable/ic_qs_flashlight_off"));
+                "com.android.systemui:drawable/ic_qs_torch_off"));
         TILES.put(TILE_WIFI, new QuickSettingsUtil.TileInfo(
                 TILE_WIFI, R.string.title_tile_wifi,
                 "com.android.systemui:drawable/ic_qs_wifi_4"));
