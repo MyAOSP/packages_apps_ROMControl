@@ -119,7 +119,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
 
         mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
         mLockScreenRotation.setChecked(Settings.System.getBoolean(mResolver,
-                Settings.System.LOCKSCREEN_AUTO_ROTATE, false);
+                Settings.System.LOCKSCREEN_AUTO_ROTATE, false));
 
         mBatteryStatus = (ListPreference) findPreference(KEY_ALWAYS_BATTERY_PREF);
         mBatteryStatus.setOnPreferenceChangeListener(this);

@@ -27,6 +27,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
