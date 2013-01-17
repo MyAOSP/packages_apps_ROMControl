@@ -64,6 +64,10 @@
             android:summary="@string/navigation_bar_glow_tint_summary"
             android:defaultValue="#FFFFFF" />
 
+        <com.baked.romcontrol.widgets.SeekBarPreference
+            android:key="button_transparency"
+            android:title="@string/button_transparency_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -104,10 +108,6 @@
             android:key="navigation_bar_width"
             android:title="@string/navigation_bar_width_title"
             android:summary="@string/navigation_bar_width_summary" />
-
-        <com.baked.romcontrol.widgets.SeekBarPreference
-            android:key="button_transparency"
-            android:title="@string/button_transparency_title" />
 
     </PreferenceCategory>
 
