@@ -32,9 +32,9 @@ public class About extends BAKEDPreferenceFragment {
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mSiteUrl) {
-            launchUrl("http://teamicemods.com/");
+            launchUrl("http://bakedrom.com/");
         } else if (preference == mSourceUrl) {
-            launchUrl("http://github.com/teambaked");
+            launchUrl("http://github.com/TeamBAKED");
         } else if (preference == mIrcUrl) {
             launchUrl("http://webchat.freenode.net/?channels=teamBAKED");
         }

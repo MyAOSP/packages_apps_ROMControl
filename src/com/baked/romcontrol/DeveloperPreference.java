@@ -15,10 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import com.baked.romcontrol.R;
 
@@ -32,7 +30,6 @@ public class DeveloperPreference extends Preference implements OnClickListener {
     private ImageView mBtnEmail;
     private ImageView mBtnMarket;
     private LinearLayout mTwitterRes;
-    private ProgressBar mLoading;
     private TextView mTitleRes;
 
     private String mDevUrl;
@@ -64,7 +61,6 @@ public class DeveloperPreference extends Preference implements OnClickListener {
         mBtnEmail = (ImageView) developer.findViewById(R.id.widget_developer_btn_email);
         mBtnMarket = (ImageView) developer.findViewById(R.id.widget_developer_btn_market);
         mTwitterRes = (LinearLayout) developer.findViewById(R.id.widget_developer_title);
-        mLoading = (ProgressBar) developer.findViewById(R.id.widget_developer_loading);
         mTitleRes = (TextView) developer.findViewById(R.id.widget_developer_name);
 
         return developer;
@@ -77,26 +73,8 @@ public class DeveloperPreference extends Preference implements OnClickListener {
         if (mDevIcon != null) {
             mAvatar.setImageDrawable(mDevIcon);
         } else if (mDevUrl != null) {
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.init(ImageLoaderConfiguration.createDefault(getContext()));
-            imageLoader.displayImage(mDevUrl, mAvatar, new ImageLoadingListener() {
-
-                public void onLoadingStarted() {
-                    mLoading.setVisibility(View.VISIBLE);
-                }
-
-                public void onLoadingFailed(FailReason failReason) {
-                    mLoading.setVisibility(View.INVISIBLE);
-                }
-
-                public void onLoadingComplete() {
-                    mLoading.setVisibility(View.INVISIBLE);
-                }
-
-                public void onLoadingCancelled() {
-                    // Do nothing here unless you want to create a log report
-                }
-            });
+            UrlImageViewHelper.setUrlDrawable(this.mAvatar, mDevUrl, R.drawable.ic_dev_null,
+                    UrlImageViewHelper.CACHE_DURATION_TWO_DAYS);
         }
 
         if (mDonate != null) {

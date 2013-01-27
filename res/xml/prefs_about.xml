@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:baked="http://schemas.android.com/apk/res/com.baked.romcontrol">
 
     <Preference
         android:key="baked_website"
@@ -17,15 +18,63 @@
         android:title="@string/baked_irc_title"
         android:summary="@string/baked_irc_summary" />
 
-    <Preference
+    <PreferenceCategory
         android:id="@+id/aboutpage"
-        android:title="@string/baked_devs"
-        android:summary="@string/baked_devs_summary">
+        android:title="@string/baked_devs">
+        <!--
+        * Use baked:twitter twitter name exactly as spelled
+        * Use baked:devIcon image stored in package
+        * Use baked:devUrl to pull image from web anywhere
+        * Use baked:donate paypal link
+        * Use baked:email for email link
+        * Use baked:market for market links
+        *
+        *  -->
 
-        <intent
-                android:action="android.intent.action.MAIN"
-                android:targetClass="com.baked.romcontrol.AboutActivity"
-                android:targetPackage="com.baked.romcontrol" />
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="travp624"
+            baked:devUrl="https://lh6.googleusercontent.com/-0aA_j5NQqJE/AAAAAAAAAAI/AAAAAAAABJY/DAYY-EEmMd4/s250-c-k/photo.jpg"
+            baked:donate="http://goo.gl/WqQH3"
+            baked:email="teambakedrom@gmail.com" />
 
-    </Preference>
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="mastur_mynd"
+            baked:devUrl="https://lh6.googleusercontent.com/-MdQpQkBoRa0/TsGRKMCSVsI/AAAAAAAAADk/_aYCWAh00b8/s703/IMG_20110613_014521.jpg"
+            baked:market="https://play.google.com/store/apps/developer?id=Mastur+Mynd#?t=W251bGwsbnVsbCxudWxsLDEsImNvbS5tYXN0dXJteW5kLm1hc3R1cm1vZHMiXQ.."
+            baked:donate="http://goo.gl/LNQtx"
+            baked:email="masturmynd@gmail.com"/>
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="B_boytm"
+            baked:devUrl="https://si0.twimg.com/profile_images/2560313181/9l8yvvvkd10df6zlm4kv.jpeg"
+            baked:market="http://play.google.com/store/apps/developer?id=B-boy%E2%84%A2"
+            baked:donate="http://bit.ly/PayPalLINK"
+            baked:email="teambakedrom@gmail.com"/>
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="termleech"
+            baked:devUrl="https://lh5.googleusercontent.com/-brhokuCIgQ8/TiQnZk2oMwI/AAAAAAAAAtY/Qob3BtZq_y0/s291/Code-Monkey-Java-Logo-medium.jpg"
+            baked:email="chaines@gmail.com" />
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="nycbjr"
+            baked:devUrl="https://lh4.googleusercontent.com/-OiMDAPxcbm8/ThsMbMs2OsI/AAAAAAAAAXM/eAQrRFIgUyY/s350/37744_411899016035_609706035_5029184_3412768_n.jpg" />
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="Dreamsforgott3n"
+            baked:devUrl="https://twimg0-a.akamaihd.net/profile_images/1589629504/oqS1A0xh" />
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="jdlogan151"
+            baked:devUrl="https://si0.twimg.com/profile_images/2507190187/iwol8noe8h5vfx2pjlnt.jpeg"
+            baked:donate="http://bit.ly/TzKEw9"
+            baked:email="jermaine151@gmail.com" />
+
+        <com.baked.romcontrol.DeveloperPreference
+            baked:twitter="ebs512"
+            baked:devUrl="https://twimg0-a.akamaihd.net/profile_images/1690610038/2Cab0XEa"
+            baked:donate="http://goo.gl/wvYGF"
+            baked:email="ebs512@gmail.com" />
+
+    </PreferenceCategory>
 </PreferenceScreen>
