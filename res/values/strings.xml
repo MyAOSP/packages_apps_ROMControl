@@ -9,12 +9,12 @@
     <string name="baked_devs">Developers of teambaked</string>
     <string name="baked_devs_summary">@null</string>
     <string name="baked">Black Android Kang Everyone Desires</string>
-    <string name="baked_website_title">BAKED temp. Website</string>
-    <string name="baked_website_summary">www.teamicemods.com - Find all releases &amp; changelogs here.</string>
+    <string name="baked_website_title">BAKED site/downloads</string>
+    <string name="baked_website_summary">For downloads &amp; changelogs go to http://bakedrom.com</string>
     <string name="baked_source_title">BAKED Source</string>
     <string name="baked_source_summary">BAKED is fully open source. http://github.com/TeamBAKED</string>
     <string name="baked_irc_title">Join us on IRC</string>
-    <string name="baked_irc_summary">#teamBAKED @ irc.freenode.net</string>
+    <string name="baked_irc_summary">#teamBAKED @ webchat.freenode.net</string>
 
 <!-- Header Strings -->
     <string name="header_system">System</string>
@@ -241,13 +241,14 @@
     <string name="title_tile_bluetooth">Bluetooth</string>
     <string name="title_tile_brightness">Brightness</string>
     <string name="title_tile_sleep">Go to sleep</string>
+    <string name="title_tile_fcharge">Fast charge</string>
     <string name="title_tile_gps">GPS</string>
     <string name="title_tile_torch">Torch</string>
     <string name="title_tile_lockscreen">Lock screen</string>
     <string name="title_tile_lte">LTE</string>
     <string name="title_tile_mobiledata">Mobile data</string>
     <string name="title_tile_nfc">NFC</string>
-    <string name="title_tile_autorotate">Orientation</string>
+    <string name="title_tile_autorotate">Auto rotate</string>
     <string name="title_tile_profile">Profile</string>
     <string name="title_tile_settings">Settings</string>
     <string name="title_tile_screentimeout">Screen timeout</string>

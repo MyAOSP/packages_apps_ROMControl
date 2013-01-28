@@ -68,12 +68,12 @@ public class QuickSettingsTiles extends Fragment {
             }
         }
         mTileAdapter = new TileAdapter(getActivity(), 0);
-        updateTilesPerRow();
         return mDragView;
     }
 
     void genTiles() {
         mDragView.removeAllViews();
+        updateTilesPerRow();
         ArrayList<String> tiles = QuickSettingsUtil.getTileListFromString(QuickSettingsUtil.getCurrentTiles(getActivity()));
         for (String tileindex : tiles) {
             QuickSettingsUtil.TileInfo tile = QuickSettingsUtil.TILES.get(tileindex);
@@ -93,7 +93,7 @@ public class QuickSettingsTiles extends Fragment {
      */
     void addTile(int titleId, String iconSysId, int iconRegId, boolean newTile) {
         View v = (View) mInflater.inflate(R.layout.qs_tile, null, false);
-        TextView name = (TextView) v.findViewById(R.id.qs_text);
+        final TextView name = (TextView) v.findViewById(R.id.qs_text);
         name.setText(titleId);
         name.setTextSize(1, mTileTextSize);
         if (mSystemUiResources != null && iconSysId != null) {

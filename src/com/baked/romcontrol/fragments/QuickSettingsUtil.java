@@ -16,11 +16,13 @@
 
 package com.baked.romcontrol.fragments;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.wimax.WimaxHelper;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -28,6 +30,7 @@ import android.text.TextUtils;
 
 import com.android.internal.telephony.PhoneConstants;
 import com.baked.romcontrol.R;
+import com.baked.romcontrol.fragments.QuickSettings;
 
 /**
  * THIS CLASS'S DATA MUST BE KEPT UP-TO-DATE WITH THE DATA IN
@@ -60,6 +63,7 @@ public class QuickSettingsUtil {
     public static final String TILE_WIMAX = "toggleWimax";
     public static final String TILE_PROFILE = "toggleProfile";
     public static final String TILE_NFC = "toggleNfc";
+    public static final String TILE_FCHARGE = "toggleFastCharge";
 
     private static final String TILE_DELIMITER = "|";
     protected static ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -97,6 +101,11 @@ public class QuickSettingsUtil {
         TILES.put(TILE_BRIGHTNESS, new QuickSettingsUtil.TileInfo(
                 TILE_BRIGHTNESS, R.string.title_tile_brightness,
                 "com.android.systemui:drawable/ic_qs_brightness_auto_off"));
+        if (QuickSettings.deviceSupportsFastCharge()) {
+            TILES.put(TILE_FCHARGE, new QuickSettingsUtil.TileInfo(
+                    TILE_FCHARGE, R.string.title_tile_fcharge,
+                    "com.android.systemui:drawable/ic_qs_fcharge_off"));
+        }
         TILES.put(TILE_GPS, new QuickSettingsUtil.TileInfo(
                 TILE_GPS, R.string.title_tile_gps,
                 "com.android.systemui:drawable/ic_qs_gps_neutral"));

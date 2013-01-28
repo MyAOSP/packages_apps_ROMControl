@@ -16,6 +16,7 @@
 
 package com.baked.romcontrol.fragments;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,16 +29,18 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.nfc.NfcAdapter;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.WifiDisplayStatus;
 import android.net.ConnectivityManager;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
+import android.preference.PreferenceCategory;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -64,6 +67,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     private static final String DYNAMIC_WIFI = "dynamic_wifi";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String COLLAPSE_PANEL = "collapse_panel";
+    private static final String GENERAL_SETTINGS = "pref_general_settings";
+    private static final String STATIC_TILES = "static_tiles";
+    private static final String DYNAMIC_TILES = "pref_dynamic_tiles";
     private static final String TILES_PER_ROW = "tiles_per_row";
 
     CheckBoxPreference mDynamicAlarm;
@@ -77,26 +83,33 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     ListPreference mNetworkMode;
     ListPreference mScreenTimeoutMode;
     MultiSelectListPreference mRingMode;
+    PreferenceCategory mGeneralSettings;
+    PreferenceCategory mStaticTiles;
+    PreferenceCategory mDynamicTiles;
+
+    private static Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.prefs_qs_settings);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        addPreferencesFromResource(R.xml.prefs_qs_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
         PackageManager pm = getPackageManager();
         ContentResolver resolver = getActivity().getContentResolver();
-
+        mContext = getActivity().getApplicationContext();
+        mGeneralSettings = (PreferenceCategory) prefSet.findPreference(GENERAL_SETTINGS);
+        mStaticTiles = (PreferenceCategory) prefSet.findPreference(STATIC_TILES);
+        mDynamicTiles = (PreferenceCategory) prefSet.findPreference(DYNAMIC_TILES);
         mQuickPulldown = (ListPreference) prefSet.findPreference(QUICK_PULLDOWN);
         if (!Utils.isPhone(getActivity())) {
             if (mQuickPulldown != null)
-                ((PreferenceGroup) findPreference("pref_general_settings"))
-                        .removePreference(mQuickPulldown);
+                mGeneralSettings.removePreference(mQuickPulldown);
         } else {
             mQuickPulldown.setOnPreferenceChangeListener(this);
             int quickPulldownValue = Settings.System.getInt(resolver, Settings.System.QS_QUICK_PULLDOWN, 0);
@@ -105,6 +118,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         }
 
         mTilesPerRow = (ListPreference) prefSet.findPreference(TILES_PER_ROW);
+        mTilesPerRow.setSummary(mTilesPerRow.getEntry());
         mTilesPerRow.setOnPreferenceChangeListener(this);
 
         mCollapsePanel = (CheckBoxPreference) prefSet.findPreference(COLLAPSE_PANEL);
@@ -145,14 +159,22 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         mDynamicWifi = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_WIFI);
         mDynamicWifi.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_WIFI, 1) == 1);
 
+        if (!deviceSupportsUsbTether()) {
+            mDynamicTiles.removePreference(mDynamicUsbTether);
+        }
+
+        if (!deviceSupportsWifiDisplay()) {
+            mDynamicTiles.removePreference(mDynamicWifi);
+        }
+
         // Don't show mobile data options if not supported
         boolean isMobileData = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
         if (!isMobileData) {
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_MOBILEDATA);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_WIFIAP);
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-            if (mNetworkMode != null)
-                ((PreferenceGroup) findPreference("static_tiles")).removePreference(mNetworkMode);
+            if(mNetworkMode != null)
+                mStaticTiles.removePreference(mNetworkMode);
             QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_WIFIAP);
             QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_MOBILEDATA);
             QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_NETWORKMODE);
@@ -176,8 +198,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
                     break;
                 default:
                     QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-                    ((PreferenceGroup) findPreference("static_tiles"))
-                            .removePreference(mNetworkMode);
+                    mStaticTiles.removePreference(mNetworkMode);
                     break;
             }
         }
@@ -197,6 +218,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         if (NfcAdapter.getDefaultAdapter(getActivity()) == null) {
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NFC);
         }
+
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
@@ -215,7 +237,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             return true;
         } else if (preference == mDynamicUsbTether) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER,
-                    mDynamicWifi.isChecked() ? 1 : 0);
+                    mDynamicUsbTether.isChecked() ? 1 : 0);
             return true;
         } else if (preference == mDynamicWifi) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_WIFI,
@@ -255,8 +277,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
         } else if (preference == mTilesPerRow) {
             int val = Integer.parseInt((String) newValue);
+            int index = mTilesPerRow.findIndexOfValue((String) newValue);
             Settings.System.putInt(resolver, Settings.System.QUICK_TILES_PER_ROW, val);
-            // Helpers.restartSystemUI();
+            mTilesPerRow.setSummary(mTilesPerRow.getEntries()[index]);
             return true;
 
         } else if (preference == mNetworkMode) {
@@ -276,7 +299,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
       } else if (preference == mScreenTimeoutMode) {
             int value = Integer.valueOf((String) newValue);
             int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
-            Settings.System.putInt(resolver, Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
             mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntries()[index]);
             return true;
         }
@@ -292,11 +316,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             StringBuilder summary = new StringBuilder();
             for (int i = 0; i < (length); i++) {
                 CharSequence entry = entries[Integer.parseInt(values[i])];
-                if ((length - i) > 2) {
-                    summary.append(entry).append(", ");
-                } else if ((length - i) == 2) {
-                    summary.append(entry).append(" & ");
-                } else if ((length - i) == 1) {
+                if ((length - i) > 1) {
+                    summary.append(entry).append(" | ");
+                } else {
                     summary.append(entry);
                 }
             }
@@ -331,5 +353,17 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     private boolean deviceSupportsUsbTether() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm.getTetherableUsbRegexs().length != 0);
+    }
+
+    private boolean deviceSupportsWifiDisplay() {
+        DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        return (dm.getWifiDisplayStatus().getFeatureState() != WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE);
+    }
+
+    public static boolean deviceSupportsFastCharge() {
+        Resources res = mContext.getResources();
+        String mFastChargePath = res.getString(com.android.internal.R.string.config_fastChargePath);
+        return ((mFastChargePath != null || !mFastChargePath.isEmpty())
+                    || new File(mFastChargePath).exists());
     }
 }
