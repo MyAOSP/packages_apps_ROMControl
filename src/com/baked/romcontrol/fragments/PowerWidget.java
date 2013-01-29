@@ -278,8 +278,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
                 mCheckBoxPrefs.put(cb, button.getId());
 
                 // specific checks for availability on some platforms
-                if (PowerWidgetUtil.BUTTON_FLASHLIGHT.equals(button.getId()) &&
-                        !getResources().getBoolean(R.bool.has_led_flash)) {
+                if (PowerWidgetUtil.BUTTON_FLASHLIGHT.equals(button.getId()) && !hasTorch) {
                     // disable flashlight if it's not supported
                     cb.setEnabled(false);
                     mFlashMode.setEnabled(false);
