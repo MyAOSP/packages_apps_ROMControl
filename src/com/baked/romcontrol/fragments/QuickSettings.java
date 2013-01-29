@@ -46,6 +46,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telephony.Phone;
+
 import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.Utils;
@@ -92,12 +93,12 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.prefs_qs_settings);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        addPreferencesFromResource(R.xml.prefs_qs_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
         PackageManager pm = getPackageManager();
@@ -217,6 +218,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         // Dont show the NFC tile if not supported
         if (NfcAdapter.getDefaultAdapter(getActivity()) == null) {
             QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NFC);
+        }
+
+        if (noFchargeSupport()) {
+            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_FCHARGE);
         }
 
     }
@@ -360,10 +365,10 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         return (dm.getWifiDisplayStatus().getFeatureState() != WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE);
     }
 
-    public static boolean deviceSupportsFastCharge() {
+    private boolean noFchargeSupport() {
         Resources res = mContext.getResources();
         String mFastChargePath = res.getString(com.android.internal.R.string.config_fastChargePath);
-        return ((mFastChargePath != null || !mFastChargePath.isEmpty())
-                    || new File(mFastChargePath).exists());
+        return mFastChargePath == null || mFastChargePath.isEmpty()
+                    || !new File(mFastChargePath).exists();
     }
 }
