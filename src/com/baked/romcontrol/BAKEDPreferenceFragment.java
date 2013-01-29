@@ -46,14 +46,12 @@ public class BAKEDPreferenceFragment extends PreferenceFragment implements Dialo
     protected boolean mShortcutFragment;
     protected boolean hasTorch;
     protected boolean hasHardwareButtons;
-    protected boolean hasFastCharge;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hasTorch = getResources().getBoolean(R.bool.has_torch);
+        hasTorch = getResources().getBoolean(R.bool.has_led_flash);
         hasHardwareButtons = getResources().getBoolean(R.bool.has_hardware_buttons);
-        hasFastCharge = getResources().getBoolean(R.bool.has_fast_charge);
         mContext = getActivity().getApplicationContext();
         mActionBar = getActivity().getActionBar();
         if(getArguments() != null) {

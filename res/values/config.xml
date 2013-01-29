@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Whether device has camera flash or torch capabilities -->
-    <bool name="has_torch">true</bool>
-
     <!-- LED Flashlight -->
     <bool name="has_led_flash">false</bool>
 
     <!-- Whether device has hardware buttons -->
-    <bool name="has_hardware_buttons">true</bool>
-
-    <!-- Whether can use fast chage -->
-    <bool name="has_fast_charge">true</bool>
+    <bool name="has_hardware_buttons">false</bool>
 </resources>
