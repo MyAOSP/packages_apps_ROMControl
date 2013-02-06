@@ -64,11 +64,18 @@ import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.Utils;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
+import net.margaritov.preference.colorpicker.ColorPickerView;
 
 public class LockscreenInterface extends BAKEDPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private static final String TAG = "LockscreenInterface";
+    public static final int REQUEST_PICK_WALLPAPER = 199;
+    public static final int SELECT_WALLPAPER = 3;
+
+    private static final int LOCKSCREEN_BACKGROUND_COLOR_FILL = 0;
+    private static final int LOCKSCREEN_BACKGROUND_CUSTOM_IMAGE = 1;
+    private static final int LOCKSCREEN_BACKGROUND_DEFAULT_WALLPAPER = 2;
 
     private static final String PREF_LOCKSCREEN_TEXT_COLOR = "lockscreen_text_color";
     private static final String KEY_ALWAYS_BATTERY_PREF = "lockscreen_battery_status";
@@ -77,6 +84,12 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private static final String KEY_VOLUME_WAKE = "volume_wake";
     private static final String KEY_VOLBTN_MUSIC_CTRL = "volbtn_music_controls";
     private static final String KEY_LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
+    private static final String KEY_LOCKSCREEN_BACKGROUND_ALPHA = "lockscreen_background_alpha";
+    public static final String KEY_BACKGROUND_PREF = "lockscreen_background";
+
+    private File mWallpaperImage;
+    private File mWallpaperTemporary;
+    private ListPreference mCustomBackground;
 
     private CheckBoxPreference mLockScreenRotation;
     private CheckBoxPreference mVolumeWake;
@@ -85,9 +98,12 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private CheckBoxPreference mQuickUnlockScreen;
     private ColorPickerPreference mLockscreenTextColor;
     private ListPreference mBatteryStatus;
+    private Preference mWallpaperAlpha;
 
     private Activity mActivity;
     private ContentResolver mResolver;
+
+    private int seekbarProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,6 +142,54 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
 
         mLockscreenTextColor = (ColorPickerPreference) findPreference(PREF_LOCKSCREEN_TEXT_COLOR);
         mLockscreenTextColor.setOnPreferenceChangeListener(this);
+
+        mCustomBackground = (ListPreference) findPreference(KEY_BACKGROUND_PREF);
+        mCustomBackground.setOnPreferenceChangeListener(this);
+        updateCustomBackgroundSummary();
+
+        mWallpaperImage = new File(getActivity().getFilesDir() + "/lockwallpaper");
+        mWallpaperTemporary = new File(getActivity().getCacheDir() + "/lockwallpaper.tmp");
+
+        mWallpaperAlpha = (Preference) findPreference(KEY_LOCKSCREEN_BACKGROUND_ALPHA);
+    }
+
+    private void updateCustomBackgroundSummary() {
+        int resId;
+        String value = Settings.System.getString(getContentResolver(),
+                Settings.System.LOCKSCREEN_BACKGROUND);
+        if (value == null) {
+            resId = R.string.lockscreen_background_default_wallpaper;
+            mCustomBackground.setValueIndex(2);
+        } else if (value.isEmpty()) {
+            resId = R.string.lockscreen_background_custom_image;
+            mCustomBackground.setValueIndex(1);
+        } else {
+            resId = R.string.lockscreen_background_color_fill;
+            mCustomBackground.setValueIndex(0);
+        }
+        mCustomBackground.setSummary(getResources().getString(resId));
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PICK_WALLPAPER) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (mWallpaperTemporary.exists()) {
+                    mWallpaperTemporary.renameTo(mWallpaperImage);
+                }
+                mWallpaperImage.setReadable(true, false);
+                Toast.makeText(mActivity, getResources().getString(R.string.
+                        lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
+                Settings.System.putString(getContentResolver(),
+                        Settings.System.LOCKSCREEN_BACKGROUND,"");
+                updateCustomBackgroundSummary();
+            } else {
+                if (mWallpaperTemporary.exists()) {
+                    mWallpaperTemporary.delete();
+                }
+                Toast.makeText(mActivity, getResources().getString(R.string.
+                        lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
@@ -167,6 +231,53 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             Settings.System.putInt(mResolver, Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
+
+        } else if (preference == mWallpaperAlpha) {
+            Resources res = getActivity().getResources();
+            String cancel = res.getString(R.string.cancel);
+            String ok = res.getString(R.string.ok);
+            String title = res.getString(R.string.alpha_dialog_title);
+            float savedProgress = Settings.System.getFloat(getActivity()
+                        .getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, 1.0f);
+
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
+            SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
+            OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekbar, int progress, boolean fromUser) {
+                    seekbarProgress = seekbar.getProgress();
+                }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekbar) {
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekbar) {
+                }
+            };
+            seekbar.setProgress((int) (savedProgress * 100));
+            seekbar.setMax(100);
+            seekbar.setOnSeekBarChangeListener(seekBarChangeListener);
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(title)
+                    .setView(alphaDialog)
+                    .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // nothing
+                }
+            })
+            .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    float val = ((float) seekbarProgress / 100);
+                    Settings.System.putFloat(getActivity().getContentResolver(),
+                        Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, val);
+                }
+            })
+            .create()
+            .show();
+            return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -174,7 +285,11 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         ContentResolver cr = getActivity().getContentResolver();
 
-        if (preference == mBatteryStatus) {
+        if (preference == mCustomBackground) {
+            int selection = mCustomBackground.findIndexOfValue(objValue.toString());
+            return handleBackgroundSelection(selection);
+
+        } else if (preference == mBatteryStatus) {
             int value = Integer.valueOf((String) objValue);
             int index = mBatteryStatus.findIndexOfValue((String) objValue);
             Settings.System.putInt(cr, Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, value);
@@ -194,6 +309,82 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, intHex);
             return true;
         }
+        return false;
+    }
+
+    private boolean handleBackgroundSelection(int selection) {
+        if (selection == LOCKSCREEN_BACKGROUND_COLOR_FILL) {
+            final ColorPickerView colorView = new ColorPickerView(getActivity());
+            int currentColor = Settings.System.getInt(getContentResolver(),
+                    Settings.System.LOCKSCREEN_BACKGROUND, -1);
+
+            if (currentColor != -1) {
+                colorView.setColor(currentColor);
+            }
+            colorView.setAlphaSliderVisible(true);
+
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.lockscreen_custom_background_dialog_title)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Settings.System.putInt(getContentResolver(),
+                                    Settings.System.LOCKSCREEN_BACKGROUND, colorView.getColor());
+                            updateCustomBackgroundSummary();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setView(colorView)
+                    .show();
+        } else if (selection == LOCKSCREEN_BACKGROUND_CUSTOM_IMAGE) {
+            final Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+            intent.setType("image/*");
+            intent.putExtra("crop", "true");
+            intent.putExtra("scale", true);
+            intent.putExtra("scaleUpIfNeeded", false);
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+
+            final Display display = getActivity().getWindowManager().getDefaultDisplay();
+            final Rect rect = new Rect();
+            final Window window = getActivity().getWindow();
+
+            window.getDecorView().getWindowVisibleDisplayFrame(rect);
+
+            int statusBarHeight = rect.top;
+            int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+            int titleBarHeight = contentViewTop - statusBarHeight;
+            boolean isPortrait = getResources().getConfiguration().orientation ==
+                    Configuration.ORIENTATION_PORTRAIT;
+
+            int width = display.getWidth();
+            int height = display.getHeight() - titleBarHeight;
+
+            intent.putExtra("aspectX", isPortrait ? width : height);
+            intent.putExtra("aspectY", isPortrait ? height : width);
+
+            try {
+                mWallpaperTemporary.createNewFile();
+                mWallpaperTemporary.setWritable(true, false);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mWallpaperTemporary));
+                intent.putExtra("return-data", false);
+                getActivity().startActivityFromFragment(this, intent, REQUEST_PICK_WALLPAPER);
+            } catch (IOException e) {
+                // Do nothing here
+            } catch (ActivityNotFoundException e) {
+                // Do nothing here
+            }
+        } else if (selection == LOCKSCREEN_BACKGROUND_DEFAULT_WALLPAPER) {
+            Settings.System.putString(getContentResolver(),
+                    Settings.System.LOCKSCREEN_BACKGROUND, null);
+            updateCustomBackgroundSummary();
+            return true;
+        }
+
         return false;
     }
 }

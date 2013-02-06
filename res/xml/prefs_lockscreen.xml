@@ -15,7 +15,7 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- <ListPreference
+    <ListPreference
         android:key="lockscreen_background"
         android:persistent="false"
         android:dialogTitle="@string/lockscreen_custom_background_title"
@@ -24,8 +24,8 @@
         android:entryValues="@array/lockscreen_background_values"/>
 
     <Preference
-        android:key="lockscreen_wallpaper_alpha"
-        android:title="@string/lockscreen_wallpaper_alpha_title" /> -->
+        android:key="lockscreen_background_alpha"
+        android:title="@string/lockscreen_wallpaper_alpha_title" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="lockscreen_text_color"
