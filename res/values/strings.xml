@@ -88,7 +88,8 @@
     <string name="vibrate_notif_expand_summary">Vibrate when expanding notifications (requires UI restart)</string>
     <string name="clock_date_opens_title">Clock/Date opens</string>
     <string name="clock_date_opens_summary">Notification pulldown clock opens alarms, date opens calendar (requires UI restart)</string>
-
+    <string name="plugged_unplugged_wakeup_title">Wake up on charger</string>
+    <string name="plugged_unplugged_wakeup_summary">Wake up device if a charger is plugged/unplugged.</string>
     <!-- system text color test -->
     <string name="primary_text_colors">Change system wide text colors</string>
 
@@ -250,6 +251,7 @@
     <string name="title_tile_nfc">NFC</string>
     <string name="title_tile_autorotate">Auto rotate</string>
     <string name="title_tile_profile">Profile</string>
+    <string name="title_tile_quiet_hours">Quiet hours</string>
     <string name="title_tile_settings">Settings</string>
     <string name="title_tile_screentimeout">Screen timeout</string>
     <string name="title_tile_sound">Sound</string>

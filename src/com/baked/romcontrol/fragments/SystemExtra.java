@@ -41,6 +41,7 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     private static final String PREF_USE_ALT_RESOLVER = "use_alt_resolver";
     private static final String PREF_VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
     private static final String PREF_CLOCK_DATE_OPENS = "clock_date_opens";
+    private static final String PREF_PLUGGED_UNPLUGGED_WAKEUP = "plugged_unplugged_wakeup";
 
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mRecentKillAll;
@@ -48,6 +49,7 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     CheckBoxPreference mUseAltResolver;
     CheckBoxPreference mVibrateOnExpand;
     CheckBoxPreference mClockDateOpens;
+    CheckBoxPreference mPluggedUnpluggedWakeup;
     Preference mLcdDensity;
 
     Random randomGenerator = new Random();
@@ -107,6 +109,15 @@ public class SystemExtra extends BAKEDPreferenceFragment {
         mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
         mUseAltResolver.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
                 Settings.System.ACTIVITY_RESOLVER_USE_ALT, true));
+
+        mPluggedUnpluggedWakeup = (CheckBoxPreference) findPreference(PREF_PLUGGED_UNPLUGGED_WAKEUP);
+        mPluggedUnpluggedWakeup.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+                Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, true));
+
+        // hide option if device is already set to never wake up
+        if(!mContext.getResources().getBoolean(com.android.internal.R.bool.config_unplugTurnsOnScreen)) {
+            ((PreferenceGroup) findPreference("misc")).removePreference(mPluggedUnpluggedWakeup);
+        }
     }
 
     private void writeKillAppLongpressBackOptions() {
@@ -165,16 +176,21 @@ public class SystemExtra extends BAKEDPreferenceFragment {
         } else if (preference == mVibrateOnExpand) {
             Settings.System.putBoolean(mContext.getContentResolver(),
                     Settings.System.VIBRATE_NOTIF_EXPAND,
-                    ((CheckBoxPreference) preference).isChecked());
+                    checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mClockDateOpens) {
             Settings.System.putBoolean(mContext.getContentResolver(),
                     Settings.System.CLOCK_DATE_OPENS,
-                    ((CheckBoxPreference) preference).isChecked());
+                    checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
+
+        } else if (preference == mPluggedUnpluggedWakeup) {
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
+                    checkBoxChecked(preference));
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }

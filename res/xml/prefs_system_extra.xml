@@ -36,6 +36,12 @@
             android:title="@string/clock_date_opens_title"
             android:summary="@string/clock_date_opens_summary" />
 
+        <CheckBoxPreference
+            android:key="plugged_unplugged_wakeup"
+            android:title="@string/plugged_unplugged_wakeup_title"
+            android:summary="@string/plugged_unplugged_wakeup_summary"
+            android:defaultValue="true" />
+
         <Preference
             android:key="lcd_density_setup"
             android:title="@string/lcd_density_title"
