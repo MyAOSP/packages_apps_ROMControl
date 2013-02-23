@@ -1,9 +1,12 @@
 
 package com.baked.romcontrol.fragments;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -11,12 +14,13 @@ import android.provider.Settings.SettingNotFoundException;
 import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 
-public class PowerMenu extends BAKEDPreferenceFragment {
+public class PowerMenu extends BAKEDPreferenceFragment implements
+            OnPreferenceChangeListener {
 
     private static final String PREF_SCREENSHOT = "show_screenshot";
     private static final String PREF_POWER_OFF = "show_power_off";
     private static final String PREF_REBOOT_CHOOSER = "show_reboot_chooser";
-    private static final String PREF_SHOW_EXPANDED_DESKTOP_TOGGLE = "show_expanded_desktop_toggle";
+    private static final String PREF_EXPANDED_DESKTOP = "expanded_desktop";
     private static final String PREF_NAVBAR_HIDE = "show_navbar_hide";
     private static final String PREF_AIRPLANE_TOGGLE = "show_airplane_toggle";
     private static final String PREF_SHOW_PROFILE_CHOOSER = "show_profile_chooser";
@@ -25,11 +29,11 @@ public class PowerMenu extends BAKEDPreferenceFragment {
     CheckBoxPreference mShowScreenShot;
     CheckBoxPreference mShowPowerOff;
     CheckBoxPreference mShowRebootChooser;
-    CheckBoxPreference mShowExpandedDesktopToggle;
     CheckBoxPreference mShowAirplaneToggle;
     CheckBoxPreference mShowNavBarHide;
     CheckBoxPreference mShowProfileChooser;
     CheckBoxPreference mShowSoundChooser;
+    ListPreference mExpandedDesktop;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,13 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         mShowRebootChooser.setChecked(Settings.System.getInt(getActivity()
                 .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_REBOOT_CHOOSER, 1) == 1);
 
-        mShowExpandedDesktopToggle = (CheckBoxPreference) findPreference(PREF_SHOW_EXPANDED_DESKTOP_TOGGLE);
-        mShowExpandedDesktopToggle.setChecked(Settings.System.getInt(getActivity()
-                .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_EXPANDED_DESKTOP_TOGGLE, 0) == 1);
+        PreferenceScreen prefSet = getPreferenceScreen();
+        mExpandedDesktop = (ListPreference) prefSet.findPreference(PREF_EXPANDED_DESKTOP);
+        mExpandedDesktop.setOnPreferenceChangeListener(this);
+        int expandedDesktopValue = Settings.System.getInt(getContentResolver(),
+                Settings.System.EXPANDED_DESKTOP_STYLE, 0);
+        mExpandedDesktop.setValue(String.valueOf(expandedDesktopValue));
+        updateExpandedDesktopSummary(expandedDesktopValue);
 
         mShowAirplaneToggle = (CheckBoxPreference) findPreference(PREF_AIRPLANE_TOGGLE);
         mShowAirplaneToggle.setChecked(Settings.System.getInt(getActivity()
@@ -69,6 +77,18 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         mShowSoundChooser = (CheckBoxPreference) findPreference(PREF_SHOW_SOUND_CHOOSER);
         mShowSoundChooser.setChecked(Settings.System.getInt(getActivity()
                 .getContentResolver(), Settings.System.POWER_DIALOG_SHOW_SOUND_CHOOSER, 1) == 1);
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mExpandedDesktop) {
+            int expandedDesktopValue = Integer.valueOf((String) newValue);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.EXPANDED_DESKTOP_STYLE, expandedDesktopValue);
+            updateExpandedDesktopSummary(expandedDesktopValue);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -90,12 +110,6 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         } else if (preference == mShowRebootChooser) {
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.POWER_DIALOG_SHOW_REBOOT_CHOOSER,
-                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
-            return true;
-
-        } else if (preference == mShowExpandedDesktopToggle) {
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.POWER_DIALOG_SHOW_EXPANDED_DESKTOP_TOGGLE,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
             return true;
 
@@ -125,5 +139,24 @@ public class PowerMenu extends BAKEDPreferenceFragment {
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    private void updateExpandedDesktopSummary(int value) {
+        Resources res = getResources();
+
+        if (value == 0) {
+            // Expanded desktop disabled
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.POWER_DIALOG_SHOW_EXPANDED_DESKTOP_TOGGLE, 0);
+            mExpandedDesktop.setSummary(res.getString(R.string.expanded_desktop_disabled));
+        } else if (value == 1) {
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.POWER_DIALOG_SHOW_EXPANDED_DESKTOP_TOGGLE, 1);
+            mExpandedDesktop.setSummary(res.getString(R.string.expanded_desktop_status_bar));
+        } else if (value == 2) {
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.POWER_DIALOG_SHOW_EXPANDED_DESKTOP_TOGGLE, 1);
+            mExpandedDesktop.setSummary(res.getString(R.string.expanded_desktop_no_status_bar));
+        }
     }
 }
