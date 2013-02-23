@@ -12,6 +12,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,10 +21,12 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemProperties;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -32,7 +35,8 @@ import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.util.CMDProcessor;
 import com.baked.romcontrol.util.Helpers;
 
-public class SystemExtra extends BAKEDPreferenceFragment {
+public class SystemExtra extends BAKEDPreferenceFragment implements
+        OnPreferenceChangeListener {
 
     public static final String TAG = "SystemExtra";
 
@@ -42,6 +46,8 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     private static final String PREF_VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
     private static final String PREF_CLOCK_DATE_OPENS = "clock_date_opens";
     private static final String PREF_PLUGGED_UNPLUGGED_WAKEUP = "plugged_unplugged_wakeup";
+    private static final String PREF_USER_MODE_UI = "user_mode_ui";
+    private static final String PREF_HIDE_EXTRAS = "hide_extras";
 
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mRecentKillAll;
@@ -50,6 +56,8 @@ public class SystemExtra extends BAKEDPreferenceFragment {
     CheckBoxPreference mVibrateOnExpand;
     CheckBoxPreference mClockDateOpens;
     CheckBoxPreference mPluggedUnpluggedWakeup;
+    CheckBoxPreference mHideExtras;
+    ListPreference mUserModeUI;
     Preference mLcdDensity;
 
     Random randomGenerator = new Random();
@@ -118,6 +126,17 @@ public class SystemExtra extends BAKEDPreferenceFragment {
         if(!mContext.getResources().getBoolean(com.android.internal.R.bool.config_unplugTurnsOnScreen)) {
             ((PreferenceGroup) findPreference("misc")).removePreference(mPluggedUnpluggedWakeup);
         }
+
+        mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
+        mHideExtras.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+                        Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
+
+        mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
+        int uiMode = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 0);
+        mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.USER_UI_MODE, uiMode)));
+        mUserModeUI.setOnPreferenceChangeListener(this);
     }
 
     private void writeKillAppLongpressBackOptions() {
@@ -191,7 +210,23 @@ public class SystemExtra extends BAKEDPreferenceFragment {
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
                     checkBoxChecked(preference));
+        } else if (preference == mHideExtras) {
+            Settings.System.putBoolean(mContext.getContentResolver(),
+                    Settings.System.HIDE_EXTRAS_SYSTEM_BAR,
+                    ((CheckBoxPreference) preference).isChecked());
+            return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mUserModeUI) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.USER_UI_MODE, Integer.parseInt((String) newValue));
+            Helpers.restartSystemUI();
+            return true;
+        }
+        return false;
     }
 }

@@ -84,6 +84,8 @@
     <string name="alt_resolver_summary">Switches to a app picker that one click selects the app also has always checkbox at bottom</string>
     <string name="force_tablet_ui">Force Tablet UI</string>
     <string name="force_tablet_ui_summary">This will force the device to use the Tablet UI (requires reboot). **If setting this on a high dpi device please change to a lower screen density before setting this to on</string>
+    <string name="hide_extras">Hide Extras</string>
+    <string name="hide_extras_summary">Hide some systembar stuff i.e. the compat. mode button(requires UI restart)</string>
     <string name="vibrate_notif_expand_title">Vibrate on expand</string>
     <string name="vibrate_notif_expand_summary">Vibrate when expanding notifications (requires UI restart)</string>
     <string name="clock_date_opens_title">Clock/Date opens</string>
@@ -121,6 +123,12 @@
     <string name="statusbar_background_color">Statusbar background color</string>
     <string name="statusbar_brightness_slider_title">Statusbar brightness slider</string>
     <string name="statusbar_brightness_slider_summary">Whether the Statusbar brightness slider is on when you slide across the statusbar</string>
+    <!-- UserUI mode -->
+    <string name="user_mode_ui">UI Mode</string>
+    <string name="user_mode_ui_summary">What style to display NavBar and Statusbar\nChanges will force SystemUI Restart</string>
+    <string name="phone_mode_ui">Phone - NavBar to side in landscape</string>
+    <string name="tablet_mode_ui">Tablet - Combined NavBar and SystemBar</string>
+    <string name="phablet_mode_ui">Phablet - NavBar stays at bottom in landscape</string>
     <!-- Statusbar | wallpaper by xoomdev -->
     <string name="notification_wallpaper_title">Choose notification background</string>
     <string name="notification_wallpaper_summary">You can remove the wallpaper from the menu in this window</string>
@@ -301,6 +309,10 @@
     <string name="navbar_qty_summary">Choose the number of navigation buttons</string>
     <string name="navbar_action_title">Button %1$s action &amp; icon</string>
     <string name="button_transparency_title">Nav button transparency</string>
+    <string name="navbar_width_help_title">NavBar combined width help</string>
+    <string name="navbar_width_help_summary">100 is 70\%% of screen width, 5 is 30\%% of screen width. 0 will default to per button width.</string>
+    <string name="width_port_title">Combined bar width portrait</string>
+    <string name="width_land_title">Combined bar width landscape</string>
     <string name="navbar_longpress_title">Button %1$s longpress action</string>
     <string name="navbar_action_home">Home</string>
     <string name="navbar_action_back">Back</string>
