@@ -85,6 +85,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private static final String KEY_VOLBTN_MUSIC_CTRL = "volbtn_music_controls";
     private static final String KEY_LOCKSCREEN_MAXIMIZE_WIDGETS = "lockscreen_maximize_widgets";
     private static final String KEY_LOCKSCREEN_BACKGROUND_ALPHA = "lockscreen_background_alpha";
+    private static final String KEY_LOCKSCREEN_VIBRATE = "lockscreen_vibrate";
     public static final String KEY_BACKGROUND_PREF = "lockscreen_background";
 
     private File mWallpaperImage;
@@ -96,6 +97,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private CheckBoxPreference mVolBtnMusicCtrl;
     private CheckBoxPreference mLockMaximizeWidgets;
     private CheckBoxPreference mQuickUnlockScreen;
+    private CheckBoxPreference mLockscreenVibrate;
     private ColorPickerPreference mLockscreenTextColor;
     private ListPreference mBatteryStatus;
     private Preference mWallpaperAlpha;
@@ -123,7 +125,13 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
 
         mQuickUnlockScreen = (CheckBoxPreference) findPreference(LOCKSCREEN_QUICK_UNLOCK_CONTROL);
         mQuickUnlockScreen.setChecked(Settings.System.getInt(mResolver,
-                    Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+
+        mLockscreenVibrate = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATE);
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mResolver,
+                Settings.System.LOCKSCREEN_VIBRATE_ENABLED, 1) == 1);
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mResolver,
+                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1);
 
         mLockMaximizeWidgets = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_MAXIMIZE_WIDGETS);
         if (!Utils.isPhone(getActivity())) {
@@ -231,6 +239,12 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             Settings.System.putInt(mResolver, Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
+
+        } else if (preference == mLockscreenVibrate) {
+            Settings.System.putInt(mResolver, Settings.System.LOCKSCREEN_VIBRATE_ENABLED,
+                    checkBoxChecked(preference) ? 1 : 0);
+            Settings.System.putInt(mResolver, Settings.System.HAPTIC_FEEDBACK_ENABLED,
+                    checkBoxChecked(preference) ? 1 : 0);
 
         } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();

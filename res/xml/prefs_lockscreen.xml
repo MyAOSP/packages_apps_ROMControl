@@ -57,6 +57,11 @@
         android:summary="@string/pref_volume_wake_summary" />
 
     <CheckBoxPreference
+        android:key="lockscreen_vibrate"
+        android:title="@string/lockscreen_vibrate_title"
+        android:summary="@string/lockscreen_vibrate_summary" />
+
+    <CheckBoxPreference
         android:key="lockscreen_maximize_widgets"
         android:persistent="false"
         android:title="@string/lockscreen_maximize_widgets_title"

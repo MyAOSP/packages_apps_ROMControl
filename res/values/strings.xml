@@ -92,7 +92,6 @@
     <string name="plugged_unplugged_wakeup_summary">Wake up device if a charger is plugged/unplugged.</string>
     <!-- system text color test -->
     <string name="primary_text_colors">Change system wide text colors</string>
-
     <!-- Menu Strings -->
     <string name="menu_nav_bar_reset">Reset nav bar</string>
 
@@ -100,7 +99,6 @@
     <string name="advanced_settings">Advanced settings</string>
     <string name="misc_short">Misc</string>
     <string name="custom_app_icon_successfully">"'s icon set successfully!"</string>
-
     <!-- Shortcut picker -->
     <string name="use_custom_app_title">Use custom application</string>
     <string name="use_custom_app_summary">Use custom application instead of the recent applications dialog</string>
@@ -123,7 +121,6 @@
     <string name="statusbar_background_color">Statusbar background color</string>
     <string name="statusbar_brightness_slider_title">Statusbar brightness slider</string>
     <string name="statusbar_brightness_slider_summary">Whether the Statusbar brightness slider is on when you slide across the statusbar</string>
-
     <!-- Statusbar | wallpaper by xoomdev -->
     <string name="notification_wallpaper_title">Choose notification background</string>
     <string name="notification_wallpaper_summary">You can remove the wallpaper from the menu in this window</string>
@@ -134,14 +131,12 @@
     <string name="notif_background_custom_image">Custom image</string>
     <string name="status_bar_notif_count_title">Show notification count</string>
     <string name="status_bar_notif_count_summary">Display number of pending notifications on the status bar</string>
-
     <!-- Statusbar | Clock -->
     <string name="clock_title_enable">Clock style</string>
     <string name="clock_color_title">Clock color</string>
     <string name="title_clock_ampm_entries">AM/PM style</string>
     <string name="enable_clock_weekday">Day of the week</string>
     <string name="enable_clock_weekday_summary">Abbreviated day of the week before the time</string>
-
     <!-- Statusbar | Battery -->
     <string name="battery_icon">Battery icon style</string>
     <string name="battery_color">Colors</string>
@@ -167,11 +162,8 @@
     <string name="cm_circle_wo_percent">CM circle w/o percent</string>
     <string name="cm_circle_with_percent">CM circle with percent</string>
     <string name="battery_hide">Hide</string>
-
-
     <!-- Statusbar | notification clock/date color -->
     <string name="expanded_clock_color_title">Statusbar expanded clock/date color</string>
-
     <!-- Statusbar | Signal -->
     <string name="signal_style">Signal Text Style</string>
     <string name="signal_color_title">Signal color</string>
@@ -362,7 +354,6 @@
     <string name="navbar_color">Color/alpha only</string>
     <string name="navbar_defaultbg_plus_color">Default Bg plus color/alpha</string>
     <string name="navbar_defaultbg">Default Bg only</string>
-
     <!-- Nav Ring Targets -->
     <string name="navbar_ring_cat">Navigation Bar Ring Targets</string>
     <string name="interface_softkey_settings">Softkey Settings</string>
@@ -397,7 +388,6 @@
     <string name="interface_navring">Ring Targets</string>
     <string name="navbar_ring">Custom Ring Targets</string>
     <string name="navring_enable_long">Enable Longpress for navring</string>
-
     <!-- NavBar -->
     <string name="right">Right</string>
     <string name="left">Left</string>
@@ -469,7 +459,6 @@
     <string name="pref_volume_wake_summary">Pressing the volume rocker up/down will wake the device</string>
     <string name="volbtn_music_controls_title">Volume rocker music controls</string>
     <string name="volbtn_music_controls_summary">When screen off, long-pressing the volume rockers will seek music tracks</string>
-
     <!-- Lockscreen background -->
     <string name="lockscreen_custom_background_title">Background</string>
     <string name="lockscreen_custom_background_dialog_title">Choose color</string>
@@ -479,7 +468,6 @@
     <string name="lockscreen_background_custom_image">Custom image</string>
     <string name="lockscreen_background_default_wallpaper">Default wallpaper</string>
     <string name="lockscreen_wallpaper_alpha_title">Lockscreen background alpha</string>
-
     <!-- Lock screen misc. settings -->
     <string name="lockscreen_battery_status_title">Battery status</string>
     <string name="lockscreen_battery_status_charging">Only when charging</string>
@@ -488,8 +476,9 @@
     <string name="lockscreen_quick_unlock_control_summary">Unlock password/pin lockscreen without pressing enter button</string>
     <string name="lockscreen_maximize_widgets_title">Maximize widgets</string>
     <string name="lockscreen_maximize_widgets_summary">Show widgets maximized and the unlock mimimized when the screen is turned on</string>
-
-    <!-- Lockscreen shortcuts strings for IconPicker -->
+    <string name="lockscreen_vibrate_title">Haptic feedback on lockscreen</string>
+    <string name="lockscreen_vibrate_summary">Vibrate on touch on lockscreen</string>
+        <!-- Lockscreen shortcuts strings for IconPicker -->
     <string name="wifi_save">Save</string>
     <string name="profile_applist_title">Applications</string>
     <string name="profile_reset_title">Reset</string>
@@ -550,7 +539,6 @@
     <string name="baked_icon_picker_title">Choose icon source</string>
     <string name="baked_icon_picker_system_icons_title">System icons</string>
     <string name="baked_icon_picker_gallery_title">Gallery</string>
-
     <string name="dpi">DPI</string>
 
 <!-- Promodder and initD arrays explainations -->
@@ -583,7 +571,6 @@
     <string name="ps_clear_cache">Clear data cache on each boot</string>
     <string name="ps_enable_sysctl">Enable sysctl tweaks on boot</string>
     <string name="ps_enable_cron">Enable scheduled cron jobs</string>
-
     <!-- PropModder -->
     <string name="propmodder_title">PropModder/Init.D</string>
     <string name="propmodder_title_summary">@null</string>
@@ -592,7 +579,6 @@
     <string name="pc_tweaks">Tweaks</string>
     <string name="pc_init_d">Enable/Disable Tweaks</string>
     <string name="pc_init_d_tweaks">Customize Tweaks</string>
-
     <!-- Start up tweaks -->
     <string name="pt_init_d">System Tweaks</string>
     <string name="pt_enable_init_d">Enable start-up tweaks</string>
@@ -603,7 +589,6 @@
     <string name="pt_clear_cache">Clear cache</string>
     <string name="pt_enable_sysctl">Enable sysctl</string>
     <string name="pt_enable_cron">Enable scheduled tasks</string>
-
     <!-- WARN THE MASSES THIS CAN BE DANGEROUS!!! -->
     <string name="main_warning_title">YOU HAVE BEEN WARNED</string>
     <string name="main_warning_summary">This area makes changes to your build.prop.  It hacks your \'/system/build.prop\' WE ARE NOT RESPONSIBLE FOR YOUR ACTIONS! Your device  your responsibility</string>
@@ -614,7 +599,6 @@
     <string name="pref_lcd_density_summary">This is the screen density allowing more high definition look (requires reboot)</string>
     <string name="pref_lcd_density_alt_summary">Screen density: %s</string>
     <string name="pref_max_events_title">Windows Manager\'s max events per second</string>
-
     <!--TODO find good explanation of this value -->
     <string name="pref_max_events_summary">This is a runtime value that controls the number of events the system will allow in a second (requires reboot)</string>
     <string name="pref_max_events_alt_summary">Max number of system events: %s</string>
