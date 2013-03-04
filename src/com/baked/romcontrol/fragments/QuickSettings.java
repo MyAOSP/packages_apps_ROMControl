@@ -24,23 +24,33 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.bluetooth.BluetoothAdapter;
+import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
+import static com.android.internal.util.cm.QSConstants.TILE_FCHARGE;
+import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
+import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
+import static com.android.internal.util.cm.QSConstants.TILE_NFC;
+import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
+import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
+import static com.android.internal.util.cm.QSConstants.TILE_LTE;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsBluetooth;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsFastCharge;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsLte;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsNfc;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsUsbTether;
+import static com.android.internal.util.cm.QSUtils.deviceSupportsWifiDisplay;
+import static com.android.internal.util.cm.QSUtils.systemProfilesEnabled;
+
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.WifiDisplayStatus;
-import android.net.ConnectivityManager;
-import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceScreen;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -88,7 +98,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     PreferenceCategory mStaticTiles;
     PreferenceCategory mDynamicTiles;
 
-    private static Context mContext;
+    String mFastChargePath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +113,6 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         PreferenceScreen prefSet = getPreferenceScreen();
         PackageManager pm = getPackageManager();
         ContentResolver resolver = getActivity().getContentResolver();
-        mContext = getActivity().getApplicationContext();
         mGeneralSettings = (PreferenceCategory) prefSet.findPreference(GENERAL_SETTINGS);
         mStaticTiles = (PreferenceCategory) prefSet.findPreference(STATIC_TILES);
         mDynamicTiles = (PreferenceCategory) prefSet.findPreference(DYNAMIC_TILES);
@@ -156,29 +165,34 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         mDynamicIme = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_IME);
         mDynamicIme.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_IME, 1) == 1);
         mDynamicUsbTether = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_USBTETHER);
-        mDynamicUsbTether.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER, 1) == 1);
-        mDynamicWifi = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_WIFI);
-        mDynamicWifi.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_WIFI, 1) == 1);
 
-        if (!deviceSupportsUsbTether()) {
-            mDynamicTiles.removePreference(mDynamicUsbTether);
+        if (mDynamicUsbTether != null) {
+            if (deviceSupportsUsbTether(getActivity())) {
+                mDynamicUsbTether.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER, 1) == 1);
+            } else {
+                mDynamicTiles.removePreference(mDynamicUsbTether);
+                mDynamicUsbTether = null;
+            }
         }
-
-        if (!deviceSupportsWifiDisplay()) {
-            mDynamicTiles.removePreference(mDynamicWifi);
+        mDynamicWifi = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_WIFI);
+        if (mDynamicWifi != null) {
+            if (deviceSupportsWifiDisplay(getActivity())) {
+                mDynamicWifi.setChecked(Settings.System.getInt(resolver, Settings.System.QS_DYNAMIC_WIFI, 1) == 1);
+            } else {
+                mDynamicTiles.removePreference(mDynamicWifi);
+                mDynamicWifi = null;
+            }
         }
 
         // Don't show mobile data options if not supported
         boolean isMobileData = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
         if (!isMobileData) {
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_MOBILEDATA);
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_WIFIAP);
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
-            if(mNetworkMode != null)
+            QuickSettingsUtil.TILES.remove(TILE_MOBILEDATA);
+            QuickSettingsUtil.TILES.remove(TILE_WIFIAP);
+            QuickSettingsUtil.TILES.remove(TILE_NETWORKMODE);
+            if(mNetworkMode != null) {
                 mStaticTiles.removePreference(mNetworkMode);
-            QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_WIFIAP);
-            QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_MOBILEDATA);
-            QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_NETWORKMODE);
+            }
         } else {
             // We have telephony support however, some phones run on networks not supported
             // by the networkmode tile so remove both it and the associated options list
@@ -198,30 +212,37 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
                 case Phone.NT_MODE_GSM_ONLY:
                     break;
                 default:
-                    QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NETWORKMODE);
+                    QuickSettingsUtil.TILES.remove(TILE_NETWORKMODE);
                     mStaticTiles.removePreference(mNetworkMode);
                     break;
             }
         }
 
         // Don't show the bluetooth options if not supported
-        if (BluetoothAdapter.getDefaultAdapter() == null) {
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_BLUETOOTH);
-            QuickSettingsUtil.TILES_DEFAULT.remove(QuickSettingsUtil.TILE_BLUETOOTH);
+        if (!deviceSupportsBluetooth()) {
+            QuickSettingsUtil.TILES.remove(TILE_BLUETOOTH);
         }
 
         // Dont show the profiles tile if profiles are disabled
-        if (Settings.System.getInt(resolver, Settings.System.SYSTEM_PROFILES_ENABLED, 1) != 1) {
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_PROFILE);
+        if (!systemProfilesEnabled(resolver)) {
+            QuickSettingsUtil.TILES.remove(TILE_PROFILE);
         }
 
         // Dont show the NFC tile if not supported
-        if (NfcAdapter.getDefaultAdapter(getActivity()) == null) {
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_NFC);
+        if (!deviceSupportsNfc(getActivity())) {
+            QuickSettingsUtil.TILES.remove(TILE_NFC);
         }
 
-        if (noFchargeSupport()) {
-            QuickSettingsUtil.TILES.remove(QuickSettingsUtil.TILE_FCHARGE);
+        mFastChargePath = getActivity().getApplicationContext().getString(
+                com.android.internal.R.string.config_fastChargePath);
+
+        if (!new File(mFastChargePath).exists() || !deviceSupportsFastCharge(getActivity())) {
+            QuickSettingsUtil.TILES.remove(TILE_FCHARGE);
+        }
+
+        // Dont show the LTE tile if not supported
+        if (!deviceSupportsLte(getActivity())) {
+            QuickSettingsUtil.TILES.remove(TILE_LTE);
         }
 
     }
@@ -240,11 +261,11 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_IME,
                     mDynamicIme.isChecked() ? 1 : 0);
             return true;
-        } else if (preference == mDynamicUsbTether) {
+        } else if (mDynamicUsbTether != null && preference == mDynamicUsbTether) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_USBTETHER,
                     mDynamicUsbTether.isChecked() ? 1 : 0);
             return true;
-        } else if (preference == mDynamicWifi) {
+        } else if (mDynamicWifi != null && preference == mDynamicWifi) {
             Settings.System.putInt(resolver, Settings.System.QS_DYNAMIC_WIFI,
                     mDynamicWifi.isChecked() ? 1 : 0);
             return true;
@@ -353,22 +374,5 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         } else {
             return val.toString().split(SEPARATOR);
         }
-    }
-
-    private boolean deviceSupportsUsbTether() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (cm.getTetherableUsbRegexs().length != 0);
-    }
-
-    private boolean deviceSupportsWifiDisplay() {
-        DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
-        return (dm.getWifiDisplayStatus().getFeatureState() != WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE);
-    }
-
-    private boolean noFchargeSupport() {
-        Resources res = mContext.getResources();
-        String mFastChargePath = res.getString(com.android.internal.R.string.config_fastChargePath);
-        return mFastChargePath == null || mFastChargePath.isEmpty()
-                    || !new File(mFastChargePath).exists();
     }
 }
