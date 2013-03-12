@@ -26,12 +26,13 @@ import java.util.Set;
 
 import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
 import static com.android.internal.util.cm.QSConstants.TILE_FCHARGE;
+import static com.android.internal.util.cm.QSConstants.TILE_LTE;
 import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
 import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
 import static com.android.internal.util.cm.QSConstants.TILE_NFC;
 import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
+import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
-import static com.android.internal.util.cm.QSConstants.TILE_LTE;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsBluetooth;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsFastCharge;
 import static com.android.internal.util.cm.QSUtils.deviceSupportsLte;
@@ -223,12 +224,12 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             QuickSettingsUtil.TILES.remove(TILE_BLUETOOTH);
         }
 
-        // Dont show the profiles tile if profiles are disabled
+        // Don't show the profiles tile if profiles are disabled
         if (!systemProfilesEnabled(resolver)) {
             QuickSettingsUtil.TILES.remove(TILE_PROFILE);
         }
 
-        // Dont show the NFC tile if not supported
+        // Don't show the NFC tile if not supported
         if (!deviceSupportsNfc(getActivity())) {
             QuickSettingsUtil.TILES.remove(TILE_NFC);
         }
@@ -240,11 +241,15 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             QuickSettingsUtil.TILES.remove(TILE_FCHARGE);
         }
 
-        // Dont show the LTE tile if not supported
+        // Don't show the LTE tile if not supported
         if (!deviceSupportsLte(getActivity())) {
             QuickSettingsUtil.TILES.remove(TILE_LTE);
         }
 
+        // Don't show Torch tile if not supported
+        if (!hasTorch) {
+            QuickSettingsUtil.TILES.remove(TILE_TORCH);
+        }
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
