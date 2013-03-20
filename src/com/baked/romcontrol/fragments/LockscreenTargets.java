@@ -134,7 +134,8 @@ public class LockscreenTargets extends BAKEDPreferenceFragment implements Shortc
         super.onActivityCreated(savedInstanceState);
         mWaveView = ((GlowPadView) mActivity.findViewById(R.id.lock_target));
         mWaveView.setOnTriggerListener(this);
-        initializeView(Settings.System.getString(mActivity.getContentResolver(), Settings.System.LOCKSCREEN_TARGETS));
+        initializeView(Settings.System.getString(mContentResolver,
+                Settings.System.LOCKSCREEN_TARGETS));
     }
 
     /**
@@ -338,7 +339,7 @@ public class LockscreenTargets extends BAKEDPreferenceFragment implements Shortc
         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 initializeView(null);
-                Settings.System.putString(mActivity.getContentResolver(), Settings.System.LOCKSCREEN_TARGETS, null);
+                Settings.System.putString(mContentResolver, Settings.System.LOCKSCREEN_TARGETS, null);
                 Toast.makeText(mActivity, R.string.lockscreen_target_reset, Toast.LENGTH_LONG).show();
             }
         }).setNegativeButton(R.string.cancel, null)
@@ -375,7 +376,8 @@ public class LockscreenTargets extends BAKEDPreferenceFragment implements Shortc
             targetLayout.append("|");
         }
         targetLayout.deleteCharAt(targetLayout.length() - 1);
-        Settings.System.putString(mActivity.getContentResolver(), Settings.System.LOCKSCREEN_TARGETS, targetLayout.toString());
+        Settings.System.putString(mContentResolver,
+                Settings.System.LOCKSCREEN_TARGETS, targetLayout.toString());
         for (File pic : mActivity.getFilesDir().listFiles()) {
             if (pic.getName().startsWith("lockscreen_") && !existingImages.contains(pic.toString())) {
                 pic.delete();

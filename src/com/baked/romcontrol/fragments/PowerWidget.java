@@ -90,18 +90,14 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             mPowerWidgetHapticFeedback.setOnPreferenceChangeListener(this);
             mPowerWidgetHapticFeedback.setSummary(mPowerWidgetHapticFeedback.getEntry());
 
-            mPowerWidget.setChecked((Settings.System.getInt(getActivity().getApplicationContext()
-                    .getContentResolver(),
+            mPowerWidget.setChecked((Settings.System.getInt(mContentAppResolver,
                     Settings.System.EXPANDED_VIEW_WIDGET, 0) == 1));
-            mPowerWidgetHideOnChange.setChecked((Settings.System.getInt(getActivity()
-                    .getApplicationContext().getContentResolver(),
+            mPowerWidgetHideOnChange.setChecked((Settings.System.getInt(mContentAppResolver,
                     Settings.System.EXPANDED_HIDE_ONCHANGE, 0) == 1));
-            mPowerWidgetHideScrollBar.setChecked((Settings.System.getInt(getActivity()
-                    .getApplicationContext().getContentResolver(),
+            mPowerWidgetHideScrollBar.setChecked((Settings.System.getInt(mContentAppResolver,
                     Settings.System.EXPANDED_HIDE_SCROLLBAR, 0) == 1));
             mPowerWidgetHapticFeedback.setValue(Integer.toString(Settings.System.getInt(
-                    getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)));
+                    mContentAppResolver, Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)));
         }
     }
 
@@ -109,7 +105,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
         if (preference == mPowerWidgetHapticFeedback) {
             int intValue = Integer.parseInt((String) newValue);
             int index = mPowerWidgetHapticFeedback.findIndexOfValue((String) newValue);
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+            Settings.System.putInt(mContentAppResolver,
                     Settings.System.EXPANDED_HAPTIC_FEEDBACK, intValue);
             mPowerWidgetHapticFeedback.setSummary(mPowerWidgetHapticFeedback.getEntries()[index]);
             return true;
@@ -118,29 +114,21 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
     }
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        boolean value;
-
         if (preference == mPowerWidget) {
-            value = mPowerWidget.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.EXPANDED_VIEW_WIDGET,
-                    value ? 1 : 0);
-        } else if (preference == mPowerWidgetHideOnChange) {
-            value = mPowerWidgetHideOnChange.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.EXPANDED_HIDE_ONCHANGE,
-                    value ? 1 : 0);
-        } else if (preference == mPowerWidgetHideScrollBar) {
-            value = mPowerWidgetHideScrollBar.isChecked();
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.EXPANDED_HIDE_SCROLLBAR,
-                    value ? 1 : 0);
-        } else {
-            // If we didn't handle it, let preferences handle it.
-            return super.onPreferenceTreeClick(preferenceScreen, preference);
-        }
+            Settings.System.putInt(mContentAppResolver, Settings.System.EXPANDED_VIEW_WIDGET,
+                    checkBoxChecked(preference) ? 1 : 0);
+            return true;
 
-        return true;
+        } else if (preference == mPowerWidgetHideOnChange) {
+            Settings.System.putInt(mContentAppResolver, Settings.System.EXPANDED_HIDE_ONCHANGE,
+                    checkBoxChecked(preference) ? 1 : 0);
+            return true;
+        } else if (preference == mPowerWidgetHideScrollBar) {
+            Settings.System.putInt(mContentAppResolver, Settings.System.EXPANDED_HIDE_SCROLLBAR,
+                    checkBoxChecked(preference) ? 1 : 0);
+            return true;
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
     public static class PowerWidgetChooser extends BAKEDPreferenceFragment
@@ -188,8 +176,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
 
             mBrightnessMode = (MultiSelectListPreference) prefSet
                     .findPreference(EXP_BRIGHTNESS_MODE);
-            String storedBrightnessMode = Settings.System.getString(getActivity()
-                    .getApplicationContext().getContentResolver(),
+            String storedBrightnessMode = Settings.System.getString(mContentAppResolver,
                     Settings.System.EXPANDED_BRIGHTNESS_MODE);
             if (storedBrightnessMode != null) {
                 String[] brightnessModeArray = TextUtils.split(storedBrightnessMode, SEPARATOR);
@@ -202,8 +189,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             mScreenTimeoutMode = (ListPreference) prefSet.findPreference(EXP_SCREENTIMEOUT_MODE);
             mScreenTimeoutMode.setOnPreferenceChangeListener(this);
             mRingMode = (MultiSelectListPreference) prefSet.findPreference(EXP_RING_MODE);
-            String storedRingMode = Settings.System.getString(getActivity()
-                    .getApplicationContext().getContentResolver(),
+            String storedRingMode = Settings.System.getString(mContentAppResolver,
                     Settings.System.EXPANDED_RING_MODE);
             if (storedRingMode != null) {
                 String[] ringModeArray = TextUtils.split(storedRingMode, SEPARATOR);
@@ -288,8 +274,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
                     int network_state = -99;
 
                     try {
-                        network_state = Settings.Global.getInt(getActivity()
-                                .getApplicationContext().getContentResolver(),
+                        network_state = Settings.Global.getInt(mContentAppResolver,
                                 Settings.Global.PREFERRED_NETWORK_MODE);
                     } catch (Settings.SettingNotFoundException e) {
                         Log.e(TAG, "Unable to retrieve PREFERRED_NETWORK_MODE", e);
@@ -360,33 +345,37 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             if (preference == mBrightnessMode) {
                 ArrayList<String> arrValue = new ArrayList<String>((Set<String>) newValue);
                 Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mBrightnessMode));
-                Settings.System.putString(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.EXPANDED_BRIGHTNESS_MODE, TextUtils.join(SEPARATOR, arrValue));
+                Settings.System.putString(mContentResolver, Settings.System.EXPANDED_BRIGHTNESS_MODE,
+                        TextUtils.join(SEPARATOR, arrValue));
                 updateSummary(TextUtils.join(SEPARATOR, arrValue),
                         mBrightnessMode, R.string.pref_brightness_mode_summary);
+
             } else if (preference == mNetworkMode) {
                 int value = Integer.valueOf((String) newValue);
                 int index = mNetworkMode.findIndexOfValue((String) newValue);
-                Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.EXPANDED_NETWORK_MODE, value);
+                Settings.System.putInt(mContentResolver, Settings.System.EXPANDED_NETWORK_MODE,
+                        value);
                 mNetworkMode.setSummary(mNetworkMode.getEntries()[index]);
+
             } else if (preference == mScreenTimeoutMode) {
                 int value = Integer.valueOf((String) newValue);
                 int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
-                Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
+                Settings.System.putInt(mContentResolver, Settings.System.EXPANDED_SCREENTIMEOUT_MODE,
+                        value);
                 mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntries()[index]);
+
             } else if (preference == mRingMode) {
                 ArrayList<String> arrValue = new ArrayList<String>((Set<String>) newValue);
                 Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mRingMode));
-                Settings.System.putString(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.EXPANDED_RING_MODE, TextUtils.join(SEPARATOR, arrValue));
+                Settings.System.putString(mContentResolver, Settings.System.EXPANDED_RING_MODE,
+                        TextUtils.join(SEPARATOR, arrValue));
                 updateSummary(TextUtils.join(SEPARATOR, arrValue), mRingMode, R.string.pref_ring_mode_summary);
+
             } else if (preference == mFlashMode) {
                 int value = Integer.valueOf((String) newValue);
                 int index = mFlashMode.findIndexOfValue((String) newValue);
-                Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.EXPANDED_FLASH_MODE, value);
+                Settings.System.putInt(mContentResolver, Settings.System.EXPANDED_FLASH_MODE,
+                        value);
                 mFlashMode.setSummary(mFlashMode.getEntries()[index]);
             }
             return true;

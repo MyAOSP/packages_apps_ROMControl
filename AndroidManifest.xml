@@ -99,6 +99,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".fragments.NavRingTargets"
+            android:label="@string/header_nav_ring" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".fragments.PowerMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -162,6 +169,13 @@
         </activity>
         <activity
             android:name=".fragments.HardwareKeys">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragments.StylusGestures"
+            android:label="@string/header_stylus_gestures" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

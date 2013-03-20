@@ -117,26 +117,28 @@
     </string-array>
 
     <string-array name="navbar_button_entries">
-        <item>@string/navbar_action_home</item>
-        <item>@string/navbar_action_back</item>
-        <item>@string/navbar_action_recents</item>
-        <item>@string/navbar_action_search</item>
-        <item>@string/navbar_action_screenshot</item>
-        <item>@string/navbar_action_menu</item>
-        <item>@string/navbar_action_ime</item>
-        <item>@string/navbar_action_kill</item>
-        <item>@string/navbar_action_power</item>
-        <item>@string/navbar_action_notifications</item>
-        <item>@string/navbar_action_custom</item>
-        <item>@string/navbar_action_none</item>
+        <item>@string/home</item>
+        <item>@string/back</item>
+        <item>@string/recents</item>
+        <item>@string/recents_gb</item>
+        <item>@string/lastapp</item>
+        <item>@string/search</item>
+        <item>@string/menu</item>
+        <item>@string/open_ime_switcher</item>
+        <item>@string/kill_app</item>
+        <item>@string/power</item>
+        <item>@string/notifications</item>
+        <item>@string/custom_app</item>
+        <item>@string/blank</item>
     </string-array>
 
     <string-array name="navbar_button_values" translatable="false">
         <item>**home**</item>
         <item>**back**</item>
         <item>**recents**</item>
+        <item>**recentsgb**</item>
+        <item>**lastapp**</item>
         <item>**search**</item>
-        <item>**screenshot**</item>
         <item>**menu**</item>
         <item>**ime**</item>
         <item>**kill**</item>
@@ -147,15 +149,17 @@
     </string-array>
 
     <string-array name="navigation_bar_width_entries">
-        <item>42 dp (default)</item>
-        <item>36 dp</item>
-        <item>30 dp</item>
-        <item>24 dp</item>
-        <item> 6 dp</item>
+        <item>@string/size_42_dp_default</item>
+        <item>@string/size_40_dp</item>
+        <item>@string/size_36_dp</item>
+        <item>@string/size_30_dp</item>
+        <item>@string/size_24_dp</item>
+        <item>@string/size_6_dp</item>
     </string-array>
 
     <string-array name="navigation_bar_width" translatable="false">
         <item>42</item>
+        <item>40</item>
         <item>36</item>
         <item>30</item>
         <item>24</item>
@@ -163,18 +167,20 @@
     </string-array>
 
     <string-array name="navigation_bar_height_entries">
-        <item>48 dp (default)</item>
-        <item>44 dp</item>
-        <item>40 dp</item>
-        <item>36 dp</item>
-        <item>30 dp</item>
-        <item>24 dp</item>
-        <item> 6 dp</item>
+        <item>@string/size_48_dp_default</item>
+        <item>@string/size_44_dp</item>
+        <item>@string/size_42_dp</item>
+        <item>@string/size_40_dp</item>
+        <item>@string/size_36_dp</item>
+        <item>@string/size_30_dp</item>
+        <item>@string/size_24_dp</item>
+        <item>@string/size_6_dp</item>
     </string-array>
 
     <string-array name="navigation_bar_height" translatable="false">
         <item>48</item>
         <item>44</item>
+        <item>42</item>
         <item>40</item>
         <item>36</item>
         <item>30</item>
@@ -183,17 +189,21 @@
     </string-array>
 
     <string-array name="navigation_bar_height_landscape_entries">
-        <item>48 dp (default)</item>
-        <item>42 dp</item>
-        <item>36 dp</item>
-        <item>30 dp</item>
-        <item>24 dp</item>
-        <item> 6 dp</item>
+        <item>@string/size_48_dp_default</item>
+        <item>@string/size_44_dp</item>
+        <item>@string/size_42_dp</item>
+        <item>@string/size_40_dp</item>
+        <item>@string/size_36_dp</item>
+        <item>@string/size_30_dp</item>
+        <item>@string/size_24_dp</item>
+        <item>@string/size_6_dp</item>
     </string-array>
 
     <string-array name="navigation_bar_height_landscape" translatable="false">
         <item>48</item>
+        <item>44</item>
         <item>42</item>
+        <item>40</item>
         <item>36</item>
         <item>30</item>
         <item>24</item>
@@ -330,12 +340,12 @@
 
     <string-array name="navring_dialog_entries" translatable="false">
         <item>@string/none</item>
-        <item>@string/take_screenshot</item>
         <item>@string/open_ime_switcher</item>
         <item>@string/ring_vib</item>
         <item>@string/ring_silent</item>
         <item>@string/ring_vib_silent</item>
         <item>@string/kill_app</item>
+        <item>@string/lastapp</item>
         <item>@string/screen_off</item>
         <item>@string/google_now</item>
         <item>@string/select_application</item>
@@ -343,15 +353,37 @@
 
     <string-array name="navring_dialog_values" translatable="false">
         <item>**null**</item>
-        <item>**screenshot**</item>
         <item>**ime**</item>
         <item>**ring_vib**</item>
         <item>**ring_silent**</item>
         <item>**ring_vib_silent**</item>
         <item>**kill**</item>
+        <item>**lastapp**</item>
         <item>**power**</item>
         <item>**assist**</item>
         <item>**app**</item>
+    </string-array>
+
+    <string-array name="navring_long_dialog_entries" translatable="false">
+        <item>@string/navring_short</item>
+        <item>@string/navring_long</item>
+        <item>@string/navring_icon</item>
+    </string-array>
+
+    <string-array name="navring_long_dialog_values" translatable="false">
+        <item>**short**</item>
+        <item>**long**</item>
+        <item>**icon**</item>
+    </string-array>
+
+    <string-array name="navring_short_dialog_entries" translatable="false">
+        <item>@string/navring_short</item>
+        <item>@string/navring_icon</item>
+    </string-array>
+
+    <string-array name="navring_short_dialog_values" translatable="false">
+        <item>**short**</item>
+        <item>**icon**</item>
     </string-array>
 
     <string-array name="pref_navring_amount_entries" translatable="false">

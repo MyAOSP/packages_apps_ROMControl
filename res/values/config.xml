@@ -5,4 +5,7 @@
 
     <!-- Whether device has hardware buttons -->
     <bool name="has_hardware_buttons">false</bool>
+
+    <!-- Whether to display the Stylus Gestures settings -->
+    <bool name="config_stylusGestures">false</bool>
 </resources>

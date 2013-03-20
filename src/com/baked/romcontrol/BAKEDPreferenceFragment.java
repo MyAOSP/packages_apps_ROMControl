@@ -50,6 +50,9 @@ public class BAKEDPreferenceFragment extends PreferenceFragment implements Dialo
     protected boolean hasHardwareButtons;
     protected boolean hasFastCharge;
 
+    protected ContentResolver mContentResolver;
+    protected ContentResolver mContentAppResolver;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,8 @@ public class BAKEDPreferenceFragment extends PreferenceFragment implements Dialo
         hasFastCharge = getResources().getBoolean(com.android.internal.R.bool.config_fastChargeSupport);
         mContext = getActivity().getApplicationContext();
         mActionBar = getActivity().getActionBar();
+        mContentResolver = getActivity().getContentResolver();
+        mContentAppResolver = mContext.getContentResolver();
         if(getArguments() != null) {
             mShortcutFragment = getArguments().getBoolean("started_from_shortcut", false);
         }

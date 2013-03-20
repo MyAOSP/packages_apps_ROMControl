@@ -21,7 +21,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -101,36 +100,30 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private ColorPickerPreference mLockscreenTextColor;
     private ListPreference mBatteryStatus;
     private Preference mWallpaperAlpha;
-
-    private Activity mActivity;
-    private ContentResolver mResolver;
-
     private int seekbarProgress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = getActivity();
-        mResolver = mActivity.getContentResolver();
 
         addPreferencesFromResource(R.xml.prefs_lockscreen);
 
         mVolumeWake = (CheckBoxPreference) findPreference(KEY_VOLUME_WAKE);
-        mVolumeWake.setChecked(Settings.System.getInt(mResolver,
+        mVolumeWake.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
 
         mVolBtnMusicCtrl = (CheckBoxPreference) findPreference(KEY_VOLBTN_MUSIC_CTRL);
-        mVolBtnMusicCtrl.setChecked(Settings.System.getInt(mResolver,
+        mVolBtnMusicCtrl.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.VOLBTN_MUSIC_CONTROLS, 0) == 1);
 
         mQuickUnlockScreen = (CheckBoxPreference) findPreference(LOCKSCREEN_QUICK_UNLOCK_CONTROL);
-        mQuickUnlockScreen.setChecked(Settings.System.getInt(mResolver,
+        mQuickUnlockScreen.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
 
         mLockscreenVibrate = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATE);
-        mLockscreenVibrate.setChecked(Settings.System.getInt(mResolver,
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.LOCKSCREEN_VIBRATE_ENABLED, 1) == 1);
-        mLockscreenVibrate.setChecked(Settings.System.getInt(mResolver,
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1);
 
         mLockMaximizeWidgets = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_MAXIMIZE_WIDGETS);
@@ -142,7 +135,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
         }
 
         mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
-        mLockScreenRotation.setChecked(Settings.System.getBoolean(mResolver,
+        mLockScreenRotation.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.LOCKSCREEN_AUTO_ROTATE, false));
 
         mBatteryStatus = (ListPreference) findPreference(KEY_ALWAYS_BATTERY_PREF);
@@ -163,7 +156,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
 
     private void updateCustomBackgroundSummary() {
         int resId;
-        String value = Settings.System.getString(getContentResolver(),
+        String value = Settings.System.getString(mContentResolver,
                 Settings.System.LOCKSCREEN_BACKGROUND);
         if (value == null) {
             resId = R.string.lockscreen_background_default_wallpaper;
@@ -185,16 +178,16 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     mWallpaperTemporary.renameTo(mWallpaperImage);
                 }
                 mWallpaperImage.setReadable(true, false);
-                Toast.makeText(mActivity, getResources().getString(R.string.
+                Toast.makeText(getActivity(), getResources().getString(R.string.
                         lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
-                Settings.System.putString(getContentResolver(),
+                Settings.System.putString(mContentResolver,
                         Settings.System.LOCKSCREEN_BACKGROUND,"");
                 updateCustomBackgroundSummary();
             } else {
                 if (mWallpaperTemporary.exists()) {
                     mWallpaperTemporary.delete();
                 }
-                Toast.makeText(mActivity, getResources().getString(R.string.
+                Toast.makeText(getActivity(), getResources().getString(R.string.
                         lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
             }
         }
@@ -203,17 +196,15 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     @Override
     public void onResume() {
         super.onResume();
-
-        ContentResolver cr = getActivity().getContentResolver();
         if (mBatteryStatus != null) {
-            int batteryStatus = Settings.System.getInt(cr,
+            int batteryStatus = Settings.System.getInt(mContentResolver,
                     Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0);
             mBatteryStatus.setValueIndex(batteryStatus);
             mBatteryStatus.setSummary(mBatteryStatus.getEntries()[batteryStatus]);
         }
 
         if (mLockMaximizeWidgets != null) {
-            mLockMaximizeWidgets.setChecked(Settings.System.getInt(cr,
+            mLockMaximizeWidgets.setChecked(Settings.System.getInt(mContentResolver,
                     Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0) == 1);
         }
     }
@@ -221,29 +212,29 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mLockScreenRotation) {
-            Settings.System.putBoolean(getContentResolver(), Settings.System.LOCKSCREEN_AUTO_ROTATE,
+            Settings.System.putBoolean(mContentResolver, Settings.System.LOCKSCREEN_AUTO_ROTATE,
                     checkBoxChecked(preference));
             return true;
 
         } else if (preference == mVolBtnMusicCtrl) {
-            Settings.System.putInt(mResolver, Settings.System.VOLBTN_MUSIC_CONTROLS,
+            Settings.System.putInt(mContentResolver, Settings.System.VOLBTN_MUSIC_CONTROLS,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
 
         } else if (preference == mVolumeWake) {
-            Settings.System.putInt(mResolver, Settings.System.VOLUME_WAKE_SCREEN,
+            Settings.System.putInt(mContentResolver, Settings.System.VOLUME_WAKE_SCREEN,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
 
         } else if (preference == mQuickUnlockScreen) {
-            Settings.System.putInt(mResolver, Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
+            Settings.System.putInt(mContentResolver, Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
 
         } else if (preference == mLockscreenVibrate) {
-            Settings.System.putInt(mResolver, Settings.System.LOCKSCREEN_VIBRATE_ENABLED,
+            Settings.System.putInt(mContentResolver, Settings.System.LOCKSCREEN_VIBRATE_ENABLED,
                     checkBoxChecked(preference) ? 1 : 0);
-            Settings.System.putInt(mResolver, Settings.System.HAPTIC_FEEDBACK_ENABLED,
+            Settings.System.putInt(mContentResolver, Settings.System.HAPTIC_FEEDBACK_ENABLED,
                     checkBoxChecked(preference) ? 1 : 0);
 
         } else if (preference == mWallpaperAlpha) {
@@ -251,8 +242,8 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             String cancel = res.getString(R.string.cancel);
             String ok = res.getString(R.string.ok);
             String title = res.getString(R.string.alpha_dialog_title);
-            float savedProgress = Settings.System.getFloat(getActivity()
-                        .getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, 1.0f);
+            float savedProgress = Settings.System.getFloat(mContentResolver,
+                    Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, 1.0f);
 
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
@@ -285,7 +276,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     float val = ((float) seekbarProgress / 100);
-                    Settings.System.putFloat(getActivity().getContentResolver(),
+                    Settings.System.putFloat(mContentResolver,
                         Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, val);
                 }
             })
@@ -297,7 +288,6 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     }
 
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        ContentResolver cr = getActivity().getContentResolver();
 
         if (preference == mCustomBackground) {
             int selection = mCustomBackground.findIndexOfValue(objValue.toString());
@@ -306,20 +296,22 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
         } else if (preference == mBatteryStatus) {
             int value = Integer.valueOf((String) objValue);
             int index = mBatteryStatus.findIndexOfValue((String) objValue);
-            Settings.System.putInt(cr, Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, value);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, value);
             mBatteryStatus.setSummary(mBatteryStatus.getEntries()[index]);
             return true;
 
         } else if (preference == mLockMaximizeWidgets) {
             boolean value = (Boolean) objValue;
-            Settings.System.putInt(cr, Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, value ? 1 : 0);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, value ? 1 : 0);
             return true;
 
         } else if (preference == mLockscreenTextColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(objValue)));
             preference.setSummary(hex);
             int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, intHex);
             return true;
         }
@@ -329,7 +321,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     private boolean handleBackgroundSelection(int selection) {
         if (selection == LOCKSCREEN_BACKGROUND_COLOR_FILL) {
             final ColorPickerView colorView = new ColorPickerView(getActivity());
-            int currentColor = Settings.System.getInt(getContentResolver(),
+            int currentColor = Settings.System.getInt(mContentResolver,
                     Settings.System.LOCKSCREEN_BACKGROUND, -1);
 
             if (currentColor != -1) {
@@ -342,7 +334,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Settings.System.putInt(getContentResolver(),
+                            Settings.System.putInt(mContentResolver,
                                     Settings.System.LOCKSCREEN_BACKGROUND, colorView.getColor());
                             updateCustomBackgroundSummary();
                         }
@@ -355,6 +347,7 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     })
                     .setView(colorView)
                     .show();
+
         } else if (selection == LOCKSCREEN_BACKGROUND_CUSTOM_IMAGE) {
             final Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
             intent.setType("image/*");
@@ -392,8 +385,9 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             } catch (ActivityNotFoundException e) {
                 // Do nothing here
             }
+
         } else if (selection == LOCKSCREEN_BACKGROUND_DEFAULT_WALLPAPER) {
-            Settings.System.putString(getContentResolver(),
+            Settings.System.putString(mContentResolver,
                     Settings.System.LOCKSCREEN_BACKGROUND, null);
             updateCustomBackgroundSummary();
             return true;

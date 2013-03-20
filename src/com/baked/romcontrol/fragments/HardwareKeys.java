@@ -113,10 +113,10 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
         if (hasHomeKey) {
             int homeLongPressAction;
             if (hasAppSwitchKey) {
-                homeLongPressAction = Settings.System.getInt(getContentResolver(),
+                homeLongPressAction = Settings.System.getInt(mContentResolver,
                         Settings.System.KEY_HOME_LONG_PRESS_ACTION, ACTION_NOTHING);
             } else {
-                homeLongPressAction = Settings.System.getInt(getContentResolver(),
+                homeLongPressAction = Settings.System.getInt(mContentResolver,
                         Settings.System.KEY_HOME_LONG_PRESS_ACTION, ACTION_APP_SWITCH);
             }
             mHomeLongPressAction.setValue(Integer.toString(homeLongPressAction));
@@ -127,7 +127,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
         }
 
         if (hasMenuKey) {
-            int menuPressAction = Settings.System.getInt(getContentResolver(),
+            int menuPressAction = Settings.System.getInt(mContentResolver,
                     Settings.System.KEY_MENU_ACTION, ACTION_MENU);
             mMenuPressAction.setValue(Integer.toString(menuPressAction));
             mMenuPressAction.setSummary(mMenuPressAction.getEntry());
@@ -135,10 +135,10 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
 
             int menuLongPressAction;
             if (hasAssistKey) {
-                menuLongPressAction = Settings.System.getInt(getContentResolver(),
+                menuLongPressAction = Settings.System.getInt(mContentResolver,
                         Settings.System.KEY_MENU_LONG_PRESS_ACTION, ACTION_NOTHING);
             } else {
-                menuLongPressAction = Settings.System.getInt(getContentResolver(),
+                menuLongPressAction = Settings.System.getInt(mContentResolver,
                         Settings.System.KEY_MENU_LONG_PRESS_ACTION, ACTION_SEARCH);
             }
             mMenuLongPressAction.setValue(Integer.toString(menuLongPressAction));
@@ -150,13 +150,13 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
         }
 
         if (hasAssistKey) {
-            int assistPressAction = Settings.System.getInt(getContentResolver(),
+            int assistPressAction = Settings.System.getInt(mContentResolver,
                     Settings.System.KEY_ASSIST_ACTION, ACTION_SEARCH);
             mAssistPressAction.setValue(Integer.toString(assistPressAction));
             mAssistPressAction.setSummary(mAssistPressAction.getEntry());
             mAssistPressAction.setOnPreferenceChangeListener(this);
 
-            int assistLongPressAction = Settings.System.getInt(getContentResolver(),
+            int assistLongPressAction = Settings.System.getInt(mContentResolver,
                     Settings.System.KEY_ASSIST_LONG_PRESS_ACTION, ACTION_VOICE_SEARCH);
             mAssistLongPressAction.setValue(Integer.toString(assistLongPressAction));
             mAssistLongPressAction.setSummary(mAssistLongPressAction.getEntry());
@@ -167,13 +167,13 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
         }
 
         if (hasAppSwitchKey) {
-            int appSwitchPressAction = Settings.System.getInt(getContentResolver(),
+            int appSwitchPressAction = Settings.System.getInt(mContentResolver,
                     Settings.System.KEY_APP_SWITCH_ACTION, ACTION_APP_SWITCH);
             mAppSwitchPressAction.setValue(Integer.toString(appSwitchPressAction));
             mAppSwitchPressAction.setSummary(mAppSwitchPressAction.getEntry());
             mAppSwitchPressAction.setOnPreferenceChangeListener(this);
 
-            int appSwitchLongPressAction = Settings.System.getInt(getContentResolver(),
+            int appSwitchLongPressAction = Settings.System.getInt(mContentResolver,
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION, ACTION_NOTHING);
             mAppSwitchLongPressAction.setValue(Integer.toString(appSwitchLongPressAction));
             mAppSwitchLongPressAction.setSummary(mAppSwitchLongPressAction.getEntry());
@@ -183,11 +183,9 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             bindingsCategory.removePreference(mAppSwitchLongPressAction);
         }
 
-        mEnableCustomBindings.setChecked((Settings.System.getInt(getActivity().
-                getApplicationContext().getContentResolver(),
+        mEnableCustomBindings.setChecked((Settings.System.getInt(mContentAppResolver,
                 Settings.System.HARDWARE_KEY_REBINDING, 0) == 1));
-        mShowActionOverflow.setChecked((Settings.System.getInt(getActivity().
-                getApplicationContext().getContentResolver(),
+        mShowActionOverflow.setChecked((Settings.System.getInt(mContentAppResolver,
                 Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0) == 1));
     }
 
@@ -197,7 +195,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mHomeLongPressAction.findIndexOfValue((String) newValue);
             mHomeLongPressAction.setSummary(
                     mHomeLongPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_HOME_LONG_PRESS_ACTION, value);
             return true;
         } else if (preference == mMenuPressAction) {
@@ -205,7 +203,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mMenuPressAction.findIndexOfValue((String) newValue);
             mMenuPressAction.setSummary(
                     mMenuPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_MENU_ACTION, value);
             return true;
         } else if (preference == mMenuLongPressAction) {
@@ -213,7 +211,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mMenuLongPressAction.findIndexOfValue((String) newValue);
             mMenuLongPressAction.setSummary(
                     mMenuLongPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_MENU_LONG_PRESS_ACTION, value);
             return true;
         } else if (preference == mAssistPressAction) {
@@ -221,7 +219,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mAssistPressAction.findIndexOfValue((String) newValue);
             mAssistPressAction.setSummary(
                     mAssistPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_ASSIST_ACTION, value);
             return true;
         } else if (preference == mAssistLongPressAction) {
@@ -229,7 +227,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mAssistLongPressAction.findIndexOfValue((String) newValue);
             mAssistLongPressAction.setSummary(
                     mAssistLongPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_ASSIST_LONG_PRESS_ACTION, value);
             return true;
         } else if (preference == mAppSwitchPressAction) {
@@ -237,7 +235,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mAppSwitchPressAction.findIndexOfValue((String) newValue);
             mAppSwitchPressAction.setSummary(
                     mAppSwitchPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_APP_SWITCH_ACTION, value);
             return true;
         } else if (preference == mAppSwitchLongPressAction) {
@@ -245,7 +243,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
             int index = mAppSwitchLongPressAction.findIndexOfValue((String) newValue);
             mAppSwitchLongPressAction.setSummary(
                     mAppSwitchLongPressAction.getEntries()[index]);
-            Settings.System.putInt(getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION, value);
             return true;
         }
@@ -254,15 +252,14 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
 
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mEnableCustomBindings) {
-            Settings.System.putInt(getContentResolver(), Settings.System.HARDWARE_KEY_REBINDING,
-                    mEnableCustomBindings.isChecked() ? 1 : 0);
+            Settings.System.putInt(mContentResolver, Settings.System.HARDWARE_KEY_REBINDING,
+                    checkBoxChecked(preference) ? 1 : 0);
             return true;
         } else if (preference == mShowActionOverflow) {
-            boolean enabled = mShowActionOverflow.isChecked();
-            Settings.System.putInt(getContentResolver(), Settings.System.UI_FORCE_OVERFLOW_BUTTON,
-                    enabled ? 1 : 0);
+            Settings.System.putInt(mContentResolver, Settings.System.UI_FORCE_OVERFLOW_BUTTON,
+                    checkBoxChecked(preference) ? 1 : 0);
             // Show appropriate
-            if (enabled) {
+            if (checkBoxChecked(preference)) {
                 Toast.makeText(getActivity(), R.string.hardware_keys_show_overflow_toast_enable,
                         Toast.LENGTH_LONG).show();
             } else {

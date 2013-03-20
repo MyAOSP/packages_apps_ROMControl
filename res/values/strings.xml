@@ -2,6 +2,22 @@
 <resources>
 
     <string name="app_name">BAKED Settings</string>
+<!-- misc. + menu strings -->
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="menu_main_activity_change_locale">Blank!</string>
+    <string name="text_on">On</string>
+    <string name="text_off">Off</string>
+
+<!-- Color Picker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on Color to apply</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_hint">#FF000000</string>
+    <string name="set">Set</string>
+    <string name="ics_color">Holo</string>
 
 <!-- AboutPage thanks mastur_mynd -->
     <string name="teambaked_about_page">About #teamBAKED</string>
@@ -17,57 +33,29 @@
     <string name="baked_irc_summary">#teamBAKED @ webchat.freenode.net</string>
 
 <!-- Header Strings -->
+    <!-- System title -->
     <string name="header_system">System</string>
-    <string name="header_statusbar">Statusbar</string>
-    <string name="header_navbar">Navbar</string>
     <string name="header_launcher_settings">Launcher settings</string>
-    <string name="header_powerwidget">Powerwidgets</string>
-    <string name="header_lockscreen">Lockscreen</string>
     <string name="header_system_extra">System Settings</string>
+    <string name="header_navbar">Navbar</string>
+    <string name="header_nav_ring">Navbar Ring</string>
+    <string name="header_hardware_keys">Hardware Keys</string>
+    <string name="header_stylus_gestures">S Pen Gestures</string>
+    <string name="header_propmodder">PropModder &amp; Init.D</string>
+    <string name="header_power_menu">Power Menu</string>
+    <!-- Lockscreen title -->
+    <string name="header_lockscreen">Lockscreen</string>
+    <string name="header_lockscreen_targets">Custom shortcuts</string>
+    <string name="header_lockscreen_extra">Lockscreen Settings</string>
+    <string name="header_lock_clock">Lock Clock Widget</string>
+    <!-- Statusbar title -->
+    <string name="header_statusbar">Statusbar</string>
+    <string name="header_powerwidget">Powerwidgets</string>
+    <string name="header_quick_settings">Quick Settings</string>
+    <string name="header_signal">Signal</string>
+    <string name="header_battery">Battery</string>
+    <string name="header_clock">Clock</string>
     <string name="header_statusbar_extra">Statusbar Settings</string>
-    <string name="header_sound_title">Sound</string>
-    <string name="header_performance">Performance</string>
-    <string name="header_lockscreen_extra_title">Lockscreen Settings</string>
-    <string name="header_lock_clock_title">Lock Clock Widget</string>
-    <string name="title_hardwarekeys">Hardware Keys</string>
-    <string name="title_navring">Navigation Ring</string>
-    <string name="clock">Clock</string>
-    <string name="battery">Battery</string>
-    <string name="signal">Signal</string>
-    <string name="nav_bar">Navbar</string>
-    <string name="toggles_layout">Toggles</string>
-    <string name="power_menu_options">Power Menu</string>
-    <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
-    <string name="menu_main_activity_change_locale">Blank!</string>
-
-<!-- Header Summaries -->
-    <string name="header_summary_clock">@null</string>
-    <string name="header_summary_toggles">@null</string>
-    <string name="header_summary_system_extra">@null</string>
-    <string name="header_summary_statusbar_extra">@null</string>
-    <string name="header_summary_launcher_settings">@null</string>
-    <string name="header_summary_battery">@null</string>
-    <string name="header_summary_navigation_bar">@null</string>
-    <string name="header_summary_powerwidget">@null</string>
-    <string name="header_summary_power_menu">@null</string>
-    <string name="header_summary_lockscreen">@null</string>
-    <string name="header_summary_sound">@null</string>
-    <string name="header_summary_performance">@null</string>
-    <string name="header_summary_lockscreen_extra">@null</string>
-    <string name="header_lock_clock_summary">@null</string>
-    <string name="header_summary_signal">@null</string>
-    <string name="header_summary_hardware_keys">@null</string>
-
-<!-- Color Picker -->
-    <string name="dialog_color_picker">Color Picker</string>
-    <string name="press_color_to_apply">Press on Color to apply</string>
-    <string name="arrow_right">→</string>
-    <string name="arrow_down">↓</string>
-    <string name="hex">Hex:</string>
-    <string name="hex_hint">#FF000000</string>
-    <string name="set">Set</string>
-    <string name="ics_color">Holo</string>
 
 <!-- System | Extras -->
     <string name="ime_switcher_title">Show IME Switcher</string>
@@ -320,6 +308,7 @@
     <string name="navbar_action_home">Home</string>
     <string name="navbar_action_back">Back</string>
     <string name="navbar_action_recents">Recents</string>
+    <string name="navbar_action_recents_gb">Recents (GB style)</string>
     <string name="navbar_action_search">Search</string>
     <string name="navbar_action_screenshot">Screenshot</string>
     <string name="navbar_action_menu">Menu</string>
@@ -328,6 +317,7 @@
     <string name="navbar_action_kill">Kill task</string>
     <string name="navbar_action_power">Power</string>
     <string name="navbar_action_notifications">Notifications</string>
+    <string name="navbar_action_lastapp">Last app</string>
     <string name="navbar_action_custom">Custom app</string>
     <string name="navbar_action_none">Blank</string>
     <string name="navbar_widgets">Navigation Bar Widgets</string>
@@ -370,39 +360,26 @@
     <string name="navbar_defaultbg_plus_color">Default Bg plus color/alpha</string>
     <string name="navbar_defaultbg">Default Bg only</string>
     <!-- Nav Ring Targets -->
-    <string name="navbar_ring_cat">Navigation Bar Ring Targets</string>
-    <string name="interface_softkey_settings">Softkey Settings</string>
-    <string name="interface_softkeys_pref_default_1_title">Target 1 short press activity</string>
-    <string name="interface_softkeys_pref_long_1_title">Target 1 long press activity</string>
-    <string name="interface_softkeys_pref_default_2_title">Target 2 short press activity</string>
-    <string name="interface_softkeys_pref_long_2_title">Target 2 long press activity</string>
-    <string name="interface_softkeys_pref_default_3_title">Target 3 short press activity</string>
-    <string name="interface_softkeys_pref_long_3_title">Target 3 long press activity</string>
-    <string name="interface_softkeys_pref_default_4_title">Target 4 short press activity</string>
-    <string name="interface_softkeys_pref_long_4_title">Target 4 long press activity</string>
-    <string name="interface_softkeys_pref_default_5_title">Target 5 short press activity</string>
-    <string name="interface_softkeys_pref_long_5_title">Target 5 long press activity</string>
-    <string name="interface_softkeys_pref_default_summary">Tap the settings icon to select a custom long press activity</string>
-    <string name="interface_softkeys_activity_dialog_title">Select Activity</string>
-    <string name="interface_softkeys_reboot_title">Reboot Menu</string>
-    <string name="interface_softkeys_screenshot_title">Screenshot</string>
-    <string name="interface_softkeys_screenoff_title">Screen Off</string>
-    <string name="interface_softkeys_ime_switcher_title">Open IME Switcher</string>
-    <string name="interface_softkeys_ring_vib_title">Toggle Ring/Vib</string>
-    <string name="interface_softkeys_ring_silent_title">Toggle Ring/Silent</string>
-    <string name="interface_softkeys_ring_vib_silent_title">Toggle Ring/Vib/Silent</string>
-    <string name="interface_softkeys_kill_process_title">Kill App</string>
-    <string name="interface_softkey_package_removed">The previously selected package was not found</string>
-    <string name="interface_navring_settings_title">Navigation bar ring</string>
-    <string name="interface_navring_settings_summary">Edit your custom nav ring apps</string>
-    <string name="title_navring_amount">Number of nav ring targets</string>
-    <string name="summary_navring_amount">How many ring targets you want? *Changing this will reset your current targets and restart your System UI*</string>
-    <string name="interface_navring_custom_pref_summary">Release on target to launch </string>
-    <string name="interface_navring_pref_default_summary">Tap to select a custom ring target activity</string>
-    <string name="interface_navring_assist_title">Google Now</string>
-    <string name="interface_navring">Ring Targets</string>
+    <string name="navbar_ring_cat">Navigation Ring Targets</string>
     <string name="navbar_ring">Custom Ring Targets</string>
-    <string name="navring_enable_long">Enable Longpress for navring</string>
+    <string name="navring_enable_long">Enable Longpress for navigation ring</string>
+    <string name="navring_target_save">Navigation rings saved</string>
+    <string name="navring_target_reset_message">Do you want to reset the navigation ring?</string>
+    <string name="navring_target_reset">Navigation ring targets reset.</string>
+    <string name="choose_action_title">Choose action</string>
+    <string name="choose_action_short_title">Choose short action</string>
+    <string name="choose_action_long_title">Choose long action</string>
+    <string name="action_long_save"> set as long action</string>
+    <string name="title_navring_amount">Number of navigation ring targets</string>
+    <string name="summary_navring_amount">Choose number of targets in the navigation ring</string>
+    <string name="interface_navring_settings_title">Navigation Ring</string>
+    <string name="interface_navring_settings_summary">@null</string>
+    <string name="navring_target_info">Drag your finger to targets to assign actions</string>
+    <string name="navring_short">Short action</string>
+    <string name="navring_long">Long action</string>
+    <string name="navring_icon">Custom icon</string>
+    <string name="navring_target_amount_text">Current number of targets</string>
+    <string name="navring_target_longpress_text">Longpress status</string>
     <!-- NavBar -->
     <string name="right">Right</string>
     <string name="left">Left</string>
@@ -420,8 +397,10 @@
     <string name="toggle_widgets">Toggle Widgets</string>
     <string name="open_ime_switcher">Open IME Switcher</string>
     <string name="kill_app">Kill app</string>
+    <string name="lastapp">Last app</string>
     <string name="power">Power</string>
     <string name="notifications">Notifications</string>
+    <string name="recents_gb">Recents (GB style)</string>
     <string name="custom_app">Custom app</string>
     <string name="menu_power">Power menu</string>
     <string name="blank">Blank</string>
@@ -442,6 +421,7 @@
     <string name="size_36_dp">36 dp</string>
     <string name="size_30_dp">30 dp</string>
     <string name="size_24_dp">24 dp</string>
+    <string name="size_6_dp">6 dp</string>
     <string name="size_48_dp_default">48 dp (default)</string>
     <string name="size_44_dp">44 dp</string>
     <string name="size_40_dp">40 dp</string>
@@ -460,8 +440,6 @@
 <!-- LOCKSCREEN -->
     <!-- Lockscreen Shortcuts -->
     <string name="lockscreen_target_info">Drag the slider to targets to assign shortcuts</string>
-    <string name="lockscreen_target_title">Custom shortcuts</string>
-    <string name="lockscreen_target_summary">@null</string>
     <string name="lockscreen_target_reset">Lock screen shortcuts reset to default</string>
     <string name="lockscreen_target_save">Lock screen shortcuts saved</string>
     <string name="lockscreen_target_reset_title">Reset</string>
@@ -587,8 +565,6 @@
     <string name="ps_enable_sysctl">Enable sysctl tweaks on boot</string>
     <string name="ps_enable_cron">Enable scheduled cron jobs</string>
     <!-- PropModder -->
-    <string name="propmodder_title">PropModder/Init.D</string>
-    <string name="propmodder_title_summary">@null</string>
     <string name="buildprop_title">Build.prop mods</string>
     <string name="nonprop_cat_title">Mods involving init.d script</string>
     <string name="pc_tweaks">Tweaks</string>
@@ -719,5 +695,15 @@
     <string name="hardware_keys_action_voice_search">Voice search</string>
     <string name="hardware_keys_action_in_app_search">In-app search</string>
     <string name="hardware_keys_additional_options_title">Additional options</string>
+
+<!-- S Pen stylus gestures -->
+    <string name="spen_left_title">Action on swipe left</string>
+    <string name="spen_right_title">Action on swipe right</string>
+    <string name="spen_up_title">Action on swipe up</string>
+    <string name="spen_down_title">Action on swipe down</string>
+    <string name="spen_double_title">Action on double tap</string>
+    <string name="spen_long_title">Action on long press</string>
+    <string name="spen_enable">Enable S Pen Gestures</string>
+    <string name="spen_enable_summary">Set custom actions for S Pen gestures</string>
 
 </resources>

@@ -102,15 +102,15 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         PreferenceScreen prefs = getPreferenceScreen();
 
         mStatusBarNotifCount = (CheckBoxPreference) findPreference(PREF_STATUS_BAR_NOTIF_COUNT);
-        mStatusBarNotifCount.setChecked(Settings.System.getInt(mContext.getContentResolver(),
+        mStatusBarNotifCount.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.STATUSBAR_NOTIF_COUNT, 0) == 1);
 
         mStatusBarBrightnessSlider = (CheckBoxPreference) findPreference(PREF_STATUSBAR_BRIGHTNESS_SLIDER);
-        mStatusBarBrightnessSlider.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mStatusBarBrightnessSlider.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.STATUSBAR_BRIGHTNESS_CONTROL, true));
 
         mShowImeSwitcher = (CheckBoxPreference) findPreference(PREF_IME_SWITCHER);
-        mShowImeSwitcher.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mShowImeSwitcher.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.SHOW_STATUSBAR_IME_SWITCHER, true));
 
         mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
@@ -138,7 +138,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
     }
 
     private void updateVisibility() {
-        int visible = Settings.System.getInt(getActivity().getContentResolver(),
+        int visible = Settings.System.getInt(mContentResolver,
                     Settings.System.STATUSBAR_BACKGROUND_STYLE, 2);
         if (visible == 2) {
             mStatusbarBgColor.setEnabled(false);
@@ -149,7 +149,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
 
     private void updateCustomBackgroundSummary() {
         int resId;
-        String value = Settings.System.getString(getContentResolver(),
+        String value = Settings.System.getString(mContentResolver,
                 Settings.System.NOTIF_BACKGROUND);
         if (value == null) {
             resId = R.string.notif_background_default;
@@ -165,7 +165,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
     }
 
     private void updateCustomLabelTextSummary() {
-        mCustomLabelText = Settings.System.getString(getActivity().getContentResolver(),
+        mCustomLabelText = Settings.System.getString(mContentResolver,
                 Settings.System.CUSTOM_CARRIER_LABEL);
         if (mCustomLabelText == null || mCustomLabelText.length() == 0) {
             mCustomLabel.setSummary(R.string.custom_carrier_label_notset);
@@ -178,20 +178,17 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             Preference preference) {
          if (preference == mStatusBarNotifCount) {
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.STATUSBAR_NOTIF_COUNT,
+            Settings.System.putInt(mContentResolver, Settings.System.STATUSBAR_NOTIF_COUNT,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
 
         } else if (preference == mShowImeSwitcher) {
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.SHOW_STATUSBAR_IME_SWITCHER,
+            Settings.System.putBoolean(mContentResolver, Settings.System.SHOW_STATUSBAR_IME_SWITCHER,
                     checkBoxChecked(preference));
             return true;
 
         } else if (preference == mStatusBarBrightnessSlider) {
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_BRIGHTNESS_CONTROL,
+            Settings.System.putBoolean(mContentResolver, Settings.System.STATUSBAR_BRIGHTNESS_CONTROL,
                     checkBoxChecked(preference));
             return true;
 
@@ -200,8 +197,8 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             String cancel = res.getString(R.string.cancel);
             String ok = res.getString(R.string.ok);
             String title = res.getString(R.string.alpha_dialog_title);
-            float savedProgress = Settings.System.getFloat(getActivity()
-                        .getContentResolver(), Settings.System.NOTIF_WALLPAPER_ALPHA, 1.0f);
+            float savedProgress = Settings.System.getFloat(mContentResolver,
+                    Settings.System.NOTIF_WALLPAPER_ALPHA, 1.0f);
 
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
@@ -234,8 +231,8 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     float val = ((float) seekbarProgress / 100);
-                    Settings.System.putFloat(getActivity().getContentResolver(),
-                        Settings.System.NOTIF_WALLPAPER_ALPHA, val);
+                    Settings.System.putFloat(mContentResolver,
+                            Settings.System.NOTIF_WALLPAPER_ALPHA, val);
                     Helpers.restartSystemUI();
                 }
             })
@@ -257,7 +254,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String value = ((Spannable) input.getText()).toString();
-                    Settings.System.putString(getActivity().getContentResolver(),
+                    Settings.System.putString(mContentResolver,
                             Settings.System.CUSTOM_CARRIER_LABEL, value);
                     updateCustomLabelTextSummary();
                     Intent i = new Intent();
@@ -285,14 +282,14 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             preference.setSummary(hex);
 
             int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_EXPANDED_CLOCK_COLOR, intHex);
             Log.e("BAKED", intHex + "");
 
         } else if (preference == mStatusbarBgStyle) {
             int value = Integer.valueOf((String) newValue);
             int index = mStatusbarBgStyle.findIndexOfValue((String) newValue);
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+            Settings.System.putInt(mContentAppResolver,
                     Settings.System.STATUSBAR_BACKGROUND_STYLE, value);
             preference.setSummary(mStatusbarBgStyle.getEntries()[index]);
             updateVisibility();
@@ -305,7 +302,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             preference.setSummary(hex);
 
             int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_BACKGROUND_COLOR, intHex);
             Log.e("BAKED", intHex + "");
 
@@ -315,7 +312,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 //Displays color dialog when user has chosen color fill
                 case 0:
                     final ColorPickerView colorView = new ColorPickerView(mActivity);
-                    int currentColor = Settings.System.getInt(getContentResolver(),
+                    int currentColor = Settings.System.getInt(mContentResolver,
                             Settings.System.NOTIF_BACKGROUND, -1);
                     if (currentColor != -1) {
                         colorView.setColor(currentColor);
@@ -326,7 +323,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Settings.System.putInt(getContentResolver(), Settings.System.NOTIF_BACKGROUND, colorView.getColor());
+                            Settings.System.putInt(mContentResolver, Settings.System.NOTIF_BACKGROUND, colorView.getColor());
                             updateCustomBackgroundSummary();
                             Helpers.restartSystemUI();
                         }
@@ -371,7 +368,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     return false;
                 //Sets background color to default
                 case 2:
-                    Settings.System.putString(getContentResolver(),
+                    Settings.System.putString(mContentResolver,
                             Settings.System.NOTIF_BACKGROUND, null);
                     updateCustomBackgroundSummary();
                     break;
@@ -391,7 +388,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 wallpaperImage.setReadable(true, false);
                 Toast.makeText(mActivity, getResources().getString(R.string.
                         lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
-                Settings.System.putString(getContentResolver(),
+                Settings.System.putString(mContentResolver,
                         Settings.System.NOTIF_BACKGROUND,"");
                 updateCustomBackgroundSummary();
                 Helpers.restartSystemUI();

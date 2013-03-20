@@ -83,8 +83,7 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
         }
         mLcdDensity.setSummary(getResources().getString(R.string.current_lcd_density) + currentProperty);
 
-        mKillAppLongpressBack = (CheckBoxPreference) findPreference(
-                PREF_KILL_APP_LONGPRESS_BACK);
+        mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
                 updateKillAppLongpressBackOptions();
 
         boolean hasNavBarByDefault = mContext.getResources().getBoolean(
@@ -94,7 +93,7 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
         }
 
         mRecentKillAll = (CheckBoxPreference) findPreference(PREF_RECENT_KILL_ALL);
-        mRecentKillAll.setChecked(Settings.System.getBoolean(getActivity().getContentResolver(),
+        mRecentKillAll.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.RECENT_KILL_ALL_BUTTON, false));
 
         mDisableBootAnimation = (CheckBoxPreference) findPreference("disable_bootanimation");
@@ -107,19 +106,19 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
         }
 
         mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
-        mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.VIBRATE_NOTIF_EXPAND, true));
 
         mClockDateOpens = (CheckBoxPreference) findPreference(PREF_CLOCK_DATE_OPENS);
-        mClockDateOpens.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mClockDateOpens.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.CLOCK_DATE_OPENS, true));
 
         mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
-        mUseAltResolver.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mUseAltResolver.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.ACTIVITY_RESOLVER_USE_ALT, true));
 
         mPluggedUnpluggedWakeup = (CheckBoxPreference) findPreference(PREF_PLUGGED_UNPLUGGED_WAKEUP);
-        mPluggedUnpluggedWakeup.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
+        mPluggedUnpluggedWakeup.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, true));
 
         // hide option if device is already set to never wake up
@@ -128,30 +127,29 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
         }
 
         mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
-        mHideExtras.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
-                        Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
+        mHideExtras.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
 
         mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
-        int uiMode = Settings.System.getInt(mContext.getContentResolver(),
+        int uiMode = Settings.System.getInt(mContentAppResolver,
                 Settings.System.CURRENT_UI_MODE, 0);
-        mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContext.getContentResolver(),
+        mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContentAppResolver,
                 Settings.System.USER_UI_MODE, uiMode)));
         mUserModeUI.setOnPreferenceChangeListener(this);
     }
 
     private void writeKillAppLongpressBackOptions() {
-        Settings.System.putInt(getActivity().getContentResolver(),
-                Settings.System.KILL_APP_LONGPRESS_BACK, mKillAppLongpressBack.isChecked() ? 1 : 0);
+        Settings.System.putInt(mContentResolver, Settings.System.KILL_APP_LONGPRESS_BACK,
+                mKillAppLongpressBack.isChecked() ? 1 : 0);
     }
 
     private void updateKillAppLongpressBackOptions() {
-        mKillAppLongpressBack.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+        mKillAppLongpressBack.setChecked(Settings.System.getInt(mContentResolver,
                 Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-            Preference preference) {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mDisableBootAnimation) {
             boolean checked = ((CheckBoxPreference) preference).isChecked();
             if (checked) {
@@ -176,9 +174,8 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
             writeKillAppLongpressBackOptions();
 
         } else if (preference == mRecentKillAll) {
-            boolean checked = ((CheckBoxPreference)preference).isChecked();
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.RECENT_KILL_ALL_BUTTON, checked ? true : false);
+            Settings.System.putBoolean(mContentResolver, Settings.System.RECENT_KILL_ALL_BUTTON,
+                    checkBoxChecked(preference));
             return true;
 
         } else if (preference == mLcdDensity) {
@@ -187,33 +184,28 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
             return true;
 
         } else if (preference == mUseAltResolver) {
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.ACTIVITY_RESOLVER_USE_ALT,
+            Settings.System.putBoolean(mContentResolver, Settings.System.ACTIVITY_RESOLVER_USE_ALT,
                     checkBoxChecked(preference));
             return true;
 
         } else if (preference == mVibrateOnExpand) {
-            Settings.System.putBoolean(mContext.getContentResolver(),
-                    Settings.System.VIBRATE_NOTIF_EXPAND,
+            Settings.System.putBoolean(mContentResolver, Settings.System.VIBRATE_NOTIF_EXPAND,
                     checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mClockDateOpens) {
-            Settings.System.putBoolean(mContext.getContentResolver(),
-                    Settings.System.CLOCK_DATE_OPENS,
+            Settings.System.putBoolean(mContentResolver, Settings.System.CLOCK_DATE_OPENS,
                     checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
 
         } else if (preference == mPluggedUnpluggedWakeup) {
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
+            Settings.System.putBoolean(mContentResolver, Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
                     checkBoxChecked(preference));
         } else if (preference == mHideExtras) {
-            Settings.System.putBoolean(mContext.getContentResolver(),
-                    Settings.System.HIDE_EXTRAS_SYSTEM_BAR,
-                    ((CheckBoxPreference) preference).isChecked());
+            Settings.System.putBoolean(mContentResolver, Settings.System.HIDE_EXTRAS_SYSTEM_BAR,
+                    checkBoxChecked(preference));
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -222,7 +214,7 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mUserModeUI) {
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.USER_UI_MODE, Integer.parseInt((String) newValue));
             Helpers.restartSystemUI();
             return true;

@@ -58,6 +58,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
     Locale defaultLocale;
 
     protected boolean isShortcut;
+    private int deviceKeys;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,9 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
         defaultLocale = Locale.getDefault();
         Log.i(TAG, "defualt locale: " + defaultLocale.getDisplayName());
         setLocale();
+
+        deviceKeys = getResources().getInteger(
+                com.android.internal.R.integer.config_deviceHardwareKeys);
 
         mInLocalHeaderSwitch = true;
         super.onCreate(savedInstanceState);
@@ -198,21 +202,29 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
      * Populate the activity with the top-level headers.
      */
     @Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.preference_headers, target);
-        for (int i=0; i<target.size(); i++) {
+    public void onBuildHeaders(List<Header> headers) {
+        loadHeadersFromResource(R.xml.preference_headers, headers);
+
+        updateHeaderList(headers);
+        mHeaders = headers;
+    }
+
+    private void updateHeaderList(List<Header> target) {
+        int i = 0;
+        mHeaderIndexMap.clear();
+        while (i < target.size()) {
             Header header = target.get(i);
-            final int deviceKeys = getResources().getInteger(
-                    com.android.internal.R.integer.config_deviceHardwareKeys);
-            final boolean hasHardwareKeys = getResources().getBoolean(
-                    R.bool.has_hardware_buttons);
-            if (header.id == R.id.hardware_keys) {
-                if (deviceKeys == 0 || hasHardwareKeys == false) {
+            // Ids are integers, so downcasting
+            int id = (int) header.id;
+            if (id == R.id.hardware_keys) {
+                if (deviceKeys == 0 || !hasHardwareKeys()) {
                     target.remove(i);
-                } else {
-                    target.get(i);
                 }
-            } else if (header.id == R.id.launcher_settings) {
+            } else if (id == R.id.stylus_gestures) {
+                if (!hasStylusGestures()) {
+                    target.remove(i);
+                }
+            } else if (id == R.id.launcher_settings) {
                 Intent launcherIntent = new Intent(Intent.ACTION_MAIN);
                 launcherIntent.addCategory(Intent.CATEGORY_HOME);
                 launcherIntent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -229,7 +241,7 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                 } else {
                     target.remove(i);
                 }
-            } else if (header.id == R.id.lockscreen_lock_clock) {
+            } else if (id == R.id.lockscreen_lock_clock) {
                 Intent launchPref = new Intent(Intent.ACTION_MAIN);
                 launchPref.setClassName("com.cyanogenmod.lockclock", "com.cyanogenmod.lockclock.preference.Preferences");
                 ResolveInfo launcherPreferences = getPackageManager().resolveActivity(launchPref, 0);
@@ -239,9 +251,27 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                     target.remove(i);
                 }
             }
+
+            // Increment if the current one wasn't removed by the Utils code.
+            if (target.get(i) == header) {
+                // Hold on to the first header, when we need to reset to the
+                // top-level
+                if (mFirstHeader == null &&
+                        HeaderAdapter.getHeaderType(header) != HeaderAdapter.HEADER_TYPE_CATEGORY) {
+                    mFirstHeader = header;
+                }
+                mHeaderIndexMap.put(id, i);
+                i++;
+            }
         }
-        updateHeaderList(target);
-        mHeaders = target;
+    }
+
+    private boolean hasStylusGestures() {
+        return getResources().getBoolean(R.bool.config_stylusGestures);
+    }
+
+    private boolean hasHardwareKeys() {
+        return getResources().getBoolean(R.bool.has_hardware_buttons);
     }
 
     /**
@@ -279,27 +309,6 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
             if (index != null) {
                 getListView().setItemChecked(index, true);
                 getListView().smoothScrollToPosition(index);
-            }
-        }
-    }
-
-    private void updateHeaderList(List<Header> target) {
-        int i = 0;
-        while (i < target.size()) {
-            Header header = target.get(i);
-            // Ids are integers, so downcasting
-            int id = (int) header.id;
-
-            // Increment if the current one wasn't removed by the Utils code.
-            if (target.get(i) == header) {
-                // Hold on to the first header, when we need to reset to the
-                // top-level
-                if (mFirstHeader == null &&
-                        HeaderAdapter.getHeaderType(header) != HeaderAdapter.HEADER_TYPE_CATEGORY) {
-                    mFirstHeader = header;
-                }
-                mHeaderIndexMap.put(id, i);
-                i++;
             }
         }
     }

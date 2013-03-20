@@ -37,21 +37,18 @@ public class StatusBarClock extends BAKEDPreferenceFragment implements
 
         mClockStyle = (ListPreference) findPreference(PREF_ENABLE);
         mClockStyle.setOnPreferenceChangeListener(this);
-        mClockStyle.setValue(Integer.toString(Settings.System.getInt(getActivity()
-                .getContentResolver(), Settings.System.STATUSBAR_CLOCK_STYLE,
-                1)));
+        mClockStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_STYLE, 1)));
 
         mClockAmPmstyle = (ListPreference) findPreference(PREF_AM_PM_STYLE);
         mClockAmPmstyle.setOnPreferenceChangeListener(this);
-        mClockAmPmstyle.setValue(Integer.toString(Settings.System.getInt(getActivity()
-                .getContentResolver(), Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE,
-                2)));
+        mClockAmPmstyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, 2)));
 
         mClockWeekday = (ListPreference) findPreference(PREF_CLOCK_WEEKDAY);
         mClockWeekday.setOnPreferenceChangeListener(this);
-        mClockWeekday.setValue(Integer.toString(Settings.System.getInt(getActivity()
-                .getContentResolver(), Settings.System.STATUSBAR_CLOCK_WEEKDAY,
-                0)));
+        mClockWeekday.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_WEEKDAY, 0)));
 
         mClockColor = (ColorPickerPreference) findPreference(PREF_CLOCK_COLOR);
         mClockColor.setOnPreferenceChangeListener(this);
@@ -61,31 +58,27 @@ public class StatusBarClock extends BAKEDPreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         boolean result = false;
-
         if (preference == mClockAmPmstyle) {
-
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(getActivity().getContentResolver(),
+            result = Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, val);
 
         } else if (preference == mClockStyle) {
-
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(getActivity().getContentResolver(),
+            result = Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_STYLE, val);
 
         } else if (preference == mClockWeekday) {
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(getActivity().getContentResolver(),
+            result = Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_WEEKDAY, val);
 
         } else if (preference == mClockColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
                     .valueOf(newValue)));
             preference.setSummary(hex);
-
             int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_COLOR, intHex);
             Log.e("BAKED", intHex + "");
         }
