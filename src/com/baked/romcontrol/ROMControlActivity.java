@@ -3,6 +3,7 @@ package com.baked.romcontrol;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -220,6 +221,10 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                 if (deviceKeys == 0 || !hasHardwareKeys()) {
                     target.remove(i);
                 }
+            } else if (id == R.id.nav_ring) {
+                if (!enableNavigationBar()) {
+                    target.remove(i);
+                }
             } else if (id == R.id.stylus_gestures) {
                 if (!hasStylusGestures()) {
                     target.remove(i);
@@ -264,6 +269,12 @@ public class ROMControlActivity extends PreferenceActivity implements ButtonBarH
                 i++;
             }
         }
+    }
+
+    private boolean enableNavigationBar() {
+        return (getResources().getBoolean(com.android.internal.R.bool.config_showNavigationBar)
+                != false) || (Settings.System.getInt(getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW, 0) != 0);
     }
 
     private boolean hasStylusGestures() {
