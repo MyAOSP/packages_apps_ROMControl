@@ -651,7 +651,7 @@ public class Navbar extends BAKEDPreferenceFragment implements
 
         Bitmap d = ((BitmapDrawable) image).getBitmap();
         if (d == null) {
-            return getResources().getDrawable(R.drawable.ic_sysbar_null);
+            return getResources().getDrawable(R.drawable.ic_baked);
         } else {
             Bitmap bitmapOrig = Bitmap.createScaledBitmap(d, px, px, false);
             return new BitmapDrawable(mContext.getResources(), bitmapOrig);
@@ -662,46 +662,99 @@ public class Navbar extends BAKEDPreferenceFragment implements
         String uri = Settings.System.getString(mContentResolver,
                 Settings.System.NAVIGATION_CUSTOM_ACTIVITIES[index]);
 
-        if (uri == null)
-            return getResources().getDrawable(R.drawable.ic_sysbar_null);
+        final String packName = "com.android.systemui";
 
-        if (uri.startsWith("**")) {
-            if (uri.equals("**home**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_home);
-            } else if (uri.equals("**back**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_back);
-            } else if (uri.equals("**recents**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_recent);
-            } else if (uri.equals("**recentsgb**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_recent_gb);
-            } else if (uri.equals("**search**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_search);
-            } else if (uri.equals("**screenshot**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_screenshot);
-            } else if (uri.equals("**menu**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_menu_big);
-            } else if (uri.equals("**ime**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_ime_switcher);
-            } else if (uri.equals("**kill**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_killtask);
-            } else if (uri.equals("**power**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_power);
-            } else if (uri.equals("**notifications**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_notifications);
-            } else if (uri.equals("**lastapp**")) {
-                return getResources().getDrawable(R.drawable.ic_sysbar_lastapp);
+        try {
+            PackageManager manager = getPackageManager();
+            Resources mSystemUiResources = manager.getResourcesForApplication(packName);
+            String navbarDrawable;
+            int resID;
+            Drawable d;
+
+            if (uri == null) {
+                navbarDrawable = "ic_sysbar_null";
+                resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                d = mSystemUiResources.getDrawable(resID);
+                return d;
             }
-        } else {
-            try {
-                return mContext.getPackageManager().getActivityIcon(Intent.parseUri(uri, 0));
-            } catch (NameNotFoundException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+
+            if (uri.startsWith("**")) {
+                if (uri.equals("**home**")) {
+                    navbarDrawable = "ic_sysbar_home";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**back**")) {
+                    navbarDrawable = "ic_sysbar_back";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**recents**")) {
+                    navbarDrawable = "ic_sysbar_recent";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**recentsgb**")) {
+                    navbarDrawable = "ic_sysbar_recent_gb";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**search**")) {
+                    navbarDrawable = "ic_sysbar_search";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**screenshot**")) {
+                    navbarDrawable = "ic_sysbar_screenshot";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**menu**")) {
+                    navbarDrawable = "ic_sysbar_menu_big";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**ime**")) {
+                    navbarDrawable = "ic_sysbar_ime_switcher";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**kill**")) {
+                    navbarDrawable = "ic_sysbar_killtask";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**power**")) {
+                    navbarDrawable = "ic_sysbar_power";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**notifications**")) {
+                    navbarDrawable = "ic_sysbar_notifications";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                } else if (uri.equals("**lastapp**")) {
+                    navbarDrawable = "ic_sysbar_lastapp";
+                    resID = mSystemUiResources.getIdentifier(navbarDrawable, "drawable", packName);
+                    d = mSystemUiResources.getDrawable(resID);
+                    return d;
+                }
+            } else {
+                try {
+                    return mContext.getPackageManager().getActivityIcon(Intent.parseUri(uri, 0));
+                } catch (NameNotFoundException e) {
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
+
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
 
-        return getResources().getDrawable(R.drawable.ic_sysbar_null);
+        return getResources().getDrawable(R.drawable.ic_baked);
     }
 
     private String getProperSummary(int i, boolean longpress) {
