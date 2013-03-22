@@ -21,31 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-import static com.android.internal.util.cm.QSConstants.TILES_DEFAULT;
-import static com.android.internal.util.cm.QSConstants.TILE_AIRPLANE;
-import static com.android.internal.util.cm.QSConstants.TILE_AUTOROTATE;
-import static com.android.internal.util.cm.QSConstants.TILE_BATTERY;
-import static com.android.internal.util.cm.QSConstants.TILE_BLUETOOTH;
-import static com.android.internal.util.cm.QSConstants.TILE_BRIGHTNESS;
-import static com.android.internal.util.cm.QSConstants.TILE_DELIMITER;
-import static com.android.internal.util.cm.QSConstants.TILE_FCHARGE;
-import static com.android.internal.util.cm.QSConstants.TILE_GPS;
-import static com.android.internal.util.cm.QSConstants.TILE_LOCKSCREEN;
-import static com.android.internal.util.cm.QSConstants.TILE_LTE;
-import static com.android.internal.util.cm.QSConstants.TILE_MOBILEDATA;
-import static com.android.internal.util.cm.QSConstants.TILE_NETWORKMODE;
-import static com.android.internal.util.cm.QSConstants.TILE_NFC;
-import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
-import static com.android.internal.util.cm.QSConstants.TILE_QUIETHOURS;
-import static com.android.internal.util.cm.QSConstants.TILE_RINGER;
-import static com.android.internal.util.cm.QSConstants.TILE_SCREENTIMEOUT;
-import static com.android.internal.util.cm.QSConstants.TILE_SETTINGS;
-import static com.android.internal.util.cm.QSConstants.TILE_SLEEP;
-import static com.android.internal.util.cm.QSConstants.TILE_SYNC;
-import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
-import static com.android.internal.util.cm.QSConstants.TILE_USER;
-import static com.android.internal.util.cm.QSConstants.TILE_WIFI;
-import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
+import static com.android.internal.util.cm.QSConstants.*;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -121,6 +97,9 @@ public class QuickSettingsUtil {
         TILES.put(TILE_TORCH, new QuickSettingsUtil.TileInfo(
                 TILE_TORCH, R.string.title_tile_torch,
                 "com.android.systemui:drawable/ic_qs_torch_off"));
+        TILES.put(TILE_VOLUME, new QuickSettingsUtil.TileInfo(
+                TILE_VOLUME, R.string.title_tile_volume,
+                "com.android.systemui:drawable/ic_qs_volume"));
         TILES.put(TILE_WIFI, new QuickSettingsUtil.TileInfo(
                 TILE_WIFI, R.string.title_tile_wifi,
                 "com.android.systemui:drawable/ic_qs_wifi_4"));
