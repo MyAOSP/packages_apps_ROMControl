@@ -347,6 +347,7 @@
         <item>@string/kill_app</item>
         <item>@string/lastapp</item>
         <item>@string/screen_off</item>
+        <item>@string/torch</item>
         <item>@string/google_now</item>
         <item>@string/select_application</item>
     </string-array>
@@ -360,6 +361,7 @@
         <item>**kill**</item>
         <item>**lastapp**</item>
         <item>**power**</item>
+        <item>**torch**</item>
         <item>**assist**</item>
         <item>**app**</item>
     </string-array>

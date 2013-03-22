@@ -584,31 +584,34 @@ public class NavRingTargets extends Fragment implements
         String newSummary = mContext.getResources().getString(R.string.none);
         ActionConstant stringEnum = fromString(uri);
         switch (stringEnum) {
-        case ACTION_IME:
+            case ACTION_IME:
                 newSummary = getResources().getString(R.string.open_ime_switcher);
                 break;
-        case ACTION_VIB:
+            case ACTION_VIB:
                 newSummary = getResources().getString(R.string.ring_vib);
                 break;
-        case ACTION_SILENT:
+            case ACTION_SILENT:
                 newSummary = getResources().getString(R.string.ring_silent);
                 break;
-        case ACTION_SILENT_VIB:
+            case ACTION_SILENT_VIB:
                 newSummary = getResources().getString(R.string.ring_vib_silent);
                 break;
-        case ACTION_KILL:
+            case ACTION_KILL:
                 newSummary = getResources().getString(R.string.kill_app);
                 break;
-        case ACTION_LAST_APP:
+            case ACTION_LAST_APP:
                 newSummary = getResources().getString(R.string.lastapp);
                 break;
-        case ACTION_POWER:
+            case ACTION_POWER:
                 newSummary = getResources().getString(R.string.screen_off);
                 break;
-        case ACTION_ASSIST:
+            case ACTION_TORCH:
+                newSummary = getResources().getString(R.string.torch);
+                break;
+            case ACTION_ASSIST:
                 newSummary = getResources().getString(R.string.google_now);
                 break;
-        case ACTION_APP:
+            case ACTION_APP:
                 newSummary = mPicker.getFriendlyNameForUri(uri);
                 break;
         }

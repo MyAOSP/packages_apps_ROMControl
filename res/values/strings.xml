@@ -400,6 +400,7 @@
     <string name="kill_app">Kill app</string>
     <string name="lastapp">Last app</string>
     <string name="power">Power</string>
+    <string name="torch">Torch</string>
     <string name="notifications">Notifications</string>
     <string name="recents_gb">Recents (GB style)</string>
     <string name="custom_app">Custom app</string>
