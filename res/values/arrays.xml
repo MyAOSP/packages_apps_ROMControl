@@ -223,17 +223,41 @@
         <item>2</item>
     </string-array>
 
-    <!-- Tiles per row -->
-    <string-array name="tiles_per_row_entries" translatable="false">
+    <!-- Num Columns port/land per row -->
+    <string-array name="num_columns_port_entries" translatable="false">
+        <item>@string/one_column</item>
+        <item>@string/two_columns</item>
+        <item>@string/three_columns</item>
+        <item>@string/four_columns</item>
+        <item>@string/five_columns</item>
+    </string-array>
+
+    <string-array name="num_columns_port_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
     </string-array>
 
-    <string-array name="tiles_per_row_values" translatable="false">
+    <string-array name="num_columns_land_entries" translatable="false">
+        <item>@string/one_column</item>
+        <item>@string/two_columns</item>
+        <item>@string/three_columns</item>
+        <item>@string/four_columns</item>
+        <item>@string/five_columns</item>
+        <item>@string/six_columns</item>
+        <item>@string/seven_columns</item>
+    </string-array>
+
+    <string-array name="num_columns_land_values" translatable="false">
+        <item>1</item>
+        <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
+        <item>6</item>
+        <item>7</item>
     </string-array>
 
     <string-array name="glow_times_entries">

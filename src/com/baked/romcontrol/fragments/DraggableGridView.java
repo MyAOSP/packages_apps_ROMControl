@@ -19,9 +19,12 @@ package com.baked.romcontrol.fragments;
 import java.util.Collections;
 import java.util.ArrayList;
 
+import static com.android.internal.util.cm.QSUtils.getMaxColumns;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff.Mode;
@@ -61,9 +64,14 @@ public class DraggableGridView extends ViewGroup implements
     protected OnClickListener secondaryOnClickListener;
     private OnItemClickListener onItemClickListener;
     private int mTileTextSize = 12;
+    protected boolean mPortrait;
+    private Context mContext;
 
     public DraggableGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+        mPortrait = mContext.getResources().getConfiguration()
+                .orientation == Configuration.ORIENTATION_PORTRAIT;
         setListeners();
         setChildrenDrawingOrderEnabled(true);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -128,9 +136,12 @@ public class DraggableGridView extends ViewGroup implements
         // compute width of view, in dp
         float w = (r - l) / (dpi / 160f);
 
-        // determine number of columns, at least 3
-        colCount = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.QUICK_TILES_PER_ROW, 3);
+        // determine number of columns, at least 3 from user choice.
+        if (mPortrait) {
+            colCount = getMaxColumns(mContext, Configuration.ORIENTATION_PORTRAIT);
+        } else {
+            colCount = getMaxColumns(mContext, Configuration.ORIENTATION_LANDSCAPE);
+        }
 
         // determine childSize and padding, in px
         childSize = (r - l) / colCount;
@@ -501,8 +512,14 @@ public class DraggableGridView extends ViewGroup implements
     }
 
     void updateTileTextSize(int column) {
-        // adjust the tile text size based on column count
+        // adjust Tile Text Size based on column count
         switch (column) {
+            case 7:
+                mTileTextSize = 8;
+                break;
+            case 6:
+                mTileTextSize = 8;
+                break;
             case 5:
                 mTileTextSize = 8;
                 break;
@@ -517,9 +534,12 @@ public class DraggableGridView extends ViewGroup implements
     }
 
     private void updateTilesPerRow() {
-        ContentResolver resolver = mContext.getContentResolver();
-        int columnCount = Settings.System.getInt(resolver, Settings.System.QUICK_TILES_PER_ROW,
-                3);
+        int columnCount;
+        if (mPortrait) {
+            columnCount = getMaxColumns(mContext, Configuration.ORIENTATION_PORTRAIT);
+        } else {
+            columnCount = getMaxColumns(mContext, Configuration.ORIENTATION_LANDSCAPE);
+        }
         updateTileTextSize(columnCount);
     }
 

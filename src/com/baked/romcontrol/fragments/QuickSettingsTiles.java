@@ -16,12 +16,15 @@
 
 package com.baked.romcontrol.fragments;
 
+import static com.android.internal.util.cm.QSUtils.getMaxColumns;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -42,6 +45,7 @@ import com.baked.romcontrol.Utils;
 import com.baked.romcontrol.fragments.QuickSettingsUtil.TileInfo;
 
 import java.util.ArrayList;
+
 public class QuickSettingsTiles extends Fragment {
 
     private static final int MENU_RESET = Menu.FIRST;
@@ -53,6 +57,9 @@ public class QuickSettingsTiles extends Fragment {
     TileAdapter mTileAdapter;
 
     private int mTileTextSize = 12;
+    private boolean mPortrait;
+
+    private Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,6 +122,9 @@ public class QuickSettingsTiles extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mContext = getActivity().getApplicationContext();
+        mPortrait = mContext.getResources().getConfiguration()
+                .orientation == Configuration.ORIENTATION_PORTRAIT;
         genTiles();
         mDragView.setOnRearrangeListener(new OnRearrangeListener() {
             public void onRearrange(int oldIndex, int newIndex) {
@@ -239,8 +249,14 @@ public class QuickSettingsTiles extends Fragment {
     }
 
     void updateTileTextSize(int column) {
-        // adjust the tile text size based on column count
+        // adjust Tile Text Size based on column count
         switch (column) {
+            case 7:
+                mTileTextSize = 8;
+                break;
+            case 6:
+                mTileTextSize = 8;
+                break;
             case 5:
                 mTileTextSize = 8;
                 break;
@@ -255,8 +271,12 @@ public class QuickSettingsTiles extends Fragment {
     }
 
     private void updateTilesPerRow() {
-        int columnCount = Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.QUICK_TILES_PER_ROW, 3);
+        int columnCount;
+        if (mPortrait) {
+            columnCount = getMaxColumns(mContext, Configuration.ORIENTATION_PORTRAIT);
+        } else {
+            columnCount = getMaxColumns(mContext, Configuration.ORIENTATION_LANDSCAPE);
+        }
         updateTileTextSize(columnCount);
     }
 }

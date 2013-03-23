@@ -274,11 +274,21 @@
     <string name="summary_collapse_panel">Close the QuickSettings panel upon toggle</string>
     <string name="dialog_delete_title">Delete</string>
     <string name="profiles_add">Add</string>
+    <string name="num_columns_port_title">Tiles per row portrait</string>
+    <string name="num_columns_port_summary">Choose how many tiles to show per row in portrait mode</string>
+    <string name="num_columns_land_title">Tiles per row landscape</string>
+    <string name="num_columns_land_summary">Choose how many tiles to show per row in landscape mode</string>
+    <!-- array strings for tiles per row -->
+    <string name="one_column">1 column</string>
+    <string name="two_columns">2 columns</string>
+    <string name="three_columns">3 columns</string>
+    <string name="four_columns">4 columns</string>
+    <string name="five_columns">5 columns</string>
+    <string name="six_columns">6 columns</string>
+    <string name="seven_columns">7 columns</string>
     <!-- Reset tiles -->
     <string name="tiles_reset_title">Reset</string>
     <string name="tiles_reset_message">Restore the default displayed tiles and layout?</string>
-    <string name="tiles_per_row_title">Tiles per row</string>
-    <string name="tiles_per_row_summary">Choose how many tiles to show per row</string>
 
     <!-- This exists as part of Power widget already, re-use them
          If Power widget is removed, re-enable these

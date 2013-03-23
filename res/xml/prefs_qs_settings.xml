@@ -31,11 +31,18 @@
             android:persistent="false" />
 
         <ListPreference
-            android:key="tiles_per_row"
-            android:entries="@array/tiles_per_row_entries"
-            android:entryValues="@array/tiles_per_row_values"
-            android:title="@string/tiles_per_row_title"
-            android:summary="@string/tiles_per_row_summary" />
+            android:key="num_columns_port"
+            android:entries="@array/num_columns_port_entries"
+            android:entryValues="@array/num_columns_port_values"
+            android:title="@string/num_columns_port_title"
+            android:summary="@string/num_columns_port_summary" />
+
+        <ListPreference
+            android:key="num_columns_land"
+            android:entries="@array/num_columns_land_entries"
+            android:entryValues="@array/num_columns_land_values"
+            android:title="@string/num_columns_land_title"
+            android:summary="@string/num_columns_land_summary" />
 
         <CheckBoxPreference
             android:key="collapse_panel"

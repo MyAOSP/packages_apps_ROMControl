@@ -81,7 +81,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     private static final String GENERAL_SETTINGS = "pref_general_settings";
     private static final String STATIC_TILES = "static_tiles";
     private static final String DYNAMIC_TILES = "pref_dynamic_tiles";
-    private static final String TILES_PER_ROW = "tiles_per_row";
+    private static final String NUM_COLUMNS_PORT = "num_columns_port";
+    private static final String NUM_COLUMNS_LAND = "num_columns_land";
 
     CheckBoxPreference mDynamicAlarm;
     CheckBoxPreference mDynamicBugReport;
@@ -89,7 +90,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     CheckBoxPreference mDynamicWifi;
     CheckBoxPreference mDynamicIme;
     CheckBoxPreference mCollapsePanel;
-    ListPreference mTilesPerRow;
+    ListPreference mNumColumnsPort;
+    ListPreference mNumColumnsLand;
     ListPreference mQuickPulldown;
     ListPreference mNetworkMode;
     ListPreference mScreenTimeoutMode;
@@ -127,9 +129,13 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             updatePulldownSummary(quickPulldownValue);
         }
 
-        mTilesPerRow = (ListPreference) prefSet.findPreference(TILES_PER_ROW);
-        mTilesPerRow.setSummary(mTilesPerRow.getEntry());
-        mTilesPerRow.setOnPreferenceChangeListener(this);
+        mNumColumnsPort = (ListPreference) prefSet.findPreference(NUM_COLUMNS_PORT);
+        mNumColumnsPort.setSummary(mNumColumnsPort.getEntry());
+        mNumColumnsPort.setOnPreferenceChangeListener(this);
+
+        mNumColumnsLand = (ListPreference) prefSet.findPreference(NUM_COLUMNS_LAND);
+        mNumColumnsLand.setSummary(mNumColumnsLand.getEntry());
+        mNumColumnsLand.setOnPreferenceChangeListener(this);
 
         mCollapsePanel = (CheckBoxPreference) prefSet.findPreference(COLLAPSE_PANEL);
         mCollapsePanel.setChecked(Settings.System.getInt(mContentResolver,
@@ -306,14 +312,24 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mRingMode));
             Settings.System.putString(mContentResolver, Settings.System.EXPANDED_RING_MODE,
                     TextUtils.join(SEPARATOR, arrValue));
-            updateSummary(TextUtils.join(SEPARATOR, arrValue), mRingMode, R.string.pref_ring_mode_summary);
+            updateSummary(TextUtils.join(SEPARATOR, arrValue),
+                    mRingMode, R.string.pref_ring_mode_summary);
             return true;
 
-        } else if (preference == mTilesPerRow) {
+        } else if (preference == mNumColumnsPort) {
             int val = Integer.parseInt((String) newValue);
-            int index = mTilesPerRow.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentResolver, Settings.System.QUICK_TILES_PER_ROW, val);
-            mTilesPerRow.setSummary(mTilesPerRow.getEntries()[index]);
+            int index = mNumColumnsPort.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_PORT, val);
+            mNumColumnsPort.setSummary(mNumColumnsPort.getEntries()[index]);
+            return true;
+
+        } else if (preference == mNumColumnsLand) {
+            int val = Integer.parseInt((String) newValue);
+            int index = mNumColumnsLand.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_LAND, val);
+            mNumColumnsLand.setSummary(mNumColumnsLand.getEntries()[index]);
             return true;
 
         } else if (preference == mNetworkMode) {
