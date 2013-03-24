@@ -286,6 +286,12 @@
     <string name="five_columns">5 columns</string>
     <string name="six_columns">6 columns</string>
     <string name="seven_columns">7 columns</string>
+    <!-- Tile background style and text color -->
+    <string name="tile_background_style_title">Tile background style</string>
+    <string name="tile_background_style_summary">Lets you choose from random, color fill or default background for tiles</string>
+    <string name="tile_background_random">Random colors</string>
+    <string name="tile_custom_background_dialog_title">Tile background style</string>
+    <string name="tile_text_color_title">Set tile text color</string>
     <!-- Reset tiles -->
     <string name="tiles_reset_title">Reset</string>
     <string name="tiles_reset_message">Restore the default displayed tiles and layout?</string>

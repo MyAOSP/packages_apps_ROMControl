@@ -17,6 +17,8 @@
 package com.baked.romcontrol.fragments;
 
 import static com.android.internal.util.cm.QSUtils.getMaxColumns;
+import static com.android.internal.util.cm.QSUtils.getTileTextColor;
+import static com.android.internal.util.cm.QSUtils.setBackgroundStyle;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -100,9 +102,12 @@ public class QuickSettingsTiles extends Fragment {
      */
     void addTile(int titleId, String iconSysId, int iconRegId, boolean newTile) {
         View v = (View) mInflater.inflate(R.layout.qs_tile, null, false);
+        v.setBackgroundDrawable(null);
+        setBackgroundStyle(mContext, v);
         final TextView name = (TextView) v.findViewById(R.id.qs_text);
         name.setText(titleId);
         name.setTextSize(1, mTileTextSize);
+        name.setTextColor(getTileTextColor(mContext));
         if (mSystemUiResources != null && iconSysId != null) {
             int resId = mSystemUiResources.getIdentifier(iconSysId, null, null);
             if (resId > 0) {
@@ -258,7 +263,7 @@ public class QuickSettingsTiles extends Fragment {
                 mTileTextSize = 8;
                 break;
             case 5:
-                mTileTextSize = 8;
+                mTileTextSize = 9;
                 break;
             case 4:
                 mTileTextSize = 10;
@@ -266,6 +271,12 @@ public class QuickSettingsTiles extends Fragment {
             case 3:
             default:
                 mTileTextSize = 12;
+                break;
+            case 2:
+                mTileTextSize = 14;
+                break;
+            case 1:
+                mTileTextSize = 16;
                 break;
         }
     }

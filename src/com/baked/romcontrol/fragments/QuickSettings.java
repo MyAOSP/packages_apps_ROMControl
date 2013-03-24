@@ -33,14 +33,11 @@ import static com.android.internal.util.cm.QSConstants.TILE_NFC;
 import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsBluetooth;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsFastCharge;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsLte;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsNfc;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsUsbTether;
-import static com.android.internal.util.cm.QSUtils.deviceSupportsWifiDisplay;
-import static com.android.internal.util.cm.QSUtils.systemProfilesEnabled;
+import static com.android.internal.util.cm.QSUtils.*;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -61,6 +58,9 @@ import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.Utils;
 import com.baked.romcontrol.util.Helpers;
+
+import net.margaritov.preference.colorpicker.ColorPickerPreference;
+import net.margaritov.preference.colorpicker.ColorPickerView;
 
 public class QuickSettings extends BAKEDPreferenceFragment implements
         OnPreferenceChangeListener {
@@ -83,6 +83,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     private static final String DYNAMIC_TILES = "pref_dynamic_tiles";
     private static final String NUM_COLUMNS_PORT = "num_columns_port";
     private static final String NUM_COLUMNS_LAND = "num_columns_land";
+    private static final String TILE_BACKGROUND_STYLE = "tile_background_style";
+    private static final String TILE_TEXT_COLOR = "tile_text_color";
 
     CheckBoxPreference mDynamicAlarm;
     CheckBoxPreference mDynamicBugReport;
@@ -90,7 +92,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     CheckBoxPreference mDynamicWifi;
     CheckBoxPreference mDynamicIme;
     CheckBoxPreference mCollapsePanel;
+    ColorPickerPreference mTileTextColor;
     ListPreference mNumColumnsPort;
+    ListPreference mTileBgStyle;
     ListPreference mNumColumnsLand;
     ListPreference mQuickPulldown;
     ListPreference mNetworkMode;
@@ -102,6 +106,8 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
     String mFastChargePath;
 
+    private Activity mActivity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +116,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity = getActivity();
         addPreferencesFromResource(R.xml.prefs_qs_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
@@ -128,6 +135,13 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             mQuickPulldown.setValue(String.valueOf(quickPulldownValue));
             updatePulldownSummary(quickPulldownValue);
         }
+
+        mTileBgStyle = (ListPreference) findPreference(TILE_BACKGROUND_STYLE);
+        mTileBgStyle.setOnPreferenceChangeListener(this);
+        updateTileBackgroundSummary();
+
+        mTileTextColor = (ColorPickerPreference) findPreference(TILE_TEXT_COLOR);
+        mTileTextColor.setOnPreferenceChangeListener(this);
 
         mNumColumnsPort = (ListPreference) prefSet.findPreference(NUM_COLUMNS_PORT);
         mNumColumnsPort.setSummary(mNumColumnsPort.getEntry());
@@ -263,6 +277,23 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         }
     }
 
+    private void updateTileBackgroundSummary() {
+        int resId;
+        String value = Settings.System.getString(mContentResolver,
+                Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE);
+        if (value == null) {
+            resId = R.string.notif_background_default;
+            mTileBgStyle.setValueIndex(2);
+        } else if (value.equals("random")) {
+            resId = R.string.tile_background_random;
+            mTileBgStyle.setValueIndex(0);
+        } else {
+            resId = R.string.notif_background_color_fill;
+            mTileBgStyle.setValueIndex(1);
+        }
+        mTileBgStyle.setSummary(getResources().getString(resId));
+    }
+
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mDynamicAlarm) {
             Settings.System.putInt(mContentResolver, Settings.System.QS_DYNAMIC_ALARM,
@@ -352,6 +383,55 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
             Settings.System.putInt(mContentAppResolver,
                     Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
             mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntries()[index]);
+            return true;
+
+        } else if (preference == mTileTextColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_TEXT_COLOR, intHex);
+            return true;
+
+        } else if (preference == mTileBgStyle) {
+            int indexOf = mTileBgStyle.findIndexOfValue(newValue.toString());
+            switch (indexOf) {
+                //Displays color dialog when user has chosen color fill
+                case 0:
+                    Settings.System.putString(mContentResolver,
+                            Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, "random");
+                    updateTileBackgroundSummary();
+                    break;
+                case 1:
+                    final ColorPickerView colorView = new ColorPickerView(mActivity);
+                    int currentColor = Settings.System.getInt(mContentResolver,
+                            Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, -1);
+                    if (currentColor != -1) {
+                        colorView.setColor(currentColor);
+                    }
+                    colorView.setAlphaSliderVisible(true);
+                    new AlertDialog.Builder(mActivity)
+                    .setTitle(R.string.tile_custom_background_dialog_title)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Settings.System.putInt(mContentResolver,
+                            Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, colorView.getColor());
+                            updateTileBackgroundSummary();
+                        }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).setView(colorView).show();
+                    return false;
+                case 2:
+                    Settings.System.putString(mContentResolver,
+                            Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, null);
+                    updateTileBackgroundSummary();
+                    break;
+            }
             return true;
         }
         return false;

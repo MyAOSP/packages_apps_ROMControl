@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 import static com.android.internal.util.cm.QSUtils.getMaxColumns;
+import static com.android.internal.util.cm.QSUtils.getTileTextColor;
+import static com.android.internal.util.cm.QSUtils.setBackgroundStyle;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -295,6 +297,7 @@ public class DraggableGridView extends ViewGroup implements
         addDeleteTile.setCompoundDrawablesRelativeWithIntrinsicBounds(0, resid, 0, 0);
         addDeleteTile.setText(stringid);
         addDeleteTile.setTextSize(1, mTileTextSize);
+        addDeleteTile.setTextColor(getTileTextColor(mContext));
     }
 
     public boolean onLongClick(View view) {
@@ -337,7 +340,7 @@ public class DraggableGridView extends ViewGroup implements
                     break;
                 } else {
                     isDelete = false;
-                    getChildAt(dragged).setBackgroundColor(Color.parseColor("#AA222222"));
+                    setBackgroundStyle(mContext, getChildAt(dragged));
                 }
                 if (lastTarget != target && target != getChildCount() - 1) {
                     if (target != -1) {
