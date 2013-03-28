@@ -18,6 +18,16 @@
     <string name="hex_hint">#FF000000</string>
     <string name="set">Set</string>
     <string name="ics_color">Holo</string>
+    <!-- Random colors -->
+    <string name="random_colors">Random colors</string>
+    <string name="random_colors_title">Set random colors</string>
+    <string name="random_colors_summary">Allows you to select your own random colors</string>
+    <string name="color_one">Color one</string>
+    <string name="color_two">Color two</string>
+    <string name="color_three">Color three</string>
+    <string name="color_four">Color four</string>
+    <string name="color_five">Color five</string>
+    <string name="color_six">Color six</string>
 
 <!-- AboutPage thanks mastur_mynd -->
     <string name="teambaked_about_page">About #teamBAKED</string>
@@ -278,6 +288,8 @@
     <string name="num_columns_port_summary">Choose how many tiles to show per row in portrait mode</string>
     <string name="num_columns_land_title">Tiles per row landscape</string>
     <string name="num_columns_land_summary">Choose how many tiles to show per row in landscape mode</string>
+    <string name="flip_tile_title">Flip tile</string>
+    <string name="flip_tile_summary">Flips the tile when touched on/off</string>
     <!-- array strings for tiles per row -->
     <string name="one_column">1 column</string>
     <string name="two_columns">2 columns</string>
@@ -289,6 +301,7 @@
     <!-- Tile background style and text color -->
     <string name="tile_background_style_title">Tile background style</string>
     <string name="tile_background_style_summary">Lets you choose from random, color fill or default background for tiles</string>
+    <string name="tile_background_color_title">Set tile background color</string>
     <string name="tile_background_random">Random colors</string>
     <string name="tile_custom_background_dialog_title">Tile background style</string>
     <string name="tile_text_color_title">Set tile text color</string>

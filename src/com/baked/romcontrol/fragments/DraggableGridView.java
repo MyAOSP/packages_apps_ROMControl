@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import static com.android.internal.util.cm.QSUtils.getMaxColumns;
 import static com.android.internal.util.cm.QSUtils.getTileTextColor;
-import static com.android.internal.util.cm.QSUtils.setBackgroundStyle;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -340,7 +339,7 @@ public class DraggableGridView extends ViewGroup implements
                     break;
                 } else {
                     isDelete = false;
-                    setBackgroundStyle(mContext, getChildAt(dragged));
+                    getChildAt(dragged).setBackgroundColor(Color.parseColor("#AA222222"));
                 }
                 if (lastTarget != target && target != getChildCount() - 1) {
                     if (target != -1) {

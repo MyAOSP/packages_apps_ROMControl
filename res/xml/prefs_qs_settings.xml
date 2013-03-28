@@ -49,6 +49,11 @@
             android:title="@string/title_collapse_panel"
             android:summary="@string/summary_collapse_panel" />
 
+        <CheckBoxPreference
+            android:key="flip_tile"
+            android:title="@string/flip_tile_title"
+            android:summary="@string/flip_tile_summary" />
+
         <ListPreference
             android:key="tile_background_style"
             android:entries="@array/tile_background_style_entries"
@@ -56,10 +61,22 @@
             android:title="@string/tile_background_style_title"
             android:summary="@string/tile_background_style_summary" />
 
+        <Preference
+            android:key="random_colors"
+            android:title="@string/random_colors_title"
+            android:summary="@string/random_colors_summary" />
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:key="tile_background_color"
+            android:title="@string/tile_background_color_title"
+            android:defaultValue="#ff000000"
+            alphaSlider="true" />
+
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="tile_text_color"
             android:title="@string/tile_text_color_title"
-            android:defaultValue="#ffffffff" />
+            android:defaultValue="#ffffffff"
+            alphaSlider="true" />
 
     </PreferenceCategory>
 
