@@ -48,6 +48,8 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
     private static final String PREF_PLUGGED_UNPLUGGED_WAKEUP = "plugged_unplugged_wakeup";
     private static final String PREF_USER_MODE_UI = "user_mode_ui";
     private static final String PREF_HIDE_EXTRAS = "hide_extras";
+    private static final String PREF_POWER_CRT_MODE = "system_power_crt_mode";
+    private static final String PREF_POWER_CRT_SCREEN_OFF = "system_power_crt_screen_off";
 
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mRecentKillAll;
@@ -57,6 +59,8 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
     CheckBoxPreference mClockDateOpens;
     CheckBoxPreference mPluggedUnpluggedWakeup;
     CheckBoxPreference mHideExtras;
+    CheckBoxPreference mCrtOff;
+    ListPreference mCrtMode;
     ListPreference mUserModeUI;
     Preference mLcdDensity;
 
@@ -83,6 +87,8 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
         mPluggedUnpluggedWakeup = (CheckBoxPreference) findPreference(PREF_PLUGGED_UNPLUGGED_WAKEUP);
         mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
         mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
+        mCrtOff = (CheckBoxPreference) findPreference(PREF_POWER_CRT_SCREEN_OFF);
+        mCrtMode = (ListPreference) findPreference(PREF_POWER_CRT_MODE);
 
         boolean hasNavBarByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar);
@@ -129,42 +135,39 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
                 preference.setSummary("");
             }
             return true;
-
         } else if (preference == mKillAppLongpressBack) {
             writeKillAppLongpressBackOptions();
-
         } else if (preference == mRecentKillAll) {
             Settings.System.putBoolean(mContentResolver, Settings.System.RECENT_KILL_ALL_BUTTON,
                     checkBoxChecked(preference));
             return true;
-
         } else if (preference == mLcdDensity) {
             ((PreferenceActivity) getActivity())
                     .startPreferenceFragment(new DensityChanger(), true);
             return true;
-
         } else if (preference == mUseAltResolver) {
             Settings.System.putBoolean(mContentResolver, Settings.System.ACTIVITY_RESOLVER_USE_ALT,
                     checkBoxChecked(preference));
             return true;
-
         } else if (preference == mVibrateOnExpand) {
             Settings.System.putBoolean(mContentResolver, Settings.System.VIBRATE_NOTIF_EXPAND,
                     checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
-
         } else if (preference == mClockDateOpens) {
             Settings.System.putBoolean(mContentResolver, Settings.System.CLOCK_DATE_OPENS,
                     checkBoxChecked(preference));
             Helpers.restartSystemUI();
             return true;
-
         } else if (preference == mPluggedUnpluggedWakeup) {
             Settings.System.putBoolean(mContentResolver, Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED,
                     checkBoxChecked(preference));
         } else if (preference == mHideExtras) {
             Settings.System.putBoolean(mContentResolver, Settings.System.HIDE_EXTRAS_SYSTEM_BAR,
+                    checkBoxChecked(preference));
+            return true;
+        } else if (preference == mCrtOff) {
+            Settings.System.putBoolean(mContentResolver, Settings.System.SYSTEM_POWER_ENABLE_CRT_OFF,
                     checkBoxChecked(preference));
             return true;
         }
@@ -178,12 +181,19 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
                     Settings.System.USER_UI_MODE, Integer.parseInt((String) newValue));
             Helpers.restartSystemUI();
             return true;
+        } else if (preference == mCrtMode) {
+            int index = mCrtMode.findIndexOfValue((String) newValue);
+            preference.setSummary(mCrtMode.getEntries()[index]);
+            int val = Integer.valueOf((String) newValue);
+            Settings.System.putInt(mContentResolver, Settings.System.SYSTEM_POWER_CRT_MODE, val);
+            return true;
         }
         return false;
     }
 
     private void registerListeners() {
         mUserModeUI.setOnPreferenceChangeListener(this);
+        mCrtMode.setOnPreferenceChangeListener(this);
     }
 
     private void setDefaultValues() {
@@ -202,11 +212,16 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
                 Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
         mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContentAppResolver,
                 Settings.System.USER_UI_MODE, 0)));
+        mCrtOff.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.SYSTEM_POWER_ENABLE_CRT_OFF, true));
+        mCrtMode.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.SYSTEM_POWER_CRT_MODE, 0)));
         updateKillAppLongpressBackOptions();
     }
 
     private void updateSummaries() {
         mLcdDensity.setSummary(getResources().getString(R.string.current_lcd_density) + currentProperty);
+        mCrtMode.setSummary(mCrtMode.getEntry());
         if (mDisableBootAnimation.isChecked()) {
             Resources res = mContext.getResources();
             String[] insults = res.getStringArray(R.array.disable_bootanimation_insults);
