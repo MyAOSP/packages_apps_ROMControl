@@ -23,37 +23,37 @@
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_one"
         android:title="@string/color_one"
-        android:defaultValue="@*android:color/holo_blue_dark"
+        android:defaultValue="#ff0099cc"
         alphaSlider="true" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_two"
         android:title="@string/color_two"
-        android:defaultValue="@*android:color/holo_green_dark"
+        android:defaultValue="#ff669900"
         alphaSlider="true" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_three"
         android:title="@string/color_three"
-        android:defaultValue="@*android:color/holo_red_dark"
+        android:defaultValue="#ffcc0000"
         alphaSlider="true" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_four"
         android:title="@string/color_four"
-        android:defaultValue="@*android:color/holo_orange_dark"
+        android:defaultValue="#ffff8800"
         alphaSlider="true" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_five"
         android:title="@string/color_five"
-        android:defaultValue="@*android:color/holo_purple"
+        android:defaultValue="#ffaa66cc"
         alphaSlider="true" />
 
     <net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="color_six"
         android:title="@string/color_six"
-        android:defaultValue="@*android:color/holo_blue_bright"
+        android:defaultValue="#ff00ddff"
         alphaSlider="true" />
 
 </PreferenceScreen>

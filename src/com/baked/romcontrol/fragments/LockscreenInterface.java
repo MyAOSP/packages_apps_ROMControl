@@ -105,108 +105,45 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         addPreferencesFromResource(R.xml.prefs_lockscreen);
 
         mVolumeWake = (CheckBoxPreference) findPreference(KEY_VOLUME_WAKE);
-        mVolumeWake.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
-
         mVolBtnMusicCtrl = (CheckBoxPreference) findPreference(KEY_VOLBTN_MUSIC_CTRL);
-        mVolBtnMusicCtrl.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.VOLBTN_MUSIC_CONTROLS, 0) == 1);
-
         mQuickUnlockScreen = (CheckBoxPreference) findPreference(LOCKSCREEN_QUICK_UNLOCK_CONTROL);
-        mQuickUnlockScreen.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
-
         mLockscreenVibrate = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_VIBRATE);
-        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.LOCKSCREEN_VIBRATE_ENABLED, 1) == 1);
-        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1);
-
         mLockMaximizeWidgets = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_MAXIMIZE_WIDGETS);
-        if (!Utils.isPhone(getActivity())) {
-            getPreferenceScreen().removePreference(mLockMaximizeWidgets);
-            mLockMaximizeWidgets = null;
-        } else {
-            mLockMaximizeWidgets.setOnPreferenceChangeListener(this);
-        }
-
         mLockScreenRotation = (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
-        mLockScreenRotation.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.LOCKSCREEN_AUTO_ROTATE, false));
-
         mBatteryStatus = (ListPreference) findPreference(KEY_ALWAYS_BATTERY_PREF);
-        mBatteryStatus.setOnPreferenceChangeListener(this);
-
         mLockscreenTextColor = (ColorPickerPreference) findPreference(PREF_LOCKSCREEN_TEXT_COLOR);
-        mLockscreenTextColor.setOnPreferenceChangeListener(this);
-
         mCustomBackground = (ListPreference) findPreference(KEY_BACKGROUND_PREF);
-        mCustomBackground.setOnPreferenceChangeListener(this);
-        updateCustomBackgroundSummary();
+        mWallpaperAlpha = (Preference) findPreference(KEY_LOCKSCREEN_BACKGROUND_ALPHA);
 
         mWallpaperImage = new File(getActivity().getFilesDir() + "/lockwallpaper");
         mWallpaperTemporary = new File(getActivity().getCacheDir() + "/lockwallpaper.tmp");
 
-        mWallpaperAlpha = (Preference) findPreference(KEY_LOCKSCREEN_BACKGROUND_ALPHA);
-    }
-
-    private void updateCustomBackgroundSummary() {
-        int resId;
-        String value = Settings.System.getString(mContentResolver,
-                Settings.System.LOCKSCREEN_BACKGROUND);
-        if (value == null) {
-            resId = R.string.lockscreen_background_default_wallpaper;
-            mCustomBackground.setValueIndex(2);
-        } else if (value.isEmpty()) {
-            resId = R.string.lockscreen_background_custom_image;
-            mCustomBackground.setValueIndex(1);
-        } else {
-            resId = R.string.lockscreen_background_color_fill;
-            mCustomBackground.setValueIndex(0);
-        }
-        mCustomBackground.setSummary(getResources().getString(resId));
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PICK_WALLPAPER) {
-            if (resultCode == Activity.RESULT_OK) {
-                if (mWallpaperTemporary.exists()) {
-                    mWallpaperTemporary.renameTo(mWallpaperImage);
-                }
-                mWallpaperImage.setReadable(true, false);
-                Toast.makeText(getActivity(), getResources().getString(R.string.
-                        lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
-                Settings.System.putString(mContentResolver,
-                        Settings.System.LOCKSCREEN_BACKGROUND,"");
-                updateCustomBackgroundSummary();
-            } else {
-                if (mWallpaperTemporary.exists()) {
-                    mWallpaperTemporary.delete();
-                }
-                Toast.makeText(getActivity(), getResources().getString(R.string.
-                        lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
-            }
+        if (!Utils.isPhone(getActivity())) {
+            getPreferenceScreen().removePreference(mLockMaximizeWidgets);
+            mLockMaximizeWidgets = null;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        registerListeners();
+        setDefaultValues();
         if (mBatteryStatus != null) {
             int batteryStatus = Settings.System.getInt(mContentResolver,
                     Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, 0);
             mBatteryStatus.setValueIndex(batteryStatus);
             mBatteryStatus.setSummary(mBatteryStatus.getEntries()[batteryStatus]);
         }
-
         if (mLockMaximizeWidgets != null) {
             mLockMaximizeWidgets.setChecked(Settings.System.getInt(mContentResolver,
                     Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, 0) == 1);
         }
+        updateSummaries();
+        updateCustomBackgroundSummary();
     }
 
     @Override
@@ -215,28 +152,23 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             Settings.System.putBoolean(mContentResolver, Settings.System.LOCKSCREEN_AUTO_ROTATE,
                     checkBoxChecked(preference));
             return true;
-
         } else if (preference == mVolBtnMusicCtrl) {
             Settings.System.putInt(mContentResolver, Settings.System.VOLBTN_MUSIC_CONTROLS,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
-
         } else if (preference == mVolumeWake) {
             Settings.System.putInt(mContentResolver, Settings.System.VOLUME_WAKE_SCREEN,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
-
         } else if (preference == mQuickUnlockScreen) {
             Settings.System.putInt(mContentResolver, Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
-
         } else if (preference == mLockscreenVibrate) {
             Settings.System.putInt(mContentResolver, Settings.System.LOCKSCREEN_VIBRATE_ENABLED,
                     checkBoxChecked(preference) ? 1 : 0);
             Settings.System.putInt(mContentResolver, Settings.System.HAPTIC_FEEDBACK_ENABLED,
                     checkBoxChecked(preference) ? 1 : 0);
-
         } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();
             String cancel = res.getString(R.string.cancel);
@@ -244,7 +176,6 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             String title = res.getString(R.string.alpha_dialog_title);
             float savedProgress = Settings.System.getFloat(mContentResolver,
                     Settings.System.LOCKSCREEN_BACKGROUND_ALPHA, 1.0f);
-
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
             SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
@@ -287,12 +218,11 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
+    @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-
         if (preference == mCustomBackground) {
             int selection = mCustomBackground.findIndexOfValue(objValue.toString());
             return handleBackgroundSelection(selection);
-
         } else if (preference == mBatteryStatus) {
             int value = Integer.valueOf((String) objValue);
             int index = mBatteryStatus.findIndexOfValue((String) objValue);
@@ -300,13 +230,11 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
                     Settings.System.LOCKSCREEN_ALWAYS_SHOW_BATTERY, value);
             mBatteryStatus.setSummary(mBatteryStatus.getEntries()[index]);
             return true;
-
         } else if (preference == mLockMaximizeWidgets) {
             boolean value = (Boolean) objValue;
             Settings.System.putInt(mContentResolver,
                     Settings.System.LOCKSCREEN_MAXIMIZE_WIDGETS, value ? 1 : 0);
             return true;
-
         } else if (preference == mLockscreenTextColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(objValue)));
             preference.setSummary(hex);
@@ -316,6 +244,74 @@ public class LockscreenInterface extends BAKEDPreferenceFragment implements
             return true;
         }
         return false;
+    }
+
+    private void registerListeners() {
+        if (Utils.isPhone(getActivity())) {
+            mLockMaximizeWidgets.setOnPreferenceChangeListener(this);
+        }
+        mBatteryStatus.setOnPreferenceChangeListener(this);
+        mLockscreenTextColor.setOnPreferenceChangeListener(this);
+        mCustomBackground.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mVolumeWake.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
+        mVolBtnMusicCtrl.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.VOLBTN_MUSIC_CONTROLS, 0) == 1);
+        mQuickUnlockScreen.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.LOCKSCREEN_VIBRATE_ENABLED, 1) == 1);
+        mLockscreenVibrate.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.HAPTIC_FEEDBACK_ENABLED, 1) == 1);
+        mLockScreenRotation.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.LOCKSCREEN_AUTO_ROTATE, false));
+    }
+
+    private void updateSummaries() {
+        mLockscreenTextColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+            mContentResolver, Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, 0xFFFFFFFF)));
+    }
+
+    private void updateCustomBackgroundSummary() {
+        int resId;
+        String value = Settings.System.getString(mContentResolver,
+                Settings.System.LOCKSCREEN_BACKGROUND);
+        if (value == null) {
+            resId = R.string.lockscreen_background_default_wallpaper;
+            mCustomBackground.setValueIndex(2);
+        } else if (value.isEmpty()) {
+            resId = R.string.lockscreen_background_custom_image;
+            mCustomBackground.setValueIndex(1);
+        } else {
+            resId = R.string.lockscreen_background_color_fill;
+            mCustomBackground.setValueIndex(0);
+        }
+        mCustomBackground.setSummary(getResources().getString(resId));
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PICK_WALLPAPER) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (mWallpaperTemporary.exists()) {
+                    mWallpaperTemporary.renameTo(mWallpaperImage);
+                }
+                mWallpaperImage.setReadable(true, false);
+                Toast.makeText(getActivity(), getResources().getString(R.string.
+                        lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
+                Settings.System.putString(mContentResolver,
+                        Settings.System.LOCKSCREEN_BACKGROUND,"");
+                updateCustomBackgroundSummary();
+            } else {
+                if (mWallpaperTemporary.exists()) {
+                    mWallpaperTemporary.delete();
+                }
+                Toast.makeText(getActivity(), getResources().getString(R.string.
+                        lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private boolean handleBackgroundSelection(int selection) {

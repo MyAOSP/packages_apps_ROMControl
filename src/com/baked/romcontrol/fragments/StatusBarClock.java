@@ -31,48 +31,45 @@ public class StatusBarClock extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_statusbar_clock);
 
         mClockStyle = (ListPreference) findPreference(PREF_ENABLE);
-        mClockStyle.setOnPreferenceChangeListener(this);
-        mClockStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_CLOCK_STYLE, 1)));
-
         mClockAmPmstyle = (ListPreference) findPreference(PREF_AM_PM_STYLE);
-        mClockAmPmstyle.setOnPreferenceChangeListener(this);
-        mClockAmPmstyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, 2)));
-
         mClockWeekday = (ListPreference) findPreference(PREF_CLOCK_WEEKDAY);
-        mClockWeekday.setOnPreferenceChangeListener(this);
-        mClockWeekday.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_CLOCK_WEEKDAY, 0)));
-
         mClockColor = (ColorPickerPreference) findPreference(PREF_CLOCK_COLOR);
-        mClockColor.setOnPreferenceChangeListener(this);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        boolean result = false;
         if (preference == mClockAmPmstyle) {
+            int index = mClockAmPmstyle.findIndexOfValue((String) newValue);
+            preference.setSummary(mClockAmPmstyle.getEntries()[index]);
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(mContentResolver,
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, val);
-
+            return true;
         } else if (preference == mClockStyle) {
+            int index = mClockStyle.findIndexOfValue((String) newValue);
+            preference.setSummary(mClockStyle.getEntries()[index]);
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(mContentResolver,
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_STYLE, val);
-
+            return true;
         } else if (preference == mClockWeekday) {
+            int index = mClockWeekday.findIndexOfValue((String) newValue);
+            preference.setSummary(mClockWeekday.getEntries()[index]);
             int val = Integer.parseInt((String) newValue);
-            result = Settings.System.putInt(mContentResolver,
+            Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_WEEKDAY, val);
-
+            return true;
         } else if (preference == mClockColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
                     .valueOf(newValue)));
@@ -80,8 +77,32 @@ public class StatusBarClock extends BAKEDPreferenceFragment implements
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_CLOCK_COLOR, intHex);
-            Log.e("BAKED", intHex + "");
+            return true;
         }
-        return result;
+        return false;
+    }
+
+    private void registerListeners() {
+        mClockStyle.setOnPreferenceChangeListener(this);
+        mClockAmPmstyle.setOnPreferenceChangeListener(this);
+        mClockWeekday.setOnPreferenceChangeListener(this);
+        mClockColor.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mClockStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_STYLE, 1)));
+        mClockAmPmstyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_AM_PM_STYLE, 2)));
+        mClockWeekday.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_CLOCK_WEEKDAY, 0)));
+    }
+
+    private void updateSummaries() {
+        mClockStyle.setSummary(mClockStyle.getEntry());
+        mClockAmPmstyle.setSummary(mClockAmPmstyle.getEntry());
+        mClockWeekday.setSummary(mClockWeekday.getEntry());
+        mClockColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.STATUSBAR_CLOCK_COLOR, 0xFF33B5E5)));
     }
 }

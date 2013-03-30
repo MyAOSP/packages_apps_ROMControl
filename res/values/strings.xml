@@ -22,6 +22,7 @@
     <string name="random_colors">Random colors</string>
     <string name="random_colors_title">Set random colors</string>
     <string name="random_colors_summary">Allows you to select your own random colors</string>
+    <string name="random_colors_reset_title">Reset random colors</string>
     <string name="color_one">Color one</string>
     <string name="color_two">Color two</string>
     <string name="color_three">Color three</string>
@@ -145,7 +146,6 @@
     <string name="clock_color_title">Clock color</string>
     <string name="title_clock_ampm_entries">AM/PM style</string>
     <string name="enable_clock_weekday">Day of the week</string>
-    <string name="enable_clock_weekday_summary">Abbreviated day of the week before the time</string>
     <!-- Statusbar | Battery -->
     <string name="battery_icon">Battery icon style</string>
     <string name="battery_color">Colors</string>
@@ -300,7 +300,6 @@
     <string name="seven_columns">7 columns</string>
     <!-- Tile background style and text color -->
     <string name="tile_background_style_title">Tile background style</string>
-    <string name="tile_background_style_summary">Lets you choose from random, color fill or default background for tiles</string>
     <string name="tile_background_color_title">Set tile background color</string>
     <string name="tile_background_random">Random colors</string>
     <string name="tile_custom_background_dialog_title">Tile background style</string>

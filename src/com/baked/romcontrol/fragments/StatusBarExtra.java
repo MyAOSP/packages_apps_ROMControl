@@ -96,102 +96,47 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
 
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_statusbar_extra);
 
-        PreferenceScreen prefs = getPreferenceScreen();
-
         mStatusBarNotifCount = (CheckBoxPreference) findPreference(PREF_STATUS_BAR_NOTIF_COUNT);
-        mStatusBarNotifCount.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_NOTIF_COUNT, 0) == 1);
-
         mStatusBarBrightnessSlider = (CheckBoxPreference) findPreference(PREF_STATUSBAR_BRIGHTNESS_SLIDER);
-        mStatusBarBrightnessSlider.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.STATUSBAR_BRIGHTNESS_CONTROL, true));
-
         mShowImeSwitcher = (CheckBoxPreference) findPreference(PREF_IME_SWITCHER);
-        mShowImeSwitcher.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.SHOW_STATUSBAR_IME_SWITCHER, true));
-
         mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
-        updateCustomLabelTextSummary();
-
         mNotificationBackground = (ListPreference) findPreference(PREF_NOTIFICATION_WALLPAPER);
-        mNotificationBackground.setOnPreferenceChangeListener(this);
+        mWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
+        mExpandedClockColor = (ColorPickerPreference) findPreference(PREF_EXPANDED_CLOCK_COLOR);
+        mStatusbarBgColor = (ColorPickerPreference) findPreference(PREF_STATUSBAR_BACKGROUND_COLOR);
+        mStatusbarBgStyle = (ListPreference) findPreference(PREF_STATUSBAR_BACKGROUND_STYLE);
 
         wallpaperImage = new File(mActivity.getFilesDir()+"/notifwallpaper");
         wallpaperTemporary = new File(mActivity.getCacheDir()+"/notifwallpaper.tmp");
-
-        mWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
-
-        mExpandedClockColor = (ColorPickerPreference) findPreference(PREF_EXPANDED_CLOCK_COLOR);
-        mExpandedClockColor.setOnPreferenceChangeListener(this);
-
-        mStatusbarBgColor = (ColorPickerPreference) findPreference(PREF_STATUSBAR_BACKGROUND_COLOR);
-        mStatusbarBgColor.setOnPreferenceChangeListener(this);
-
-        mStatusbarBgStyle = (ListPreference) findPreference(PREF_STATUSBAR_BACKGROUND_STYLE);
-        mStatusbarBgStyle.setOnPreferenceChangeListener(this);
-
-        updateCustomBackgroundSummary();
-        updateVisibility();
-    }
-
-    private void updateVisibility() {
-        int visible = Settings.System.getInt(mContentResolver,
-                    Settings.System.STATUSBAR_BACKGROUND_STYLE, 2);
-        if (visible == 2) {
-            mStatusbarBgColor.setEnabled(false);
-        } else {
-            mStatusbarBgColor.setEnabled(true);
-        }
-    }
-
-    private void updateCustomBackgroundSummary() {
-        int resId;
-        String value = Settings.System.getString(mContentResolver,
-                Settings.System.NOTIF_BACKGROUND);
-        if (value == null) {
-            resId = R.string.notif_background_default;
-            mNotificationBackground.setValueIndex(2);
-        } else if (value.isEmpty()) {
-            resId = R.string.notif_background_custom_image;
-            mNotificationBackground.setValueIndex(1);
-        } else {
-            resId = R.string.notif_background_color_fill;
-            mNotificationBackground.setValueIndex(0);
-        }
-        mNotificationBackground.setSummary(getResources().getString(resId));
-    }
-
-    private void updateCustomLabelTextSummary() {
-        mCustomLabelText = Settings.System.getString(mContentResolver,
-                Settings.System.CUSTOM_CARRIER_LABEL);
-        if (mCustomLabelText == null || mCustomLabelText.length() == 0) {
-            mCustomLabel.setSummary(R.string.custom_carrier_label_notset);
-        } else {
-            mCustomLabel.setSummary(mCustomLabelText);
-        }
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-            Preference preference) {
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
+        updateCustomBackgroundSummary();
+        updateCustomLabelTextSummary();
+        updateVisibility();
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
          if (preference == mStatusBarNotifCount) {
             Settings.System.putInt(mContentResolver, Settings.System.STATUSBAR_NOTIF_COUNT,
                     checkBoxChecked(preference) ? 1 : 0);
             return true;
-
         } else if (preference == mShowImeSwitcher) {
             Settings.System.putBoolean(mContentResolver, Settings.System.SHOW_STATUSBAR_IME_SWITCHER,
                     checkBoxChecked(preference));
             return true;
-
         } else if (preference == mStatusBarBrightnessSlider) {
             Settings.System.putBoolean(mContentResolver, Settings.System.STATUSBAR_BRIGHTNESS_CONTROL,
                     checkBoxChecked(preference));
             return true;
-
         } else if (preference == mWallpaperAlpha) {
             Resources res = getActivity().getResources();
             String cancel = res.getString(R.string.cancel);
@@ -199,7 +144,6 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             String title = res.getString(R.string.alpha_dialog_title);
             float savedProgress = Settings.System.getFloat(mContentResolver,
                     Settings.System.NOTIF_WALLPAPER_ALPHA, 1.0f);
-
             LayoutInflater factory = LayoutInflater.from(getActivity());
             final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
             SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
@@ -239,18 +183,14 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             .create()
             .show();
             return true;
-
         } else if (preference == mCustomLabel) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-
             alert.setTitle(R.string.custom_carrier_label_title);
             alert.setMessage(R.string.custom_carrier_label_explain);
-
             // Set an EditText view to get user input
             final EditText input = new EditText(getActivity());
             input.setText(mCustomLabelText != null ? mCustomLabelText : "");
             alert.setView(input);
-
             alert.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String value = ((Spannable) input.getText()).toString();
@@ -275,17 +215,14 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-
         if (preference == mExpandedClockColor) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
-                    .valueOf(newValue)));
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
             preference.setSummary(hex);
-
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_EXPANDED_CLOCK_COLOR, intHex);
-            Log.e("BAKED", intHex + "");
-
+            return true;
         } else if (preference == mStatusbarBgStyle) {
             int value = Integer.valueOf((String) newValue);
             int index = mStatusbarBgStyle.findIndexOfValue((String) newValue);
@@ -293,19 +230,15 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     Settings.System.STATUSBAR_BACKGROUND_STYLE, value);
             preference.setSummary(mStatusbarBgStyle.getEntries()[index]);
             updateVisibility();
-            // Helpers.restartSystemUI();
             return true;
-
         } else if (preference == mStatusbarBgColor) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
-                    .valueOf(newValue)));
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
             preference.setSummary(hex);
-
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_BACKGROUND_COLOR, intHex);
-            Log.e("BAKED", intHex + "");
-
+            return true;
         } else if (preference == mNotificationBackground) {
             int indexOf = mNotificationBackground.findIndexOfValue(newValue.toString());
             switch (indexOf) {
@@ -399,6 +332,69 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 Toast.makeText(mActivity, getResources().getString(R.string.
                         lockscreen_background_result_not_successful), Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void registerListeners() {
+        mNotificationBackground.setOnPreferenceChangeListener(this);
+        mExpandedClockColor.setOnPreferenceChangeListener(this);
+        mStatusbarBgColor.setOnPreferenceChangeListener(this);
+        mStatusbarBgStyle.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mStatusBarNotifCount.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_NOTIF_COUNT, 0) == 1);
+        mStatusBarBrightnessSlider.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.STATUSBAR_BRIGHTNESS_CONTROL, true));
+        mShowImeSwitcher.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.SHOW_STATUSBAR_IME_SWITCHER, true));
+        mStatusbarBgStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_BACKGROUND_STYLE, 2)));
+    }
+
+    private void updateSummaries() {
+        mExpandedClockColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.STATUSBAR_EXPANDED_CLOCK_COLOR, 0xFF33B5E5)));
+        mStatusbarBgColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.STATUSBAR_BACKGROUND_COLOR, 0xFF000000)));
+        mStatusbarBgStyle.setSummary(mStatusbarBgStyle.getEntry());
+    }
+
+    private void updateVisibility() {
+        int visible = Settings.System.getInt(mContentResolver,
+                    Settings.System.STATUSBAR_BACKGROUND_STYLE, 2);
+        if (visible == 2) {
+            mStatusbarBgColor.setEnabled(false);
+        } else {
+            mStatusbarBgColor.setEnabled(true);
+        }
+    }
+
+    private void updateCustomBackgroundSummary() {
+        int resId;
+        String value = Settings.System.getString(mContentResolver,
+                Settings.System.NOTIF_BACKGROUND);
+        if (value == null) {
+            resId = R.string.notif_background_default;
+            mNotificationBackground.setValueIndex(2);
+        } else if (value.isEmpty()) {
+            resId = R.string.notif_background_custom_image;
+            mNotificationBackground.setValueIndex(1);
+        } else {
+            resId = R.string.notif_background_color_fill;
+            mNotificationBackground.setValueIndex(0);
+        }
+        mNotificationBackground.setSummary(getResources().getString(resId));
+    }
+
+    private void updateCustomLabelTextSummary() {
+        mCustomLabelText = Settings.System.getString(mContentResolver,
+                Settings.System.CUSTOM_CARRIER_LABEL);
+        if (mCustomLabelText == null || mCustomLabelText.length() == 0) {
+            mCustomLabel.setSummary(R.string.custom_carrier_label_notset);
+        } else {
+            mCustomLabel.setSummary(mCustomLabelText);
         }
     }
 }

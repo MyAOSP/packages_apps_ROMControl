@@ -17,7 +17,7 @@ import com.baked.romcontrol.BAKEDPreferenceFragment;
 public class StatusBarSignal extends BAKEDPreferenceFragment implements
         OnPreferenceChangeListener {
 
-    ListPreference mDbmStyletyle;
+    ListPreference mDbmStyle;
     ListPreference mWifiStyle;
     ColorPickerPreference mColorPicker;
     ColorPickerPreference mWifiColorPicker;
@@ -26,28 +26,21 @@ public class StatusBarSignal extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_statusbar_signal);
 
-        mDbmStyletyle = (ListPreference) findPreference("signal_style");
-        mDbmStyletyle.setOnPreferenceChangeListener(this);
-        mDbmStyletyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_SIGNAL_TEXT, 0)));
-
+        mDbmStyle = (ListPreference) findPreference("signal_style");
         mColorPicker = (ColorPickerPreference) findPreference("signal_color");
-        mColorPicker.setOnPreferenceChangeListener(this);
         mWifiStyle = (ListPreference) findPreference("wifi_signal_style");
-        mWifiStyle.setOnPreferenceChangeListener(this);
-        mWifiStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_WIFI_SIGNAL_TEXT, 0)));
-
         mWifiColorPicker = (ColorPickerPreference) findPreference("wifi_signal_color");
-        mWifiColorPicker.setOnPreferenceChangeListener(this);
-
         mHideSignal = (CheckBoxPreference) findPreference("hide_signal");
-        mHideSignal.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.STATUSBAR_HIDE_SIGNAL_BARS, 0) != 0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
     }
 
     @Override
@@ -56,7 +49,6 @@ public class StatusBarSignal extends BAKEDPreferenceFragment implements
         if (preference == mHideSignal) {
             Settings.System.putInt(mContentResolver, Settings.System.STATUSBAR_HIDE_SIGNAL_BARS,
                     checkBoxChecked(preference) ? 1 : 0);
-
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -64,28 +56,29 @@ public class StatusBarSignal extends BAKEDPreferenceFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mDbmStyletyle) {
+        if (preference == mDbmStyle) {
+            int index = mDbmStyle.findIndexOfValue((String) newValue);
+            mDbmStyle.setSummary(mDbmStyle.getEntries()[index]);
             int val = Integer.parseInt((String) newValue);
             Settings.System.putInt(mContentResolver, Settings.System.STATUSBAR_SIGNAL_TEXT, val);
             return true;
-
         } else if (preference == mColorPicker) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
-                    .valueOf(newValue)));
+            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(
+                    String.valueOf(newValue)));
             preference.setSummary(hex);
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(mContentResolver,
                     Settings.System.STATUSBAR_SIGNAL_TEXT_COLOR, intHex);
             return true;
-
         } else if (preference == mWifiStyle) {
+            int index = mWifiStyle.findIndexOfValue((String) newValue);
+            mWifiStyle.setSummary(mWifiStyle.getEntries()[index]);
             int val = Integer.parseInt((String) newValue);
             Settings.System.putInt(mContentResolver, Settings.System.STATUSBAR_WIFI_SIGNAL_TEXT, val);
             return true;
-
         } else if (preference == mWifiColorPicker) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String
-                    .valueOf(newValue)));
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
             preference.setSummary(hex);
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(mContentResolver,
@@ -93,5 +86,30 @@ public class StatusBarSignal extends BAKEDPreferenceFragment implements
             return true;
         }
         return false;
+    }
+
+    private void registerListeners() {
+        mDbmStyle.setOnPreferenceChangeListener(this);
+        mColorPicker.setOnPreferenceChangeListener(this);
+        mWifiStyle.setOnPreferenceChangeListener(this);
+        mWifiColorPicker.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mDbmStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_SIGNAL_TEXT, 0)));
+        mWifiStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_WIFI_SIGNAL_TEXT, 0)));
+        mHideSignal.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.STATUSBAR_HIDE_SIGNAL_BARS, 0) != 0);
+    }
+
+    private void updateSummaries() {
+        mDbmStyle.setSummary(mDbmStyle.getEntry());
+        mColorPicker.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.STATUSBAR_SIGNAL_TEXT_COLOR, 0xFF33B5E5)));
+        mWifiStyle.setSummary(mWifiStyle.getEntry());
+        mWifiColorPicker.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.STATUSBAR_WIFI_SIGNAL_TEXT_COLOR, 0xFF33B5E5)));
     }
 }

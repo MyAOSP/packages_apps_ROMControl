@@ -80,27 +80,24 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             PreferenceScreen prefSet = getPreferenceScreen();
 
             mPowerWidget = (CheckBoxPreference) prefSet.findPreference(UI_EXP_WIDGET);
-            mPowerWidgetHideOnChange = (CheckBoxPreference) prefSet
-                    .findPreference(UI_EXP_WIDGET_HIDE_ONCHANGE);
-            mPowerWidgetHideScrollBar = (CheckBoxPreference) prefSet
-                    .findPreference(UI_EXP_WIDGET_HIDE_SCROLLBAR);
-
-            mPowerWidgetHapticFeedback = (ListPreference) prefSet
-                    .findPreference(UI_EXP_WIDGET_HAPTIC_FEEDBACK);
-            mPowerWidgetHapticFeedback.setOnPreferenceChangeListener(this);
-            mPowerWidgetHapticFeedback.setSummary(mPowerWidgetHapticFeedback.getEntry());
-
-            mPowerWidget.setChecked((Settings.System.getInt(mContentAppResolver,
-                    Settings.System.EXPANDED_VIEW_WIDGET, 0) == 1));
-            mPowerWidgetHideOnChange.setChecked((Settings.System.getInt(mContentAppResolver,
-                    Settings.System.EXPANDED_HIDE_ONCHANGE, 0) == 1));
-            mPowerWidgetHideScrollBar.setChecked((Settings.System.getInt(mContentAppResolver,
-                    Settings.System.EXPANDED_HIDE_SCROLLBAR, 0) == 1));
-            mPowerWidgetHapticFeedback.setValue(Integer.toString(Settings.System.getInt(
-                    mContentAppResolver, Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)));
+            mPowerWidgetHideOnChange = (CheckBoxPreference) prefSet.findPreference(
+                    UI_EXP_WIDGET_HIDE_ONCHANGE);
+            mPowerWidgetHideScrollBar = (CheckBoxPreference) prefSet.findPreference(
+                    UI_EXP_WIDGET_HIDE_SCROLLBAR);
+            mPowerWidgetHapticFeedback = (ListPreference) prefSet.findPreference(
+                    UI_EXP_WIDGET_HAPTIC_FEEDBACK);
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
+    }
+
+    @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mPowerWidgetHapticFeedback) {
             int intValue = Integer.parseInt((String) newValue);
@@ -113,6 +110,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
         return false;
     }
 
+    @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mPowerWidget) {
             Settings.System.putInt(mContentAppResolver, Settings.System.EXPANDED_VIEW_WIDGET,
@@ -129,6 +127,31 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
+    }
+
+    private void registerListeners() {
+        if (getPreferenceManager() != null) {
+            mPowerWidgetHapticFeedback.setOnPreferenceChangeListener(this);
+        }
+    }
+
+    private void setDefaultValues() {
+        if (getPreferenceManager() != null) {
+            mPowerWidget.setChecked((Settings.System.getInt(mContentAppResolver,
+                    Settings.System.EXPANDED_VIEW_WIDGET, 0) == 1));
+            mPowerWidgetHideOnChange.setChecked((Settings.System.getInt(mContentAppResolver,
+                    Settings.System.EXPANDED_HIDE_ONCHANGE, 0) == 1));
+            mPowerWidgetHideScrollBar.setChecked((Settings.System.getInt(mContentAppResolver,
+                    Settings.System.EXPANDED_HIDE_SCROLLBAR, 0) == 1));
+            mPowerWidgetHapticFeedback.setValue(Integer.toString(Settings.System.getInt(
+                    mContentAppResolver, Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)));
+        }
+    }
+
+    private void updateSummaries() {
+        if (getPreferenceManager() != null) {
+            mPowerWidgetHapticFeedback.setSummary(mPowerWidgetHapticFeedback.getEntry());
+        }
     }
 
     public static class PowerWidgetChooser extends BAKEDPreferenceFragment

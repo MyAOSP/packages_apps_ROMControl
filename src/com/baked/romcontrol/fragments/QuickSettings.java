@@ -113,6 +113,9 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
 
     String mFastChargePath;
 
+    String storedRingMode = Settings.System.getString(mContentResolver,
+            Settings.System.EXPANDED_RING_MODE);
+
     private Activity mActivity;
 
     @Override
@@ -136,78 +139,25 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         if (!Utils.isPhone(getActivity())) {
             if (mQuickPulldown != null)
                 mGeneralSettings.removePreference(mQuickPulldown);
-        } else {
-            mQuickPulldown.setOnPreferenceChangeListener(this);
-            int quickPulldownValue = Settings.System.getInt(mContentResolver,
-                    Settings.System.QS_QUICK_PULLDOWN, 0);
-            mQuickPulldown.setValue(String.valueOf(quickPulldownValue));
-            updatePulldownSummary(quickPulldownValue);
         }
 
         mTileBgStyle = (ListPreference) findPreference(TILE_BACKGROUND_STYLE);
-        mTileBgStyle.setOnPreferenceChangeListener(this);
-
         mTileBgColor = (ColorPickerPreference) findPreference(TILE_BACKGROUND_COLOR);
-        mTileBgColor.setOnPreferenceChangeListener(this);
-        mTileBgColor.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.QUICK_SETTINGS_BACKGROUND_COLOR))));
-
         mTileTextColor = (ColorPickerPreference) findPreference(TILE_TEXT_COLOR);
-        mTileTextColor.setOnPreferenceChangeListener(this);
-        mTileTextColor.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.QUICK_SETTINGS_TEXT_COLOR))));
-
         mNumColumnsPort = (ListPreference) prefSet.findPreference(NUM_COLUMNS_PORT);
-        mNumColumnsPort.setSummary(mNumColumnsPort.getEntry());
-        mNumColumnsPort.setOnPreferenceChangeListener(this);
-
         mNumColumnsLand = (ListPreference) prefSet.findPreference(NUM_COLUMNS_LAND);
-        mNumColumnsLand.setSummary(mNumColumnsLand.getEntry());
-        mNumColumnsLand.setOnPreferenceChangeListener(this);
-
         mCollapsePanel = (CheckBoxPreference) prefSet.findPreference(COLLAPSE_PANEL);
-        mCollapsePanel.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.QS_COLLAPSE_PANEL, 0) == 1);
-
         mFlipTile = (CheckBoxPreference) prefSet.findPreference(FLIP_TILE);
-        mFlipTile.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.QUICK_SETTINGS_TILES_FLIP, 1) == 1);
-
         // Add the sound mode
         mRingMode = (MultiSelectListPreference) prefSet.findPreference(EXP_RING_MODE);
-        String storedRingMode = Settings.System.getString(mContentResolver,
-                Settings.System.EXPANDED_RING_MODE);
-        if (storedRingMode != null) {
-            String[] ringModeArray = TextUtils.split(storedRingMode, SEPARATOR);
-            mRingMode.setValues(new HashSet<String>(Arrays.asList(ringModeArray)));
-            updateSummary(storedRingMode, mRingMode, R.string.pref_ring_mode_summary);
-        }
-        mRingMode.setOnPreferenceChangeListener(this);
-
         // Add the network mode preference
         mNetworkMode = (ListPreference) prefSet.findPreference(EXP_NETWORK_MODE);
-        if (mNetworkMode != null) {
-            mNetworkMode.setSummary(mNetworkMode.getEntry());
-            mNetworkMode.setOnPreferenceChangeListener(this);
-        }
-
         // Screen timeout mode
         mScreenTimeoutMode = (ListPreference) prefSet.findPreference(EXP_SCREENTIMEOUT_MODE);
-        mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntry());
-        mScreenTimeoutMode.setOnPreferenceChangeListener(this);
-
         // Add the dynamic tiles checkboxes
         mDynamicAlarm = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_ALARM);
-        mDynamicAlarm.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.QS_DYNAMIC_ALARM, 1) == 1);
         mDynamicBugReport = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_BUGREPORT);
-        mDynamicBugReport.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.QS_DYNAMIC_BUGREPORT, 1) == 1);
         mDynamicIme = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_IME);
-        mDynamicIme.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.QS_DYNAMIC_IME, 1) == 1);
         mDynamicUsbTether = (CheckBoxPreference) prefSet.findPreference(DYNAMIC_USBTETHER);
 
         if (mDynamicUsbTether != null) {
@@ -300,9 +250,13 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
         updateVisibility();
     }
 
+    @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mDynamicAlarm) {
             Settings.System.putInt(mContentResolver, Settings.System.QS_DYNAMIC_ALARM,
@@ -342,6 +296,75 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mRingMode) {
+            ArrayList<String> arrValue = new ArrayList<String>((Set<String>) newValue);
+            Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mRingMode));
+            Settings.System.putString(mContentResolver, Settings.System.EXPANDED_RING_MODE,
+                    TextUtils.join(SEPARATOR, arrValue));
+            updateSummary(TextUtils.join(SEPARATOR, arrValue),
+                    mRingMode, R.string.pref_ring_mode_summary);
+            return true;
+        } else if (preference == mNumColumnsPort) {
+            int val = Integer.parseInt((String) newValue);
+            int index = mNumColumnsPort.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_PORT, val);
+            preference.setSummary(mNumColumnsPort.getEntries()[index]);
+            return true;
+        } else if (preference == mNumColumnsLand) {
+            int val = Integer.parseInt((String) newValue);
+            int index = mNumColumnsLand.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_LAND, val);
+            preference.setSummary(mNumColumnsLand.getEntries()[index]);
+            return true;
+        } else if (preference == mNetworkMode) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mNetworkMode.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentResolver, Settings.System.EXPANDED_NETWORK_MODE, value);
+            preference.setSummary(mNetworkMode.getEntries()[index]);
+            return true;
+       } else if (preference == mQuickPulldown) {
+            int quickPulldownValue = Integer.valueOf((String) newValue);
+            Settings.System.putInt(mContentResolver, Settings.System.QS_QUICK_PULLDOWN,
+                    quickPulldownValue);
+            updatePulldownSummary(quickPulldownValue);
+            return true;
+      } else if (preference == mScreenTimeoutMode) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentAppResolver,
+                    Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
+            preference.setSummary(mScreenTimeoutMode.getEntries()[index]);
+            return true;
+        } else if (preference == mTileTextColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_TEXT_COLOR, intHex);
+            return true;
+        } else if (preference == mTileBgColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(mContentResolver,
+                    Settings.System.QUICK_SETTINGS_BACKGROUND_COLOR, intHex);
+            return true;
+        } else if (preference == mTileBgStyle) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mTileBgStyle.findIndexOfValue((String) newValue);
+            Settings.System.putInt(mContentAppResolver,
+                    Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, value);
+            preference.setSummary(mTileBgStyle.getEntries()[index]);
+            updateVisibility();
+            return true;
+        }
+        return false;
+    }
+
     private class MultiSelectListPreferenceComparator implements Comparator<String> {
         private MultiSelectListPreference pref;
 
@@ -356,80 +379,67 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         }
     }
 
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mRingMode) {
-            ArrayList<String> arrValue = new ArrayList<String>((Set<String>) newValue);
-            Collections.sort(arrValue, new MultiSelectListPreferenceComparator(mRingMode));
-            Settings.System.putString(mContentResolver, Settings.System.EXPANDED_RING_MODE,
-                    TextUtils.join(SEPARATOR, arrValue));
-            updateSummary(TextUtils.join(SEPARATOR, arrValue),
-                    mRingMode, R.string.pref_ring_mode_summary);
-            return true;
-
-        } else if (preference == mNumColumnsPort) {
-            int val = Integer.parseInt((String) newValue);
-            int index = mNumColumnsPort.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentResolver,
-                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_PORT, val);
-            mNumColumnsPort.setSummary(mNumColumnsPort.getEntries()[index]);
-            return true;
-
-        } else if (preference == mNumColumnsLand) {
-            int val = Integer.parseInt((String) newValue);
-            int index = mNumColumnsLand.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentResolver,
-                    Settings.System.QUICK_SETTINGS_NUM_COLUMNS_LAND, val);
-            mNumColumnsLand.setSummary(mNumColumnsLand.getEntries()[index]);
-            return true;
-
-        } else if (preference == mNetworkMode) {
-            int value = Integer.valueOf((String) newValue);
-            int index = mNetworkMode.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentResolver, Settings.System.EXPANDED_NETWORK_MODE, value);
-            mNetworkMode.setSummary(mNetworkMode.getEntries()[index]);
-            return true;
-
-       } else if (preference == mQuickPulldown) {
-            int quickPulldownValue = Integer.valueOf((String) newValue);
-            Settings.System.putInt(mContentResolver, Settings.System.QS_QUICK_PULLDOWN,
-                    quickPulldownValue);
-            updatePulldownSummary(quickPulldownValue);
-            return true;
-
-      } else if (preference == mScreenTimeoutMode) {
-            int value = Integer.valueOf((String) newValue);
-            int index = mScreenTimeoutMode.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentAppResolver,
-                    Settings.System.EXPANDED_SCREENTIMEOUT_MODE, value);
-            mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntries()[index]);
-            return true;
-
-        } else if (preference == mTileTextColor) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue)));
-            preference.setSummary(hex);
-            int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(mContentResolver,
-                    Settings.System.QUICK_SETTINGS_TEXT_COLOR, intHex);
-            return true;
-
-        } else if (preference == mTileBgColor) {
-            String hex = ColorPickerPreference.convertToARGB(Integer.valueOf(String.valueOf(newValue)));
-            preference.setSummary(hex);
-            int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putInt(mContentResolver,
-                    Settings.System.QUICK_SETTINGS_BACKGROUND_COLOR, intHex);
-            return true;
-
-        } else if (preference == mTileBgStyle) {
-            int value = Integer.valueOf((String) newValue);
-            int index = mTileBgStyle.findIndexOfValue((String) newValue);
-            Settings.System.putInt(mContentAppResolver,
-                    Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, value);
-            preference.setSummary(mTileBgStyle.getEntries()[index]);
-            updateVisibility();
-            return true;
+    private void registerListeners() {
+        if (Utils.isPhone(getActivity())) {
+            mQuickPulldown.setOnPreferenceChangeListener(this);
         }
-        return false;
+        mTileBgStyle.setOnPreferenceChangeListener(this);
+        mTileBgColor.setOnPreferenceChangeListener(this);
+        mTileTextColor.setOnPreferenceChangeListener(this);
+        mNumColumnsPort.setOnPreferenceChangeListener(this);
+        mNumColumnsLand.setOnPreferenceChangeListener(this);
+        mRingMode.setOnPreferenceChangeListener(this);
+        mScreenTimeoutMode.setOnPreferenceChangeListener(this);
+        if (mNetworkMode != null) {
+            mNetworkMode.setOnPreferenceChangeListener(this);
+        }
+
+    }
+
+    private void setDefaultValues() {
+        mQuickPulldown.setValue(Integer.toString(Settings.System.getInt(
+                mContentResolver, Settings.System.QS_QUICK_PULLDOWN, 0)));
+        mTileBgStyle.setValue(Integer.toString(Settings.System.getInt(
+                mContentResolver, Settings.System.QUICK_SETTINGS_BACKGROUND_STYLE, 2)));
+        mNumColumnsPort.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.QUICK_SETTINGS_NUM_COLUMNS_PORT, 3)));
+        mNumColumnsLand.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.QUICK_SETTINGS_NUM_COLUMNS_LAND, 5)));
+        mCollapsePanel.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.QS_COLLAPSE_PANEL, 0) == 1);
+        mFlipTile.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.QUICK_SETTINGS_TILES_FLIP, 1) == 1);
+        mDynamicAlarm.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.QS_DYNAMIC_ALARM, 1) == 1);
+        mDynamicBugReport.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.QS_DYNAMIC_BUGREPORT, 1) == 1);
+        mDynamicIme.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.QS_DYNAMIC_IME, 1) == 1);
+        mScreenTimeoutMode.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.EXPANDED_SCREENTIMEOUT_MODE, 1)));
+        if (storedRingMode != null) {
+            String[] ringModeArray = TextUtils.split(storedRingMode, SEPARATOR);
+            mRingMode.setValues(new HashSet<String>(Arrays.asList(ringModeArray)));
+        }
+    }
+
+    private void updateSummaries() {
+        updatePulldownSummary(Settings.System.getInt(
+                mContentResolver, Settings.System.QS_QUICK_PULLDOWN, 0));
+        mTileBgStyle.setSummary(mTileBgStyle.getEntry());
+        mNumColumnsPort.setSummary(mNumColumnsPort.getEntry());
+        mNumColumnsLand.setSummary(mNumColumnsLand.getEntry());
+        mScreenTimeoutMode.setSummary(mScreenTimeoutMode.getEntry());
+        mTileBgColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.QUICK_SETTINGS_BACKGROUND_COLOR, 0xFF000000)));
+        mTileTextColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.QUICK_SETTINGS_TEXT_COLOR, 0xFFFFFFFF)));
+        if (mNetworkMode != null) {
+            mNetworkMode.setSummary(mNetworkMode.getEntry());
+        }
+        if (storedRingMode != null) {
+            updateSummary(storedRingMode, mRingMode, R.string.pref_ring_mode_summary);
+        }
     }
 
     private void updateVisibility() {

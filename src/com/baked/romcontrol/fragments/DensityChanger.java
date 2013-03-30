@@ -63,24 +63,17 @@ public class DensityChanger extends BAKEDPreferenceFragment implements
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.lcd_density_setup);
 
-        String currentDensity = SystemProperties.get("ro.sf.lcd_density");
-        PreferenceScreen prefs = getPreferenceScreen();
-
         mStockDensity = (ListPreference) findPreference("stock_density");
-        mStockDensity.setOnPreferenceChangeListener(this);
-
         mReboot = findPreference("reboot");
         mClearMarketData = findPreference("clear_market_data");
         mOpenMarket = findPreference("open_market");
-
         mCustomDensity = (ListPreference) findPreference("lcd_density");
-        mCustomDensity.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        registerListeners();
         mClearMarketData.setSummary("");
     }
 
@@ -96,12 +89,9 @@ public class DensityChanger extends BAKEDPreferenceFragment implements
                     .getSystemService(Context.POWER_SERVICE);
             pm.reboot("Resetting density");
             return true;
-
         } else if (preference == mClearMarketData) {
-
             new ClearMarketDataTask().execute("");
             return true;
-
         } else if (preference == mOpenMarket) {
             Intent openMarket = new Intent(Intent.ACTION_MAIN)
                     .addCategory(Intent.CATEGORY_APP_MARKET)
@@ -115,9 +105,7 @@ public class DensityChanger extends BAKEDPreferenceFragment implements
                         .setSummary(getResources().getString(R.string.open_market_summary_could_not_open));
             }
             return true;
-
         }
-
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
@@ -211,6 +199,11 @@ public class DensityChanger extends BAKEDPreferenceFragment implements
         }
 
         return false;
+    }
+
+    private void registerListeners() {
+        mStockDensity.setOnPreferenceChangeListener(this);
+        mCustomDensity.setOnPreferenceChangeListener(this);
     }
 
     private void setLcdDensity(int newDensity) {

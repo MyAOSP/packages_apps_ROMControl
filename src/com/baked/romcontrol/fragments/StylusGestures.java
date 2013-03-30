@@ -46,44 +46,30 @@ public class StylusGestures extends BAKEDPreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.header_stylus_gestures);
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_stylus_gestures);
 
         mPicker = new ShortcutPickerHelper(this, this);
 
         mEnableSPen = (CheckBoxPreference) findPreference("enable_spen");
-        mEnableSPen.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.ENABLE_SPEN_ACTIONS, false));
-
         mLeft = (ListPreference) findPreference("spen_left");
-        mLeft.setOnPreferenceChangeListener(this);
-        mLeft.setSummary(getProperSummary(mLeft));
-
         mRight = (ListPreference) findPreference("spen_right");
-        mRight.setOnPreferenceChangeListener(this);
-        mRight.setSummary(getProperSummary(mRight));
-
         mUp = (ListPreference) findPreference("spen_up");
-        mUp.setOnPreferenceChangeListener(this);
-        mUp.setSummary(getProperSummary(mUp));
-
         mDown = (ListPreference) findPreference("spen_down");
-        mDown.setOnPreferenceChangeListener(this);
-        mDown.setSummary(getProperSummary(mDown));
-
         mDouble = (ListPreference) findPreference("spen_double");
-        mDouble.setOnPreferenceChangeListener(this);
-        mDouble.setSummary(getProperSummary(mDouble));
-
         mLong = (ListPreference) findPreference("spen_long");
-        mLong.setOnPreferenceChangeListener(this);
-        mLong.setSummary(getProperSummary(mLong));
 
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-            Preference preference) {
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mEnableSPen) {
             Settings.System.putBoolean(mContentResolver, Settings.System.ENABLE_SPEN_ACTIONS,
                     checkBoxChecked(preference));
@@ -158,6 +144,29 @@ public class StylusGestures extends BAKEDPreferenceFragment implements
             }
         }
         return result;
+    }
+
+    private void registerListeners() {
+        mLeft.setOnPreferenceChangeListener(this);
+        mRight.setOnPreferenceChangeListener(this);
+        mUp.setOnPreferenceChangeListener(this);
+        mDown.setOnPreferenceChangeListener(this);
+        mDouble.setOnPreferenceChangeListener(this);
+        mLong.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mEnableSPen.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.ENABLE_SPEN_ACTIONS, false));
+    }
+
+    private void updateSummaries() {
+        mLeft.setSummary(getProperSummary(mLeft));
+        mRight.setSummary(getProperSummary(mRight));
+        mUp.setSummary(getProperSummary(mUp));
+        mDown.setSummary(getProperSummary(mDown));
+        mDouble.setSummary(getProperSummary(mDouble));
+        mLong.setSummary(getProperSummary(mLong));
     }
 
     public void shortcutPicked(String uri, String friendlyName, Bitmap bmp, boolean isApplication) {

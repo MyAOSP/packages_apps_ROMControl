@@ -58,8 +58,7 @@
             android:key="tile_background_style"
             android:entries="@array/tile_background_style_entries"
             android:entryValues="@array/tile_background_style_values"
-            android:title="@string/tile_background_style_title"
-            android:summary="@string/tile_background_style_summary" />
+            android:title="@string/tile_background_style_title"/>
 
         <Preference
             android:key="random_colors"

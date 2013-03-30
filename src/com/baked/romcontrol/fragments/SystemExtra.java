@@ -61,6 +61,7 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
     Preference mLcdDensity;
 
     Random randomGenerator = new Random();
+    String currentProperty = SystemProperties.get("ro.sf.lcd_density");
 
     int newDensityValue;
     DensityChanger densityFragment;
@@ -68,84 +69,43 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_system_extra);
 
         PreferenceScreen prefs = getPreferenceScreen();
 
         mLcdDensity = findPreference("lcd_density_setup");
-        String currentProperty = SystemProperties.get("ro.sf.lcd_density");
-        try {
-            newDensityValue = Integer.parseInt(currentProperty);
-        } catch (Exception e) {
-            getPreferenceScreen().removePreference(mLcdDensity);
-        }
-        mLcdDensity.setSummary(getResources().getString(R.string.current_lcd_density) + currentProperty);
-
         mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
-                updateKillAppLongpressBackOptions();
+        mRecentKillAll = (CheckBoxPreference) findPreference(PREF_RECENT_KILL_ALL);
+        mDisableBootAnimation = (CheckBoxPreference) findPreference("disable_bootanimation");
+        mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
+        mClockDateOpens = (CheckBoxPreference) findPreference(PREF_CLOCK_DATE_OPENS);
+        mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
+        mPluggedUnpluggedWakeup = (CheckBoxPreference) findPreference(PREF_PLUGGED_UNPLUGGED_WAKEUP);
+        mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
+        mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
 
         boolean hasNavBarByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar);
         if (hasNavBarByDefault) {
             ((PreferenceGroup) findPreference("misc")).removePreference(mKillAppLongpressBack);
         }
-
-        mRecentKillAll = (CheckBoxPreference) findPreference(PREF_RECENT_KILL_ALL);
-        mRecentKillAll.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.RECENT_KILL_ALL_BUTTON, false));
-
-        mDisableBootAnimation = (CheckBoxPreference) findPreference("disable_bootanimation");
-        mDisableBootAnimation.setChecked(!new File("/system/media/bootanimation.zip").exists());
-        if (mDisableBootAnimation.isChecked()) {
-            Resources res = mContext.getResources();
-            String[] insults = res.getStringArray(R.array.disable_bootanimation_insults);
-            int randomInt = randomGenerator.nextInt(insults.length);
-            mDisableBootAnimation.setSummary(insults[randomInt]);
-        }
-
-        mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
-        mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.VIBRATE_NOTIF_EXPAND, true));
-
-        mClockDateOpens = (CheckBoxPreference) findPreference(PREF_CLOCK_DATE_OPENS);
-        mClockDateOpens.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.CLOCK_DATE_OPENS, true));
-
-        mUseAltResolver = (CheckBoxPreference) findPreference(PREF_USE_ALT_RESOLVER);
-        mUseAltResolver.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.ACTIVITY_RESOLVER_USE_ALT, true));
-
-        mPluggedUnpluggedWakeup = (CheckBoxPreference) findPreference(PREF_PLUGGED_UNPLUGGED_WAKEUP);
-        mPluggedUnpluggedWakeup.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, true));
-
         // hide option if device is already set to never wake up
         if(!mContext.getResources().getBoolean(com.android.internal.R.bool.config_unplugTurnsOnScreen)) {
             ((PreferenceGroup) findPreference("misc")).removePreference(mPluggedUnpluggedWakeup);
         }
-
-        mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
-        mHideExtras.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
-
-        mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
-        int uiMode = Settings.System.getInt(mContentAppResolver,
-                Settings.System.CURRENT_UI_MODE, 0);
-        mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContentAppResolver,
-                Settings.System.USER_UI_MODE, uiMode)));
-        mUserModeUI.setOnPreferenceChangeListener(this);
+        try {
+            newDensityValue = Integer.parseInt(currentProperty);
+        } catch (Exception e) {
+            getPreferenceScreen().removePreference(mLcdDensity);
+        }
     }
 
-    private void writeKillAppLongpressBackOptions() {
-        Settings.System.putInt(mContentResolver, Settings.System.KILL_APP_LONGPRESS_BACK,
-                mKillAppLongpressBack.isChecked() ? 1 : 0);
-    }
-
-    private void updateKillAppLongpressBackOptions() {
-        mKillAppLongpressBack.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerListeners();
+        setDefaultValues();
+        updateSummaries();
     }
 
     @Override
@@ -220,5 +180,48 @@ public class SystemExtra extends BAKEDPreferenceFragment implements
             return true;
         }
         return false;
+    }
+
+    private void registerListeners() {
+        mUserModeUI.setOnPreferenceChangeListener(this);
+    }
+
+    private void setDefaultValues() {
+        mRecentKillAll.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.RECENT_KILL_ALL_BUTTON, false));
+        mDisableBootAnimation.setChecked(!new File("/system/media/bootanimation.zip").exists());
+        mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.VIBRATE_NOTIF_EXPAND, true));
+        mClockDateOpens.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.CLOCK_DATE_OPENS, true));
+        mUseAltResolver.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.ACTIVITY_RESOLVER_USE_ALT, true));
+        mPluggedUnpluggedWakeup.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, true));
+        mHideExtras.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
+        mUserModeUI.setValue(Integer.toString(Settings.System.getInt(mContentAppResolver,
+                Settings.System.USER_UI_MODE, 0)));
+        updateKillAppLongpressBackOptions();
+    }
+
+    private void updateSummaries() {
+        mLcdDensity.setSummary(getResources().getString(R.string.current_lcd_density) + currentProperty);
+        if (mDisableBootAnimation.isChecked()) {
+            Resources res = mContext.getResources();
+            String[] insults = res.getStringArray(R.array.disable_bootanimation_insults);
+            int randomInt = randomGenerator.nextInt(insults.length);
+            mDisableBootAnimation.setSummary(insults[randomInt]);
+        }
+    }
+
+    private void writeKillAppLongpressBackOptions() {
+        Settings.System.putInt(mContentResolver, Settings.System.KILL_APP_LONGPRESS_BACK,
+                mKillAppLongpressBack.isChecked() ? 1 : 0);
+    }
+
+    private void updateKillAppLongpressBackOptions() {
+        mKillAppLongpressBack.setChecked(Settings.System.getInt(mContentResolver,
+                Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
     }
 }

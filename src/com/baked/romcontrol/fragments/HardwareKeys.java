@@ -189,6 +189,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
                 Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0) == 1));
     }
 
+    @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mHomeLongPressAction) {
             int value = Integer.valueOf((String) newValue);
@@ -250,6 +251,7 @@ public class HardwareKeys extends BAKEDPreferenceFragment implements OnPreferenc
         return false;
     }
 
+    @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference == mEnableCustomBindings) {
             Settings.System.putInt(mContentResolver, Settings.System.HARDWARE_KEY_REBINDING,

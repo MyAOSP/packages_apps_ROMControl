@@ -7,6 +7,9 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
@@ -42,6 +45,8 @@ public class RandomColors extends BAKEDPreferenceFragment implements
         mFour = (ColorPickerPreference) findPreference(PREF_RANDOM_COLOR_FOUR);
         mFive = (ColorPickerPreference) findPreference(PREF_RANDOM_COLOR_FIVE);
         mSix = (ColorPickerPreference) findPreference(PREF_RANDOM_COLOR_SIX);
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -51,34 +56,33 @@ public class RandomColors extends BAKEDPreferenceFragment implements
         updateSummaries();
     }
 
-    private void registerListeners() {
-        mOne.setOnPreferenceChangeListener(this);
-        mTwo.setOnPreferenceChangeListener(this);
-        mThree.setOnPreferenceChangeListener(this);
-        mFour.setOnPreferenceChangeListener(this);
-        mFive.setOnPreferenceChangeListener(this);
-        mSix.setOnPreferenceChangeListener(this);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.random_colors, menu);
     }
 
-    private void updateSummaries() {
-        mOne.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_ONE))));
-        mTwo.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_TWO))));
-        mThree.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_THREE))));
-        mFour.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_FOUR))));
-        mFive.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_FIVE))));
-        mSix.setSummary(ColorPickerPreference.convertToARGB(Integer.valueOf(
-                Settings.System.getString(mContentResolver,
-                Settings.System.RANDOM_COLOR_SIX))));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.reset:
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_ONE, 0xFF0099CC);
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_TWO, 0xFF669900);
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_THREE, 0xFFCC0000);
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_FOUR, 0xFFFF8800);
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_FIVE, 0xFFAA66CC);
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.RANDOM_COLOR_SIX, 0xFF00DDFF);
+                updateSummaries();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
@@ -135,4 +139,27 @@ public class RandomColors extends BAKEDPreferenceFragment implements
         return false;
     }
 
+    private void registerListeners() {
+        mOne.setOnPreferenceChangeListener(this);
+        mTwo.setOnPreferenceChangeListener(this);
+        mThree.setOnPreferenceChangeListener(this);
+        mFour.setOnPreferenceChangeListener(this);
+        mFive.setOnPreferenceChangeListener(this);
+        mSix.setOnPreferenceChangeListener(this);
+    }
+
+    private void updateSummaries() {
+        mOne.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_ONE, 0xFF0099CC)));
+        mTwo.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_TWO, 0xFF669900)));
+        mThree.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_THREE, 0xFFCC0000)));
+        mFour.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_FOUR, 0xFFFF8800)));
+        mFive.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_FIVE, 0xFFAA66CC)));
+        mSix.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
+                mContentResolver, Settings.System.RANDOM_COLOR_SIX, 0xFF00DDFF)));
+    }
 }
