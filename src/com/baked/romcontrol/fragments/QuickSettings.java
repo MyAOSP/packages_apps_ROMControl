@@ -121,11 +121,6 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
         addPreferencesFromResource(R.xml.prefs_qs_settings);
 
