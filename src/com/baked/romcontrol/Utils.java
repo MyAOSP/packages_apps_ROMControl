@@ -61,7 +61,7 @@ public class Utils {
 
     // Device types
     private static final int DEVICE_PHONE = 0;
-    private static final int DEVICE_HYBRID = 1;
+    private static final int DEVICE_PHABLET = 1;
     private static final int DEVICE_TABLET = 2;
 
     // Device type reference
@@ -158,7 +158,7 @@ public class Utils {
                 mDeviceType =  DEVICE_PHONE;
             } else if (shortSizeDp < 720) {
                 // 600-719dp: "phone" UI with modifications for larger screens
-                mDeviceType = DEVICE_HYBRID;
+                mDeviceType = DEVICE_PHABLET;
             } else {
                 // 720dp: "tablet" UI with a single combined status & navigation bar
                 mDeviceType = DEVICE_TABLET;
@@ -171,8 +171,8 @@ public class Utils {
         return getScreenType(con) == DEVICE_PHONE;
     }
 
-    public static boolean isHybrid(Context con) {
-        return getScreenType(con) == DEVICE_HYBRID;
+    public static boolean isPhablet(Context con) {
+        return getScreenType(con) == DEVICE_PHABLET;
     }
 
     public static boolean isTablet(Context con) {
