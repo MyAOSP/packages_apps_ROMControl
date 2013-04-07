@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:baked="http://schemas.android.com/apk/res/com.baked.romcontrol">
+
     <CheckBoxPreference
         android:key="enable_nav_bar"
         android:title="@string/navbar_enable_bar" />
 
-    <ListPreference
-        android:entries="@array/pref_navigation_menu_entries"
-        android:entryValues="@array/pref_navigation_menu_values"
-        android:key="pref_menu_display"
-        android:title="@string/title_pref_menu_display"
-        android:summary="@string/summary_pref_menu_display" />
+    <PreferenceCategory
+        android:key="navbar_buttons"
+        android:title="@string/navbar_button_cat">
 
-    <ListPreference
-        android:entries="@array/pref_navigation_menu_display_entries"
-        android:entryValues="@array/pref_navigation_menu_display_values"
-        android:key="navbar_menu_display"
-        android:title="@string/title_pref_navigation_menu_display"
-        android:summary="@string/summary_pref_navigation_menu_display" />
+        <ListPreference
+            android:entries="@array/pref_navigation_menu_entries"
+            android:entryValues="@array/pref_navigation_menu_values"
+            android:key="pref_menu_display"
+            android:title="@string/title_pref_menu_display"
+            android:summary="@string/summary_pref_menu_display" />
 
-    <ListPreference
-        android:entries="@array/navigation_bar_qty_entries"
-        android:entryValues="@array/navigation_bar_qty_values"
-        android:key="navbar_qty"
-        android:title="@string/navbar_qty_title"
-        android:summary="@string/navbar_qty_summary" />
+        <ListPreference
+            android:entries="@array/pref_navigation_menu_display_entries"
+            android:entryValues="@array/pref_navigation_menu_display_values"
+            android:key="navbar_menu_display"
+            android:title="@string/title_pref_navigation_menu_display"
+            android:summary="@string/summary_pref_navigation_menu_display" />
 
-    <PreferenceCategory android:title="@string/navbar_bg">
+        <com.baked.romcontrol.preferences.ImageListPreference
+            android:key="navbar_icon_style"
+            android:title="@string/navbar_icon_style"
+            android:entries="@array/navbar_icon_entries"
+            android:entryValues="@array/navbar_icon_values"
+            baked:entryImages="@array/navbar_icon_images" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="navbar_bg_cat"
+        android:title="@string/navbar_bg">
 
         <ListPreference
             android:key="navbar_bg_style"
@@ -46,7 +56,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/navbar_button_colors">
+    <PreferenceCategory
+        android:key="navbar_colors_cat"
+        android:title="@string/navbar_button_colors">
 
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="nav_button_color"
@@ -67,12 +79,6 @@
         <com.baked.romcontrol.widgets.SeekBarPreference
             android:key="button_transparency"
             android:title="@string/button_transparency_title" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="navbar_buttons"
-        android:title="@string/navbar_button_cat">
 
     </PreferenceCategory>
 

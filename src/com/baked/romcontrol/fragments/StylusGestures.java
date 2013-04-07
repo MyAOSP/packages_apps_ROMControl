@@ -1,6 +1,11 @@
 
 package com.baked.romcontrol.fragments;
 
+import static com.android.internal.util.action.ActionConstants.*;
+import com.android.internal.util.action.NavBarHelpers;
+
+import java.net.URISyntaxException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -19,10 +24,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 
-import java.net.URISyntaxException;
-
-
-import static com.android.internal.util.action.ActionConstants.*;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.R;
 import com.baked.romcontrol.util.ShortcutPickerHelper;
@@ -199,54 +200,7 @@ public class StylusGestures extends BAKEDPreferenceFragment implements
             mString = Settings.System.SPEN_ACTIONS[PRESS_LONG];
         }
 
-        String uri = Settings.System.getString(getActivity().getContentResolver(),mString);
-        if (TextUtils.isEmpty(uri)) {
-            return getResources().getString(R.string.navbar_action_none);
-        }
-
-        String newString = getResources().getString(R.string.navbar_action_none);
-        ActionConstant ActionEnum = fromString(uri);
-        switch (ActionEnum) {
-        case ACTION_HOME:
-            newString = getResources().getString(R.string.navbar_action_home);
-            break;
-        case ACTION_BACK:
-            newString = getResources().getString(R.string.navbar_action_back);
-            break;
-        case ACTION_RECENTS:
-            newString = getResources().getString(R.string.navbar_action_recents);
-            break;
-        case ACTION_RECENTS_GB:
-            newString = getResources().getString(R.string.navbar_action_recents_gb);
-            break;
-        case ACTION_SEARCH:
-            newString = getResources().getString(R.string.navbar_action_search);
-            break;
-        case ACTION_MENU:
-            newString = getResources().getString(R.string.navbar_action_menu);
-            break;
-        case ACTION_IME:
-            newString = getResources().getString(R.string.navbar_action_ime);
-            break;
-        case ACTION_KILL:
-            newString = getResources().getString(R.string.navbar_action_kill);
-            break;
-        case ACTION_POWER:
-            newString = getResources().getString(R.string.navbar_action_power);
-            break;
-        case ACTION_NOTIFICATIONS:
-            newString = getResources().getString(R.string.navbar_action_notifications);
-            break;
-        case ACTION_LAST_APP:
-            newString = getResources().getString(R.string.navbar_action_lastapp);
-            break;
-        case ACTION_NULL:
-            newString = getResources().getString(R.string.navbar_action_none);
-            break;
-        case ACTION_APP:
-            newString = mPicker.getFriendlyNameForUri(uri);
-            break;
-        }
-     return newString;
-   }
+        String uri = Settings.System.getString(mContentResolver, mString);
+        return NavBarHelpers.getProperSummary(mContext, uri);
+    }
 }

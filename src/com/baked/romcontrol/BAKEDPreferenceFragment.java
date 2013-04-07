@@ -70,11 +70,6 @@ public class BAKEDPreferenceFragment extends PreferenceFragment implements Dialo
             mActionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public static boolean isTablet(Context context) {
-        return Settings.System.getInt(context.getContentResolver(),
-            Settings.System.CURRENT_UI_MODE,0) == 1;
-    }
-
     public void setTitle(int resId) {
         getActivity().setTitle(resId);
     }
@@ -163,6 +158,21 @@ public class BAKEDPreferenceFragment extends PreferenceFragment implements Dialo
         if (mDialogFragment != null) {
             mDialogFragment.mOnDismissListener = listener;
         }
+    }
+
+    public static boolean isTablet(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 0) == 1;
+    }
+
+    public static boolean isPhablet(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 0) == 2;
+    }
+
+    public static boolean isPhone(Context context) {
+        return Settings.System.getInt(context.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 0) == 0;
     }
 
     public static class SettingsDialogFragment extends DialogFragment {
