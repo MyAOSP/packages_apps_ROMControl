@@ -33,6 +33,7 @@ import static com.android.internal.util.cm.QSConstants.TILE_NFC;
 import static com.android.internal.util.cm.QSConstants.TILE_PROFILE;
 import static com.android.internal.util.cm.QSConstants.TILE_TORCH;
 import static com.android.internal.util.cm.QSConstants.TILE_WIFIAP;
+import static com.android.internal.util.cm.QSConstants.TILE_EXPANDEDDESKTOP;
 import static com.android.internal.util.cm.QSUtils.*;
 
 import android.app.Activity;
@@ -239,6 +240,11 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         // Don't show Torch tile if not supported
         if (!hasTorch) {
             QuickSettingsUtil.TILES.remove(TILE_TORCH);
+        }
+
+        // Don't show the Expanded desktop tile if expanded desktop is disabled
+        if (!expandedDesktopEnabled(mContentResolver)) {
+            QuickSettingsUtil.TILES.remove(TILE_EXPANDEDDESKTOP);
         }
     }
 
