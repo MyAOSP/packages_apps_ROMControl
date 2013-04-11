@@ -187,6 +187,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".fragments.PieControl"
+            android:label="@string/header_pie_control" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragments.PieColor"
+            android:label="@string/header_pie_control" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".util.ShowBuildProp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

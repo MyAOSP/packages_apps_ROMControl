@@ -25,6 +25,29 @@
         android:icon="@drawable/ic_baked_system_settings" />
 
     <header
+        android:id="@+id/stylus_gestures"
+        android:fragment="com.baked.romcontrol.fragments.StylusGestures"
+        android:title="@string/header_stylus_gestures"
+        android:icon="@drawable/ic_baked_stylus_gestures" />
+
+    <header
+        android:id="@+id/propmodder_initd"
+        android:fragment="com.baked.romcontrol.fragments.PropModder"
+        android:title="@string/header_propmodder"
+        android:icon="@drawable/ic_baked_propmodder" />
+
+    <header
+        android:id="@+id/power_menu"
+        android:fragment="com.baked.romcontrol.fragments.PowerMenu"
+        android:title="@string/header_power_menu"
+        android:icon="@drawable/ic_baked_power_menu"/>
+
+    <!-- Navigation bar/Hardware keys -->
+    <header
+        android:id="@+id/header_navbar"
+        android:title="@string/header_navigation_settings" />
+
+    <header
         android:id="@+id/nav_bar"
         android:fragment="com.baked.romcontrol.fragments.Navbar"
         android:title="@string/header_navbar"
@@ -43,22 +66,10 @@
         android:icon="@drawable/ic_baked_hardware_keys" />
 
     <header
-        android:id="@+id/stylus_gestures"
-        android:fragment="com.baked.romcontrol.fragments.StylusGestures"
-        android:title="@string/header_stylus_gestures"
-        android:icon="@drawable/ic_baked_stylus_gestures" />
-
-    <header
-        android:id="@+id/propmodder_initd"
-        android:fragment="com.baked.romcontrol.fragments.PropModder"
-        android:title="@string/header_propmodder"
-        android:icon="@drawable/ic_baked_propmodder" />
-
-    <header
-        android:id="@+id/power_menu"
-        android:fragment="com.baked.romcontrol.fragments.PowerMenu"
-        android:title="@string/header_power_menu"
-        android:icon="@drawable/ic_baked_power_menu"/>
+        android:id="@+id/pie_control"
+        android:fragment="com.baked.romcontrol.fragments.PieControl"
+        android:title="@string/header_pie_control"
+        android:icon="@drawable/ic_baked_pie_control" />
 
     <!-- Lockscreen -->
     <header

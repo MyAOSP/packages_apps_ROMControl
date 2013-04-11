@@ -51,12 +51,15 @@
     <string name="header_system">System</string>
     <string name="header_launcher_settings">Launcher settings</string>
     <string name="header_system_extra">System Settings</string>
-    <string name="header_navbar">Navbar</string>
-    <string name="header_nav_ring">Navbar Ring</string>
-    <string name="header_hardware_keys">Hardware Keys</string>
     <string name="header_stylus_gestures">S Pen Gestures</string>
     <string name="header_propmodder">PropModder &amp; Init.D</string>
     <string name="header_power_menu">Power Menu</string>
+    <!-- Navigation settings title -->
+    <string name="header_navigation_settings">Navigation</string>
+    <string name="header_navbar">Navbar</string>
+    <string name="header_nav_ring">Navbar Ring</string>
+    <string name="header_hardware_keys">Hardware Keys</string>
+    <string name="header_pie_control">Pie settings</string>
     <!-- Lockscreen title -->
     <string name="header_lockscreen">Lockscreen</string>
     <string name="header_lockscreen_targets">Custom shortcuts</string>
@@ -740,4 +743,62 @@
     <string name="spen_enable">Enable S Pen Gestures</string>
     <string name="spen_enable_summary">Set custom actions for S Pen gestures</string>
 
+<!-- Pie Controls -->
+    <string name="pie_controls_title">Controls</string>
+    <string name="enable_pie_title">Enable pie</string>
+    <string name="pie_targets_title">Targets</string>
+    <!-- Gravity -->
+    <string name="pie_gravity_title">Pie gravity</string>
+    <string name="pie_gravity_summary">Select the location where you can bring up PIE</string>
+    <string name="pie_gravity_top">Top</string>
+    <string name="pie_gravity_bottom">Bottom</string>
+    <string name="pie_gravity_right">Right</string>
+    <string name="pie_gravity_left">Left</string>
+    <!-- Mode -->
+    <string name="pie_mode_title">Pie speed/style</string>
+    <string name="pie_mode_bare">Bare</string>
+    <string name="pie_mode_quick">Quick</string>
+    <string name="pie_mode_default">Normal (Default)</string>
+    <string name="pie_mode_slow">Slow</string>
+    <!-- Size -->
+    <string name="pie_size_title">Pie overall size</string>
+    <string name="pie_size_small">Small</string>
+    <string name="pie_size_default">@string/pie_mode_default</string>
+    <string name="pie_size_large">Large</string>
+    <string name="pie_size_gigantic">Gigantic</string>
+    <!-- Gap -->
+    <string name="pie_gap_title">Pie item gap</string>
+    <string name="pie_gap_none">None</string>
+    <string name="pie_gap_small">Small</string>
+    <string name="pie_gap_big">Big</string>
+    <string name="pie_gap_huge">Huge (Default)</string>
+    <!-- Trigger area -->
+    <string name="pie_trigger_title">Size of trigger area</string>
+    <string name="pie_trigger_small">Small</string>
+    <string name="pie_trigger_normal">Normal (Default)</string>
+    <string name="pie_trigger_big">Big</string>
+    <string name="pie_trigger_huge">Huge</string>
+    <string name="pie_restart_launcher_title">Restart the Launcher</string>
+    <string name="pie_restart_launcher_summary">This will restart your launcher, but may have adverse effects on the screen. Some widgets may not look right either. Be careful.</string>
+    <string name="pie_menu_title">Persistent menu button</string>
+    <string name="pie_menu_summary">Always show menu button even when it isn\'t necessary</string>
+    <string name="pie_search_title">Search button</string>
+    <string name="pie_search_summary">Enable search button on pie controls</string>
+    <string name="pie_lastapp_title">Last App button</string>
+    <string name="pie_lastapp_summary">Enable last app button on pie controls</string>
+    <string name="pie_center_title">Middle alignment</string>
+    <string name="pie_center_summary">Center Pie on the trigger edge</string>
+    <string name="pie_stick_title">Prevent rotation</string>
+    <string name="pie_stick_summary">If checked PIE will stay in place no matter which orientation</string>
+    <!-- Colors -->
+    <string name="pie_color_title">Color Settings</string>
+    <string name="pie_color_style_title">Enable custom colors</string>
+    <string name="pie_background_title">Background color</string>
+    <string name="pie_select_title">Selection color</string>
+    <string name="pie_outlines_title">Outlines color</string>
+    <string name="pie_status_clock_title">Clock color</string>
+    <string name="pie_status_title">Status color</string>
+    <string name="pie_chevron_left_title">Left chevron color</string>
+    <string name="pie_chevron_right_title">Right chevron color</string>
+    <string name="pie_juice_title">Battery juice color</string>
 </resources>
