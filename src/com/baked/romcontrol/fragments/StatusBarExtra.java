@@ -256,7 +256,8 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Settings.System.putInt(mContentResolver, Settings.System.NOTIF_BACKGROUND, colorView.getColor());
+                            Settings.System.putInt(mContentResolver,
+                                    Settings.System.NOTIF_BACKGROUND, colorView.getColor());
                             updateCustomBackgroundSummary();
                             Helpers.restartSystemUI();
                         }
@@ -304,9 +305,10 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     Settings.System.putString(mContentResolver,
                             Settings.System.NOTIF_BACKGROUND, null);
                     updateCustomBackgroundSummary();
+                    Helpers.restartSystemUI();
                     break;
             }
-            Helpers.restartSystemUI();
+            updateVisibility();
             return true;
         }
         return false;
@@ -363,11 +365,23 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
 
     private void updateVisibility() {
         int visible = Settings.System.getInt(mContentResolver,
-                    Settings.System.STATUSBAR_BACKGROUND_STYLE, 2);
+                Settings.System.STATUSBAR_BACKGROUND_STYLE, 2);
         if (visible == 2) {
             mStatusbarBgColor.setEnabled(false);
         } else {
             mStatusbarBgColor.setEnabled(true);
+        }
+
+        String enabled = Settings.System.getString(mContentResolver,
+                Settings.System.NOTIF_BACKGROUND);
+        if (enabled != null) {
+            if (enabled.equals("")) {
+                mWallpaperAlpha.setEnabled(true);
+            } else {
+                mWallpaperAlpha.setEnabled(false);
+            }
+        } else {
+            mWallpaperAlpha.setEnabled(false);
         }
     }
 
