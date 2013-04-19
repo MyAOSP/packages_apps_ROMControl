@@ -177,8 +177,7 @@ public class QuickSettings extends BAKEDPreferenceFragment implements
         }
 
         // Don't show mobile data options if not supported
-        boolean isMobileData = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
-        if (!isMobileData) {
+        if (!deviceSupportsMobileData(mContext)) {
             QuickSettingsUtil.TILES.remove(TILE_MOBILEDATA);
             QuickSettingsUtil.TILES.remove(TILE_WIFIAP);
             QuickSettingsUtil.TILES.remove(TILE_NETWORKMODE);

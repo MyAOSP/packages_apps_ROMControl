@@ -16,6 +16,8 @@
 
 package com.baked.romcontrol.fragments;
 
+import static com.android.internal.util.cm.QSUtils.deviceSupportsMobileData;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -256,8 +258,7 @@ public class PowerWidget extends BAKEDPreferenceFragment implements
             }
 
             // Don't show mobile data options if not supported
-            boolean isMobileData = pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
-            if (!isMobileData) {
+            if (!deviceSupportsMobileData(mContext)) {
                 PowerWidgetUtil.BUTTONS.remove(PowerWidgetUtil.BUTTON_MOBILEDATA);
                 PowerWidgetUtil.BUTTONS.remove(PowerWidgetUtil.BUTTON_NETWORKMODE);
                 PowerWidgetUtil.BUTTONS.remove(PowerWidgetUtil.BUTTON_WIFIAP);
