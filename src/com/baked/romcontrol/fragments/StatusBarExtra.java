@@ -52,6 +52,7 @@ import com.baked.romcontrol.R;
 import com.baked.romcontrol.BAKEDPreferenceFragment;
 import com.baked.romcontrol.util.CMDProcessor;
 import com.baked.romcontrol.util.Helpers;
+import com.baked.romcontrol.widgets.SeekBarPreference;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 import net.margaritov.preference.colorpicker.ColorPickerView;
@@ -73,13 +74,17 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
 
     private static final int REQUEST_PICK_WALLPAPER = 201;
 
+    private static final int NOTIF_BACKGROUND_COLOR_FILL = 0;
+    private static final int NOTIF_BACKGROUND_CUSTOM_IMAGE = 1;
+    private static final int NOTIF_BACKGROUND_DEFAULT = 2;
+
     CheckBoxPreference mStatusBarNotifCount;
     CheckBoxPreference mShowImeSwitcher;
     CheckBoxPreference mStatusBarBrightnessSlider;
     Preference mCustomLabel;
     ListPreference mNotificationBackground;
     ListPreference mStatusbarBgStyle;
-    Preference mWallpaperAlpha;
+    SeekBarPreference mWallpaperAlpha;
     ColorPickerPreference mExpandedClockColor;
     ColorPickerPreference mStatusbarBgColor;
 
@@ -103,7 +108,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         mShowImeSwitcher = (CheckBoxPreference) findPreference(PREF_IME_SWITCHER);
         mCustomLabel = findPreference(PREF_CUSTOM_CARRIER_LABEL);
         mNotificationBackground = (ListPreference) findPreference(PREF_NOTIFICATION_WALLPAPER);
-        mWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
+        mWallpaperAlpha = (SeekBarPreference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
         mExpandedClockColor = (ColorPickerPreference) findPreference(PREF_EXPANDED_CLOCK_COLOR);
         mStatusbarBgColor = (ColorPickerPreference) findPreference(PREF_STATUSBAR_BACKGROUND_COLOR);
         mStatusbarBgStyle = (ListPreference) findPreference(PREF_STATUSBAR_BACKGROUND_STYLE);
@@ -118,7 +123,6 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         registerListeners();
         setDefaultValues();
         updateSummaries();
-        updateCustomBackgroundSummary();
         updateCustomLabelTextSummary();
         updateVisibility();
     }
@@ -136,52 +140,6 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         } else if (preference == mStatusBarBrightnessSlider) {
             Settings.System.putBoolean(mContentResolver, Settings.System.STATUSBAR_BRIGHTNESS_CONTROL,
                     checkBoxChecked(preference));
-            return true;
-        } else if (preference == mWallpaperAlpha) {
-            Resources res = getActivity().getResources();
-            String cancel = res.getString(R.string.cancel);
-            String ok = res.getString(R.string.ok);
-            String title = res.getString(R.string.alpha_dialog_title);
-            float savedProgress = Settings.System.getFloat(mContentResolver,
-                    Settings.System.NOTIF_WALLPAPER_ALPHA, 1.0f);
-            LayoutInflater factory = LayoutInflater.from(getActivity());
-            final View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
-            SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
-            OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekbar, int progress, boolean fromUser) {
-                    seekbarProgress = seekbar.getProgress();
-                }
-                @Override
-                public void onStopTrackingTouch(SeekBar seekbar) {
-                }
-                @Override
-                public void onStartTrackingTouch(SeekBar seekbar) {
-                }
-            };
-            seekbar.setProgress((int) (savedProgress * 100));
-            seekbar.setMax(100);
-            seekbar.setOnSeekBarChangeListener(seekBarChangeListener);
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(title)
-                    .setView(alphaDialog)
-                    .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // nothing
-                }
-            })
-            .setPositiveButton(ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    float val = ((float) seekbarProgress / 100);
-                    Settings.System.putFloat(mContentResolver,
-                            Settings.System.NOTIF_WALLPAPER_ALPHA, val);
-                    Helpers.restartSystemUI();
-                }
-            })
-            .create()
-            .show();
             return true;
         } else if (preference == mCustomLabel) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -240,75 +198,13 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                     Settings.System.STATUSBAR_BACKGROUND_COLOR, intHex);
             return true;
         } else if (preference == mNotificationBackground) {
-            int indexOf = mNotificationBackground.findIndexOfValue(newValue.toString());
-            switch (indexOf) {
-                //Displays color dialog when user has chosen color fill
-                case 0:
-                    final ColorPickerView colorView = new ColorPickerView(mActivity);
-                    int currentColor = Settings.System.getInt(mContentResolver,
-                            Settings.System.NOTIF_BACKGROUND, -1);
-                    if (currentColor != -1) {
-                        colorView.setColor(currentColor);
-                    }
-                    colorView.setAlphaSliderVisible(true);
-                    new AlertDialog.Builder(mActivity)
-                    .setTitle(R.string.lockscreen_custom_background_dialog_title)
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Settings.System.putInt(mContentResolver,
-                                    Settings.System.NOTIF_BACKGROUND, colorView.getColor());
-                            updateCustomBackgroundSummary();
-                            Helpers.restartSystemUI();
-                        }
-                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).setView(colorView).show();
-                    return false;
-                 //Launches intent for user to select an image/crop it to set as background
-                case 1:
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                    intent.setType("image/*");
-                    intent.putExtra("crop", "true");
-                    intent.putExtra("scale", true);
-                    intent.putExtra("scaleUpIfNeeded", false);
-                    intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
-                    Display display = mActivity.getWindowManager().getDefaultDisplay();
-                    int width = display.getWidth();
-                    int height = display.getHeight();
-                    Rect rect = new Rect();
-                    Window window = mActivity.getWindow();
-                    window.getDecorView().getWindowVisibleDisplayFrame(rect);
-                    int statusBarHeight = rect.top;
-                    int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-                    int titleBarHeight = contentViewTop - statusBarHeight;
-                    boolean isPortrait = getResources().getConfiguration().orientation ==
-                            Configuration.ORIENTATION_PORTRAIT;
-                    intent.putExtra("aspectX", isPortrait ? width : height - titleBarHeight);
-                    intent.putExtra("aspectY", isPortrait ? height - titleBarHeight : width);
-
-                    try {
-                        wallpaperTemporary.createNewFile();
-                        wallpaperTemporary.setWritable(true, false);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(wallpaperTemporary));
-                        intent.putExtra("return-data", false);
-                        mActivity.startActivityFromFragment(this, intent, REQUEST_PICK_WALLPAPER);
-                    } catch (IOException e) {
-                    } catch (ActivityNotFoundException e) {
-                    }
-                    return false;
-                //Sets background color to default
-                case 2:
-                    Settings.System.putString(mContentResolver,
-                            Settings.System.NOTIF_BACKGROUND, null);
-                    updateCustomBackgroundSummary();
-                    Helpers.restartSystemUI();
-                    break;
-            }
-            updateVisibility();
+            int index = mNotificationBackground.findIndexOfValue(newValue.toString());
+            preference.setSummary(mNotificationBackground.getEntries()[index]);
+            return handleBackgroundSelection(index);
+        } else if (preference == mWallpaperAlpha) {
+            float val = Float.parseFloat((String) newValue);
+            Settings.System.putFloat(mContentResolver,
+                    Settings.System.NOTIF_WALLPAPER_ALPHA, val * 0.01f);
             return true;
         }
         return false;
@@ -323,10 +219,9 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 wallpaperImage.setReadable(true, false);
                 Toast.makeText(mActivity, getResources().getString(R.string.
                         lockscreen_background_result_successful), Toast.LENGTH_LONG).show();
-                Settings.System.putString(mContentResolver,
-                        Settings.System.NOTIF_BACKGROUND,"");
-                updateCustomBackgroundSummary();
-                Helpers.restartSystemUI();
+                Settings.System.putInt(mContentResolver,
+                        Settings.System.NOTIF_BACKGROUND, 1);
+                updateVisibility();
             } else {
                 if (wallpaperTemporary.exists()) {
                     wallpaperTemporary.delete();
@@ -342,6 +237,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         mExpandedClockColor.setOnPreferenceChangeListener(this);
         mStatusbarBgColor.setOnPreferenceChangeListener(this);
         mStatusbarBgStyle.setOnPreferenceChangeListener(this);
+        mWallpaperAlpha.setOnPreferenceChangeListener(this);
     }
 
     private void setDefaultValues() {
@@ -353,6 +249,11 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
                 Settings.System.SHOW_STATUSBAR_IME_SWITCHER, true));
         mStatusbarBgStyle.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
                 Settings.System.STATUSBAR_BACKGROUND_STYLE, 2)));
+        mNotificationBackground.setValue(Integer.toString(Settings.System.getInt(mContentResolver,
+                Settings.System.NOTIF_BACKGROUND, 2)));
+        final float defaultWallpaperAlpha = Settings.System.getFloat(mContentResolver,
+                Settings.System.NOTIF_WALLPAPER_ALPHA, 1f);
+        mWallpaperAlpha.setInitValue((int) (defaultWallpaperAlpha * 100));
     }
 
     private void updateSummaries() {
@@ -361,6 +262,7 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         mStatusbarBgColor.setSummary(ColorPickerPreference.convertToARGB(Settings.System.getInt(
                 mContentResolver, Settings.System.STATUSBAR_BACKGROUND_COLOR, 0xFF000000)));
         mStatusbarBgStyle.setSummary(mStatusbarBgStyle.getEntry());
+        mNotificationBackground.setSummary(mNotificationBackground.getEntry());
     }
 
     private void updateVisibility() {
@@ -372,34 +274,13 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
             mStatusbarBgColor.setEnabled(true);
         }
 
-        String enabled = Settings.System.getString(mContentResolver,
-                Settings.System.NOTIF_BACKGROUND);
-        if (enabled != null) {
-            if (enabled.equals("")) {
-                mWallpaperAlpha.setEnabled(true);
-            } else {
-                mWallpaperAlpha.setEnabled(false);
-            }
+        int enabled = Settings.System.getInt(mContentResolver,
+                Settings.System.NOTIF_BACKGROUND, 2);
+        if (enabled == 1) {
+            mWallpaperAlpha.setEnabled(true);
         } else {
             mWallpaperAlpha.setEnabled(false);
         }
-    }
-
-    private void updateCustomBackgroundSummary() {
-        int resId;
-        String value = Settings.System.getString(mContentResolver,
-                Settings.System.NOTIF_BACKGROUND);
-        if (value == null) {
-            resId = R.string.notif_background_default;
-            mNotificationBackground.setValueIndex(2);
-        } else if (value.isEmpty()) {
-            resId = R.string.notif_background_custom_image;
-            mNotificationBackground.setValueIndex(1);
-        } else {
-            resId = R.string.notif_background_color_fill;
-            mNotificationBackground.setValueIndex(0);
-        }
-        mNotificationBackground.setSummary(getResources().getString(resId));
     }
 
     private void updateCustomLabelTextSummary() {
@@ -410,5 +291,71 @@ public class StatusBarExtra extends BAKEDPreferenceFragment implements
         } else {
             mCustomLabel.setSummary(mCustomLabelText);
         }
+    }
+
+    private boolean handleBackgroundSelection(int index) {
+        if (index == NOTIF_BACKGROUND_COLOR_FILL) {
+            // Displays color dialog when user has chosen color fill
+            final ColorPickerView colorView = new ColorPickerView(mActivity);
+            int currentColor = Settings.System.getInt(mContentResolver,
+                    Settings.System.NOTIF_BACKGROUND_COLOR, 0xFF000000);
+            if (currentColor != -1) {
+                colorView.setColor(currentColor);
+            }
+            colorView.setAlphaSliderVisible(true);
+            new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.lockscreen_custom_background_dialog_title)
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Settings.System.putInt(mContentResolver,
+                            Settings.System.NOTIF_BACKGROUND_COLOR, colorView.getColor());
+                    Settings.System.putInt(mContentResolver,
+                            Settings.System.NOTIF_BACKGROUND, 0);
+                    updateVisibility();
+                }
+            })
+            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .setView(colorView)
+            .show();
+        } else if (index == NOTIF_BACKGROUND_CUSTOM_IMAGE) {
+            // Launches intent for user to select an image/crop it to set as background
+            final Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+            intent.setType("image/*");
+            intent.putExtra("crop", "true");
+            intent.putExtra("scale", true);
+            intent.putExtra("scaleUpIfNeeded", true);
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+            boolean isPortrait = getResources().getConfiguration().orientation ==
+                    Configuration.ORIENTATION_PORTRAIT;
+
+            int width = 400;
+            int height = 400;
+
+            intent.putExtra("aspectX", isPortrait ? width : height);
+            intent.putExtra("aspectY", isPortrait ? height : width);
+
+            try {
+                wallpaperTemporary.createNewFile();
+                wallpaperTemporary.setWritable(true, false);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(wallpaperTemporary));
+                intent.putExtra("return-data", false);
+                getActivity().startActivityFromFragment(this, intent, REQUEST_PICK_WALLPAPER);
+            } catch (IOException e) {
+            } catch (ActivityNotFoundException e) {
+            }
+        } else if (index == NOTIF_BACKGROUND_DEFAULT) {
+            // Sets background to default
+            Settings.System.putInt(mContentResolver,
+                            Settings.System.NOTIF_BACKGROUND, 2);
+            updateVisibility();
+            return true;
+        }
+        return false;
     }
 }

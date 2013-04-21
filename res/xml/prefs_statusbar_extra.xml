@@ -10,9 +10,11 @@
         android:entries="@array/notification_background_entries"
         android:entryValues="@array/notification_background_values" />
 
-    <Preference
+    <com.baked.romcontrol.widgets.SeekBarPreference
+        android:layout="?android:attr/preferenceLayoutChild"
         android:key="notification_wallpaper_alpha"
-        android:title="@string/notif_wallpaper_alpha_title" />
+        android:title="@string/notif_wallpaper_alpha_title"
+        android:defaultValue="100" />
 
     <PreferenceCategory android:title="@string/statusbar_bg">
 
